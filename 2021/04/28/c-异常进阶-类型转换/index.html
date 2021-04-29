@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="JAVA 反射, 陈鑫扬的第一个hexo博客">
+    <meta name="keywords" content="c++ 异常进阶&amp;类型转换运算符, 陈鑫扬的第一个hexo博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>JAVA 反射 | 陈鑫扬的第一个hexo博客</title>
+    <title>c++ 异常进阶&amp;类型转换运算符 | 陈鑫扬的第一个hexo博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -416,12 +416,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/42.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/44.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">JAVA 反射</h1>
+                    <h1 class="description center-align post-title">c++ 异常进阶&amp;类型转换运算符</h1>
                 </div>
             </div>
         </div>
@@ -537,8 +537,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/java/">
-                                <span class="chip bg-color">java</span>
+                            <a href="/tags/c/">
+                                <span class="chip bg-color">c++</span>
                             </a>
                         
                     </div>
@@ -562,14 +562,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-04-17
+                    2021-04-28
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-04-18
+                    2021-04-29
                 </div>
                 
 
@@ -596,172 +596,207 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="Class类-amp-Java反射"><a href="#Class类-amp-Java反射" class="headerlink" title="Class类&amp;Java反射"></a>Class类&amp;Java反射</h3><br/>
+                <h3 id="stdexcept异常类"><a href="#stdexcept异常类" class="headerlink" title="stdexcept异常类"></a>stdexcept异常类</h3><br/>
 
-<p>众所周知，Java中的所有类都是继承了Object类的</p>
-<p>这样，在类中就提供了一系列方法返回对应的反射的值</p>
+<p> stdexcept定义了其他几个异常类，包括logic_error&amp;runtime_error类</p>
+<p>这些类都是从公有的exception类中派生出来的</p>
 <br/>
 
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">public class Class_Java &#123;
+<h4 id="logic-error"><a href="#logic-error" class="headerlink" title="logic_error"></a>logic_error</h4><br/>
 
-    public static void main(String[] args) &#123;
+<p>见名知意，这个类描述逻辑错误</p>
+<blockquote>
+<p>domain_error domain表示定义域，如果函数输出了定义域之外的值，会执行该错误</p>
+<p>invalid_error 指出函数传递了一个意料之外的值</p>
+<p>length_error 没有足够的空间来执行所需的操作</p>
+<p>out_of_bounds 用于索引错误</p>
+</blockquote>
+<br/>
 
-        Apple a1 &#x3D; new Apple();
-        a1.setPrice(5.6);
-        System.out.println(a1.getPrice());
-        System.out.println(a1.getClass());
-		
-        &#x2F;&#x2F;获取类有三种方法
-        Class AClass &#x3D; a1.getClass();&#x2F;&#x2F;让Class类对象存储当前类的信息
-&#x2F;&#x2F;      Class c &#x3D; Apple.class;
-&#x2F;&#x2F;
-&#x2F;&#x2F; 		try &#123;
-&#x2F;&#x2F;
-&#x2F;&#x2F;            Class cl1 &#x3D; Class.forName(&quot;java.lang.String&quot;); 该方法返回给定串名相应的Class对象
-&#x2F;&#x2F;            System.out.println(cl1.getPackage() + &quot; &quot; + cl1.getClass());
-&#x2F;&#x2F;
-&#x2F;&#x2F;        &#125; catch (ClassNotFoundException e) &#123;
-&#x2F;&#x2F;
-&#x2F;&#x2F;            e.printStackTrace();
-&#x2F;&#x2F;
-&#x2F;&#x2F;        &#125;
-        
-        System.out.println(AClass);
-        System.out.println(AClass.getPackage());&#x2F;&#x2F;返回当前类所在包的位置
+<h4 id="runtime-error"><a href="#runtime-error" class="headerlink" title="runtime_error"></a>runtime_error</h4><br/>
+
+<blockquote>
+<p>range_error 输出的值域不满足规定的要求</p>
+<p>overflow_error 计算的结果超越了某个类型规定的最大允许范围</p>
+<p>underflow_error 表示下溢错误，用在浮点类型中。一般的浮点类型存在可以表示的最小非零值，如果比这个值还要小，称为下一错误</p>
+</blockquote>
+<br/>
+
+<h4 id="捕捉一般步骤"><a href="#捕捉一般步骤" class="headerlink" title="捕捉一般步骤"></a>捕捉一般步骤</h4><br/>
+
+<p>先单独捕获out_of_bounds异常，然后统一捕获其他logic_error系列异常</p>
+<p>最后再捕获exception异常以及其他从exception派生出来的异常</p>
+<p>注意：out_of_bounds在vscode中无法使用</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">try&#123;
+
+&#125;catch(logic_error &amp; e)&#123;
+
+&#125;catch(exception &amp; e)&#123;
+
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<h3 id="bad-alloc异常-amp-new"><a href="#bad-alloc异常-amp-new" class="headerlink" title="bad_alloc异常&amp;new"></a>bad_alloc异常&amp;new</h3><br/>
+
+<p>使用new导致的内存分配问题，可以使用bad_alloc异常</p>
+<p>在之前的版本中，异常中，无法分配请求的内存量时，new会返回一个空指针</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;cstdlib&gt;&#x2F;&#x2F;exit所需要的头文件
+#include &lt;new&gt;
+#include &lt;exception&gt;
+using namespace std;
+
+struct Big&#123;
+
+    double stuff[20000];
+
+&#125;;
+typedef struct Big Big;
+
+int main()&#123;
+
+    Big * pb;
+    try&#123;
+
+        cout &lt;&lt; &quot;分配一个很大的空间&quot; &lt;&lt; endl;
+        pb &#x3D; new Big[10000000];
+        &#x2F;&#x2F;使用Big[10000]时，并不会报错
+        cout &lt;&lt; &quot;执行下一步&quot; &lt;&lt; endl;
+    
+    &#125;catch(bad_alloc &amp; ba)&#123;
+
+        cout &lt;&lt; &quot;出现错误&quot; &lt;&lt; endl;
+        cout &lt;&lt; ba.what() &lt;&lt; endl;
+        exit(EXIT_FAILURE);
 
     &#125;
+
+    cout &lt;&lt; &quot;创建成功&quot; &lt;&lt; endl;
+    pb[0].stuff[0] &#x3D; 4;
+    cout &lt;&lt; pb[0].stuff[0] &lt;&lt; endl;
+    
+    delete [] pb;
+    return 0;
+
+&#125;
+&#x2F;&#x2F;会引起异常错误
+
+&#x2F;&#x2F;空指针的调用方法
+if(pb &#x3D;&#x3D; 0)&#123;
+    
+    cout &lt;&lt; &quot;分配内存失败&quot; &lt;&lt; endl;
+    exit(EXIT_FAILURE);
+    
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<h3 id="引发异常时的问题"><a href="#引发异常时的问题" class="headerlink" title="引发异常时的问题"></a>引发异常时的问题</h3><br/>
+
+<p>如果没有捕获catch中匹配的异常，在默认情况下，会导致程序异常终止</p>
+<p>但是异常没有捕获不会让程序立刻终止，相反，会先调用terminate()函数</p>
+<p>可以调用set_terminate()函数，设定该函数输出的信息，如果调用了多个，系统将会采用最后一个</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;cstdlib&gt;
+#include &lt;exception&gt;
+using namespace std;
+
+void MyError();
+
+int main()&#123;
+
+    set_terminate(MyError);&#x2F;&#x2F;在程序的开始处设定该代码
+
+    return 0;
 
 &#125;
 
-class Apple&#123;
+void MyError()&#123;
 
-    private double price;
+    cout &lt;&lt; &quot;终端使程序终止&quot; &lt;&lt; endl;
+    exit(5);
 
-    public Apple()&#123;
-
-        this(0.0);
-
-    &#125;
-
-    public Apple(double p)&#123;
-
-        p &#x3D; price;
-
-    &#125;
-
-    public void setPrice(double price) &#123;
-
-        this.price &#x3D; price;
-
-    &#125;
-
-    public double getPrice() &#123;
-
-        return price;
-
-    &#125;
-
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <br/>
 
-<p>上述是一个比较典型的例子，调用<code>getName()</code>返回String对象</p>
-<p>还有<code>getSuperclass() 获得该类继承的类</code>  <code>getInterfaces() 活得该类实现的所有接口</code></p>
+<p>对于一些函数，可能不知道可能捕获可能存在的异常，这个时候就可以使用动态异常规范</p>
+<p><code>double Argh(double, double) noexcept;</code></p>
+<p>没有预料的异常程序会调用unexcept()函数，同上述相比，set_unexcepted()受到的限制更加严格</p>
+<p>unexcepted_handler函数可以：</p>
+<p>1.调用terminate()(默认)&amp;abort()&amp;exit() 来终止程序</p>
+<p>2.引发异常</p>
+<p>3.如果新引发的异常和原来的匹配，就从原来那里正常处理，不然将使用该处理代替意外异常</p>
+<p>4.如果没有匹配的异常，并且没有bad_exception类型，默认调用terminate()</p>
+<p>5.如果没有匹配的异常，并且有规定的bad_exception，不匹配的异常将被其所取代</p>
 <br/>
 
-<h3 id="Class-forName-返回类"><a href="#Class-forName-返回类" class="headerlink" title="Class.forName() 返回类"></a>Class.forName() 返回类</h3><br/>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;exception&gt;
+using namespace std;
 
-<p>forName(String className)</p>
+void MyUnexception();
+
+int main()&#123;
+
+    set_unexpected(MyUnexception);
+
+    return 0;
+
+&#125;
+
+void MyUnexception()&#123;
+
+    throw bad_exception();
+
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <br/>
 
-<p>1.初始化initialize=true</p>
-<p>2.总是使用当前类装载器(也就是装载执行forName()请求的类的类装载器)</p>
-<p>3.总是初始化这个被装载的类(当然也包括：装载、连接、初始化</p>
+<h3 id="类型转换运算符"><a href="#类型转换运算符" class="headerlink" title="类型转换运算符"></a>类型转换运算符</h3><br/>
+
+<p>在c语言的类型转换中，c++的创始人认为太过于随意，所以c++采用了更加严格的转换方式，添加了4个类型转换符</p>
+<p>1.dynamic_cast </p>
+<p>用来检查两者是否有继承关系。因此该运算符实际上只接受基于类对象的指针和引用的类转换</p>
 <br/>
 
-<p>forName(String className, boolean initialize, ClassLoader loader)</p>
-<br/>
-
-<p>1.loader指定装载参数类所用的类装载器，如果null则用bootstrp装载器。</p>
-<p>2.initialize=true时，肯定连接，而且初始化了；</p>
-<p>3.initializ=false时，绝对不会初始化，但是可能被连接了，但是这里有个例外，如果在调用这个forName()前，已经被初始化了，那么返回的类型也肯定是被初始化的(当然，这里也暗含着：被同一个loader所装载的，而且这个类被初始化了)</p>
-<br/>
-
-<h3 id="Class-isPrimitive-判断基本类型"><a href="#Class-isPrimitive-判断基本类型" class="headerlink" title="Class.isPrimitive() 判断基本类型"></a>Class.isPrimitive() 判断基本类型</h3><br/>
-
-<p>Class.isPrimitive()判定指定的Class对象是否表示一个Java的基类型（boolean、char、byte、short、int、long、float、double）</p>
-<p><code>public boolean isPrimitive()</code></p>
-<br/>
-
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">public class TestReflect &#123;
-    public static void main(String[] args) &#123;
-        
-        String str &#x3D; &quot;abc&quot;;
-        Class cls1 &#x3D; str.getClass();
-        Class cls2 &#x3D; String.class;
-        Class cls3 &#x3D; null;&#x2F;&#x2F;必须要加上null
-        
-        try &#123;
-            
-            cls3 &#x3D; Class.forName(&quot;java.lang.String&quot;);
-            
-        &#125; catch (ClassNotFoundException e) &#123;
-            
-            &#x2F;&#x2F; TODO Auto-generated catch block
-            e.printStackTrace();
-            
-        &#125;
-        
-        System.out.println(cls1&#x3D;&#x3D;cls2);
-        System.out.println(cls1&#x3D;&#x3D;cls3);
-        
-        System.out.println(cls1.isPrimitive());
-        System.out.println(int.class.isPrimitive());&#x2F;&#x2F;判定指定的 Class 对象是否表示一个基本类型。
-        System.out.println(int.class &#x3D;&#x3D; Integer.class);&#x2F;&#x2F;False
-        System.out.println(int.class &#x3D;&#x3D; Integer.TYPE);&#x2F;&#x2F;True
-        System.out.println(int[].class.isPrimitive());&#x2F;&#x2F;Flase
-        System.out.println(int[].class.isArray());&#x2F;&#x2F;True
-        
-    &#125;
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">class A&#123;
     
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;
+
+class B : public class A&#123;
+    
+&#125;
+
+A * p1;
+B * p2;
+p1 &#x3D; dynamic_cast &lt;A * &gt; p2;&#x2F;&#x2F;将派生类转化为基类的指针<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <br/>
 
-<h3 id="访问成员变量"><a href="#访问成员变量" class="headerlink" title="访问成员变量"></a>访问成员变量</h3><br/>
-
-<h4 id="获取Field对象"><a href="#获取Field对象" class="headerlink" title="获取Field对象"></a>获取Field对象</h4><br/>
-
-<p>Class.getDeclaredField(String name);</p>
-<p>返回一个 Field 对象，该对象反映此 Class 对象所表示的类或接口的指定已声明字段（包括私有成员）</p>
-<p>Class.getDeclaredFields();</p>
-<p>返回 Field 对象的一个数组，该数组包含此 Class 对象所表示的类或接口所声明的所有字段（包括私有成员）</p>
-<p>Class.getField(String name);</p>
-<p>返回一个 Field 对象，它反映此 Class 对象所表示的类或接口的指定公共成员字段</p>
-<p>Class.getFields();</p>
-<p>返回一个包含某些 Field 对象的数组，该数组包含此 Class 对象所表示的类或接口的所有可访问公共字段</p>
+<p>2.const_cast</p>
+<p>用于执行只有一种用途的转换，改变值为const或volatile，不允许其他类型的转换</p>
+<p>语法结构和dynamic_cast一样</p>
 <br/>
 
-<h4 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h4><br/>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">class High&#123;
 
-<p><a target="_blank" rel="noopener" href="http://www.51gjie.com/java/792.html">getType()</a>： 获取属性声明时类型对象（返回class对象）</p>
-<p><a target="_blank" rel="noopener" href="http://www.51gjie.com/java/793.html">getGenericType() </a>： 返回属性声的Type类型</p>
-<p>getName() ： 获取属性声明时名字</p>
-<p>getAnnotations() ： 获得这个属性上所有的注释</p>
-<p>getModifiers() ： 获取属性的修饰</p>
-<p>isEnumConstant() ： 判断这个属性是否是枚举类</p>
-<p>isSynthetic() ： 判断这个属性是否是 复合类</p>
-<p><a target="_blank" rel="noopener" href="http://www.51gjie.com/java/795.html">get(Object obj) </a>： 取得obj对象这个Field上的值</p>
-<p><a target="_blank" rel="noopener" href="http://www.51gjie.com/java/794.html">set(Object obj, Object value)</a> ： 向obj对象的这个Field设置新值value</p>
+&#125;
+
+High p;
+const High * p1 &#x3D; &amp;p;
+High * pb &#x3D; const &lt;High *&gt; (p1);&#x2F;&#x2F;删除const标签<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <br/>
 
-<h3 id="访问构造方法"><a href="#访问构造方法" class="headerlink" title="访问构造方法"></a>访问构造方法</h3><br/>
-
-<blockquote>
-<p>getConstructors() 获取类中的公共方法</p>
-<p>getConstructor(Class[]  params) 获取类的特定构造方法,params参数指定构造方法的参数类型</p>
-<p>getDeclaredConstructors() 获取类中所有的构造方法(public、protected、default、private)</p>
-<p>getDeclaredConstructor(Class[] params) 获取类的特定构造方法,params参数指定构造方法的参数类型</p>
-</blockquote>
-<p>妈的爷累了，直接暂时咕咕</p>
+<p>由于编程时可能会无意间更改类型和常量特征</p>
+<p>所以使用const_cast更加安全</p>
+<p>3.static_cast</p>
+<p>只有转换的类中可以被隐式转换，或者被转换的类型可以被隐式转为type_name类型</p>
+<p>4.reinterpret_cast</p>
+<p>这种转化可以简化一些厌烦的操作，比如在字节的不同类型的存储方面可以起到规范作用</p>
+<p>但是并不能适用于所有类型</p>
 
                 
             </div>
@@ -788,7 +823,7 @@ class Apple&#123;
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://chenxinyang621.github.io/2021/04/17/JAVA-%E5%8F%8D%E5%B0%84/">https://chenxinyang621.github.io/2021/04/17/JAVA-%E5%8F%8D%E5%B0%84/</a>
+                    <a href="https://chenxinyang621.github.io/2021/04/28/c-%E5%BC%82%E5%B8%B8%E8%BF%9B%E9%98%B6-%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">https://chenxinyang621.github.io/2021/04/28/c-%E5%BC%82%E5%B8%B8%E8%BF%9B%E9%98%B6-%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -826,8 +861,8 @@ class Apple&#123;
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/java/">
-                                    <span class="chip bg-color">java</span>
+                                <a href="/tags/c/">
+                                    <span class="chip bg-color">c++</span>
                                 </a>
                             
                         </div>
@@ -1138,6 +1173,43 @@ class Apple&#123;
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
+                <a href="/2021/04/28/c-string%E7%B1%BB-%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="c++ string类&amp;标准模板库">
+                        
+                        <span class="card-title">c++ string类&amp;标准模板库</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-04-28
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            陈鑫扬
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
                 <a href="/2021/04/18/c-%E5%8F%8B%E5%85%83-%E5%BC%82%E5%B8%B8-%E5%85%B6%E4%BB%96/">
                     <div class="card-image">
                         
@@ -1153,56 +1225,8 @@ class Apple&#123;
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-04-18
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E5%AD%A6%E4%B9%A0/" class="post-category">
-                                    学习
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/c/">
-                        <span class="chip bg-color">c++</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2021/04/17/c-%E7%B1%BB%E6%A8%A1%E6%9D%BF%E4%BC%98%E5%8C%96/">
-                    <div class="card-image">
-                        
-                        <img src="/medias/featureimages/41.jpg" class="responsive-img" alt="c++ 类模板优化">
-                        
-                        <span class="card-title">c++ 类模板优化</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            对类模板一些问题进行完善
-                        
-                    </div>
-                    <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-04-17
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-04-18
                             </span>
                         <span class="publish-author">
                             

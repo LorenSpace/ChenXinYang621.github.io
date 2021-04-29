@@ -4,6 +4,44 @@
   
     
     <entry>
+      <title>c++ string类&amp;标准模板库</title>
+      <link href="2021/04/28/c-string%E7%B1%BB-%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93/"/>
+      <url>2021/04/28/c-string%E7%B1%BB-%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>c++ 异常进阶&amp;类型转换运算符</title>
+      <link href="2021/04/28/c-%E5%BC%82%E5%B8%B8%E8%BF%9B%E9%98%B6-%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/"/>
+      <url>2021/04/28/c-%E5%BC%82%E5%B8%B8%E8%BF%9B%E9%98%B6-%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</url>
+      
+        <content type="html"><![CDATA[<h3 id="stdexcept异常类"><a href="#stdexcept异常类" class="headerlink" title="stdexcept异常类"></a>stdexcept异常类</h3><br/><p> stdexcept定义了其他几个异常类，包括logic_error&amp;runtime_error类</p><p>这些类都是从公有的exception类中派生出来的</p><br/><h4 id="logic-error"><a href="#logic-error" class="headerlink" title="logic_error"></a>logic_error</h4><br/><p>见名知意，这个类描述逻辑错误</p><blockquote><p>domain_error domain表示定义域，如果函数输出了定义域之外的值，会执行该错误</p><p>invalid_error 指出函数传递了一个意料之外的值</p><p>length_error 没有足够的空间来执行所需的操作</p><p>out_of_bounds 用于索引错误</p></blockquote><br/><h4 id="runtime-error"><a href="#runtime-error" class="headerlink" title="runtime_error"></a>runtime_error</h4><br/><blockquote><p>range_error 输出的值域不满足规定的要求</p><p>overflow_error 计算的结果超越了某个类型规定的最大允许范围</p><p>underflow_error 表示下溢错误，用在浮点类型中。一般的浮点类型存在可以表示的最小非零值，如果比这个值还要小，称为下一错误</p></blockquote><br/><h4 id="捕捉一般步骤"><a href="#捕捉一般步骤" class="headerlink" title="捕捉一般步骤"></a>捕捉一般步骤</h4><br/><p>先单独捕获out_of_bounds异常，然后统一捕获其他logic_error系列异常</p><p>最后再捕获exception异常以及其他从exception派生出来的异常</p><p>注意：out_of_bounds在vscode中无法使用</p><br/><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">try&#123;&#125;catch(logic_error &amp; e)&#123;&#125;catch(exception &amp; e)&#123;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br/><h3 id="bad-alloc异常-amp-new"><a href="#bad-alloc异常-amp-new" class="headerlink" title="bad_alloc异常&amp;new"></a>bad_alloc异常&amp;new</h3><br/><p>使用new导致的内存分配问题，可以使用bad_alloc异常</p><p>在之前的版本中，异常中，无法分配请求的内存量时，new会返回一个空指针</p><br/><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;#include &lt;cstdlib&gt;&#x2F;&#x2F;exit所需要的头文件#include &lt;new&gt;#include &lt;exception&gt;using namespace std;struct Big&#123;    double stuff[20000];&#125;;typedef struct Big Big;int main()&#123;    Big * pb;    try&#123;        cout &lt;&lt; &quot;分配一个很大的空间&quot; &lt;&lt; endl;        pb &#x3D; new Big[10000000];        &#x2F;&#x2F;使用Big[10000]时，并不会报错        cout &lt;&lt; &quot;执行下一步&quot; &lt;&lt; endl;        &#125;catch(bad_alloc &amp; ba)&#123;        cout &lt;&lt; &quot;出现错误&quot; &lt;&lt; endl;        cout &lt;&lt; ba.what() &lt;&lt; endl;        exit(EXIT_FAILURE);    &#125;    cout &lt;&lt; &quot;创建成功&quot; &lt;&lt; endl;    pb[0].stuff[0] &#x3D; 4;    cout &lt;&lt; pb[0].stuff[0] &lt;&lt; endl;        delete [] pb;    return 0;&#125;&#x2F;&#x2F;会引起异常错误&#x2F;&#x2F;空指针的调用方法if(pb &#x3D;&#x3D; 0)&#123;        cout &lt;&lt; &quot;分配内存失败&quot; &lt;&lt; endl;    exit(EXIT_FAILURE);    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br/><h3 id="引发异常时的问题"><a href="#引发异常时的问题" class="headerlink" title="引发异常时的问题"></a>引发异常时的问题</h3><br/><p>如果没有捕获catch中匹配的异常，在默认情况下，会导致程序异常终止</p><p>但是异常没有捕获不会让程序立刻终止，相反，会先调用terminate()函数</p><p>可以调用set_terminate()函数，设定该函数输出的信息，如果调用了多个，系统将会采用最后一个</p><br/><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;#include &lt;cstdlib&gt;#include &lt;exception&gt;using namespace std;void MyError();int main()&#123;    set_terminate(MyError);&#x2F;&#x2F;在程序的开始处设定该代码    return 0;&#125;void MyError()&#123;    cout &lt;&lt; &quot;终端使程序终止&quot; &lt;&lt; endl;    exit(5);&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br/><p>对于一些函数，可能不知道可能捕获可能存在的异常，这个时候就可以使用动态异常规范</p><p><code>double Argh(double, double) noexcept;</code></p><p>没有预料的异常程序会调用unexcept()函数，同上述相比，set_unexcepted()受到的限制更加严格</p><p>unexcepted_handler函数可以：</p><p>1.调用terminate()(默认)&amp;abort()&amp;exit() 来终止程序</p><p>2.引发异常</p><p>3.如果新引发的异常和原来的匹配，就从原来那里正常处理，不然将使用该处理代替意外异常</p><p>4.如果没有匹配的异常，并且没有bad_exception类型，默认调用terminate()</p><p>5.如果没有匹配的异常，并且有规定的bad_exception，不匹配的异常将被其所取代</p><br/><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;#include &lt;exception&gt;using namespace std;void MyUnexception();int main()&#123;    set_unexpected(MyUnexception);    return 0;&#125;void MyUnexception()&#123;    throw bad_exception();&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br/><h3 id="类型转换运算符"><a href="#类型转换运算符" class="headerlink" title="类型转换运算符"></a>类型转换运算符</h3><br/><p>在c语言的类型转换中，c++的创始人认为太过于随意，所以c++采用了更加严格的转换方式，添加了4个类型转换符</p><p>1.dynamic_cast </p><p>用来检查两者是否有继承关系。因此该运算符实际上只接受基于类对象的指针和引用的类转换</p><br/><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">class A&#123;    &#125;class B : public class A&#123;    &#125;A * p1;B * p2;p1 &#x3D; dynamic_cast &lt;A * &gt; p2;&#x2F;&#x2F;将派生类转化为基类的指针<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br/><p>2.const_cast</p><p>用于执行只有一种用途的转换，改变值为const或volatile，不允许其他类型的转换</p><p>语法结构和dynamic_cast一样</p><br/><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">class High&#123;&#125;High p;const High * p1 &#x3D; &amp;p;High * pb &#x3D; const &lt;High *&gt; (p1);&#x2F;&#x2F;删除const标签<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br/><p>由于编程时可能会无意间更改类型和常量特征</p><p>所以使用const_cast更加安全</p><p>3.static_cast</p><p>只有转换的类中可以被隐式转换，或者被转换的类型可以被隐式转为type_name类型</p><p>4.reinterpret_cast</p><p>这种转化可以简化一些厌烦的操作，比如在字节的不同类型的存储方面可以起到规范作用</p><p>但是并不能适用于所有类型</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> c++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>c++ 友元&amp;异常</title>
       <link href="2021/04/18/c-%E5%8F%8B%E5%85%83-%E5%BC%82%E5%B8%B8-%E5%85%B6%E4%BB%96/"/>
       <url>2021/04/18/c-%E5%8F%8B%E5%85%83-%E5%BC%82%E5%B8%B8-%E5%85%B6%E4%BB%96/</url>
