@@ -811,6 +811,99 @@ int main()&#123;
 
 <p>cout经过缓冲后输出，默认情况下是显示器。这是一个被缓冲的输出，是标准输出，并且可以重新定向</p>
 <p>cerr不经过缓冲而直接输出，一般用于迅速输出出错信息，是标准错误，默认情况下被关联到标准输出流，但它不被缓冲，也就说错误消息可以直接发送到显示器，而无需等到缓冲区或者新的换行符时，才被显示</p>
+<br/>
+
+<p>string中还存在一个静态成员—npos，它代表了string中能存储的最大字符串长度</p>
+<p>在具体实践中，可以用他来表示没有查到字符或者字符串</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">cout &lt;&lt; string::npos &lt;&lt; endl;
+&#x2F;&#x2F;18446744073709551615<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<br/>
+
+<h3 id="智能指针模板类"><a href="#智能指针模板类" class="headerlink" title="智能指针模板类"></a>智能指针模板类</h3><br/>
+
+<p>如果在函数中使用动态内存分配，很有可能会导致忘记释放而产生的内存泄漏问题</p>
+<p>所以，c++中提供了智能指针这个功能（auto_ptr、unique_ptr、shared_ptr），前者是c++98的产物，在c++11中被废除并由后两者替代</p>
+<p>（在vscode的编译器中，前者会报版本不支持警告，但是仍然会正常运行）</p>
+<p>这三个指针被包含在memory头文件中，使用智能指针模板之后，就不需要使用delete了</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;memory&gt;
+using namespace std;
+
+class Report&#123;
+    private:
+        string str;
+    
+    public:
+        Report(const string &amp; s):str(s)&#123; cout &lt;&lt; &quot;Report created&quot; &lt;&lt; endl;&#125;
+        ~Report()&#123; cout &lt;&lt; &quot;Report deleted&quot; &lt;&lt; endl;&#125;
+        void show() const&#123; cout &lt;&lt; str &lt;&lt; endl;&#125;
+&#125;;
+
+int main()&#123;
+
+    shared_ptr&lt;Report&gt; sp(new Report(&quot;using shared_ptr&quot;));&#x2F;&#x2F;这里的sp是指针对象
+    sp-&gt;show();
+
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>在系统定义的模板中，所有的智能指针都有explict构造函数，所以不需要自动转换，不能用=来进行赋值</p>
+<p>在模板中，还使用了throw，这样在部分代码出现错误时，编译器可以及时停止运行，并显示错误信息</p>
+<br/>
+
+<h3 id="对比不同的智能指针模板"><a href="#对比不同的智能指针模板" class="headerlink" title="对比不同的智能指针模板"></a>对比不同的智能指针模板</h3><br/>
+
+<p>c++实质上定义了四种智能指针（cprimer不讨论weak_ptr）</p>
+<p>auto_ptr被c++11废除的原因可以从下面的例子略知一二</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">auto_ptr&lt;string&gt; ps(new string(&quot;cxy yyds&quot;));
+auto_ptr&lt;string&gt; version;
+version &#x3D; ps;&#x2F;&#x2F;这种写法很明显是错误的，在类和对象中有过提及
+&#x2F;&#x2F;两个对象会指向同一个地址，这样在析构函数调用时，就会调用两次，这是会出问题的（所以在重载&#x3D;的时候，才要释放旧参的内存）<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>要想解决这个办法，一般由三种可选方案</p>
+<blockquote>
+<p>重载赋值运算符（创建复制构造函数），使它执行深复制。让两个指针指向不同的对象，其中一个是另一个的副本（<code>retrun *this;</code>）</p>
+<p>建立所有权概念，对于特定的对象，只能有一个智能指针掌控，赋值操作会删去对象并转让操控权（这是用于auto_ptr&amp;unique_ptr的策略，只不过后者更为严格）</p>
+<p>创建智能更高的指针，使用引用计数（类似于先前的StringBad的例子），创建赋值时+1，释放时-1，最后一个指针过期时，才使用delete释放内存。这是shared_ptr采用的策略</p>
+</blockquote>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;memory&gt;
+using namespace std;
+
+int main()&#123;
+    shared_ptr&lt;string&gt; filename[5] &#x3D; &#123;
+        shared_ptr&lt;string&gt; (new string(&quot;cmk&quot;)),
+        shared_ptr&lt;string&gt; (new string(&quot;ckt&quot;)),
+        shared_ptr&lt;string&gt; (new string(&quot;cyx&quot;)),
+        shared_ptr&lt;string&gt; (new string(&quot;cxy&quot;)),
+        shared_ptr&lt;string&gt; (new string(&quot;fwh&quot;))   
+    &#125;;
+
+    shared_ptr&lt;string&gt; sp(new string(&quot;just monika&quot;));
+    filename[3] &#x3D; sp;&#x2F;&#x2F;如果使用auto_ptr将会产生问题    
+
+    for(int i &#x3D; 0; i &lt; 5; i++)&#123;
+        cout &lt;&lt; *filename[i] &lt;&lt; endl;
+    &#125;
+
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>如果想给一个由函数创建的智能指针赋值，可以使用move()，能够将一个unique_ptr赋值给另一个</p>
+<p>如果程序需要有多个指针对象，必须使用shared_ptr，如果不需要，就使用unique_ptr</p>
 
                 
             </div>
