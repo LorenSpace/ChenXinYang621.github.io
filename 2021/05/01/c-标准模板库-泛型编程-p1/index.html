@@ -569,7 +569,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-05-02
+                    2021-05-08
                 </div>
                 
 
@@ -596,7 +596,458 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h3 id="STL-标准模板库"><a href="#STL-标准模板库" class="headerlink" title="STL(标准模板库)"></a>STL(标准模板库)</h3><br/>
+
+<p>STL是一套功能强大的 C++ 模板类，提供了通用的模板类和函数，这些模板类和函数可以实现多种流行和常用的算法和数据结构，如向量、链表、队列、栈</p>
+<p>基本分为三个部分容器、算法、迭代器</p>
+<br/>
+
+<h4 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h4><br/>
+
+<p>容器是用来管理某一类对象的集合，C++ 提供了各种不同类型的容器，比如 deque、list、vector、map 等</p>
+<p>在之前已经大概了解了vector的基本用法和原理，vector也可以用来进行动态内存分配</p>
+<p>vector在前面说过，是自动使用new和delete（可以使用动态内存），如果忽略模板参数的值，会由自动使用分配器</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+const int N &#x3D; 10;
+
+int main()&#123;
+    vector&lt;int&gt; pdata(5);
+    vector&lt;int&gt; pd(N);&#x2F;&#x2F;支持动态内存分配
+
+    pdata[0] &#x3D; 1;&#x2F;&#x2F;类中的[]运算符是有重载过，可以使用该索引方法
+    cout &lt;&lt; pdata[0] &lt;&lt; endl;
+
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<h4 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h4><br/>
+
+<p>迭代器用于遍历对象集合的元素。这些集合可能是容器，也可能是容器的子集。你可以把迭代器当作指针（在实际使用中的语法跟指针类似），一些特殊的方法对集合的进行判断</p>
+<p>迭代器为不同容器类提供统一接口，方便程序的操作</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main()&#123;
+    vector&lt;int&gt; pd(5);
+    int i;
+    for (i &#x3D; 0; i &lt; 5; i ++)&#123;
+        pd.push_back(i);&#x2F;&#x2F;push_back( ) 成员函数在向量的末尾插入值，如果有必要会扩展向量的大小
+    &#125;
+    
+    &#x2F;&#x2F;vector&lt;int&gt;::iterator idx &#x3D; pd.begin();
+    auto idx &#x3D; pd.begin();&#x2F;&#x2F;c++11 新增了自动类型推断，可以不用像上面一样
+    while (idx !&#x3D; pd.end())&#123;
+        cout &lt;&lt; *idx &lt;&lt; endl;
+        idx++;
+    &#125;
+
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<h4 id="STL的其他操作"><a href="#STL的其他操作" class="headerlink" title="STL的其他操作"></a>STL的其他操作</h4><br/>
+
+<p>在程序中我们一般要对多个数组进行操作，包括搜索、排序等等。STL正是简化了这种重复性高的工作，假设有8个容器，需要支持10种操作，一般需要定义80个成员函数。如果采用STL方法，只需要定义10个非成员函数来进行这种操作</p>
+<p>STL中拥有各种简便的方法</p>
+<blockquote>
+<p>for_each：可以用这种代替反复枯燥的for循环</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;&#x2F;&#x2F;STL存在的头文件
+using namespace std;
+
+void print(const int &amp; x);
+
+int main()&#123;
+    int a[] &#x3D; &#123;1, 2, 3, 4, 5&#125;;
+    &#x2F;&#x2F;siezeof(a) &#x3D; N * sizeof(int) N为元素个数
+    vector&lt;int&gt; v(a, a + sizeof(a) &#x2F; sizeof(int));&#x2F;&#x2F;通过数组地址对vector进行初始化
+    &#x2F;&#x2F;vector&lt;int&gt; v(a, a + 5); 这样初始化也可以，前提是数组元素比较小且不变动
+
+    for_each(v.begin(), v.end(), print);&#x2F;&#x2F;开始，结束，使用的函数
+    &#x2F;&#x2F;可以跳过使用迭代器之后进行的一大堆for循环的编程
+
+    return 0;
+&#125;
+
+void print(const int &amp; x)&#123;
+    cout &lt;&lt; x &lt;&lt; endl;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<br/>
+
+<p>sort：之前就已经介绍过了，黄老板已经给我介绍的一句话排序</p>
+<p>random_shuffle：将容器中的元素随机打乱，需要能过随机访问值的容器，vector就十分合适</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+void print(const int &amp; x);
+bool judge(const int &amp; x1, const int &amp; x2);
+
+int main()&#123;
+    int a[] &#x3D; &#123;1, 2, 3, 4, 5, 6&#125;;
+    vector&lt;int&gt; v(a, a + sizeof(a) &#x2F; sizeof(int));
+    
+    random_shuffle(v.begin(), v.end());
+    for_each(v.begin(), v.end(), print);
+
+    cout &lt;&lt; endl;
+    sort(v.begin(), v.end(), judge);&#x2F;&#x2F;自定义判断标准
+    for_each(v.begin(), v.end(), print);
+
+    return 0;
+&#125;
+
+void print(const int &amp; x)&#123;
+    cout &lt;&lt; x &lt;&lt; endl;
+&#125;
+
+bool judge(const int &amp; x1, const int &amp; x2)&#123;
+    return x1 &gt; x2;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+</blockquote>
+<h4 id="基于范围的for循环"><a href="#基于范围的for循环" class="headerlink" title="基于范围的for循环"></a>基于范围的for循环</h4><br/>
+
+<p>c++11中新增的for循环（可以理解为Java中的foreach循环），为STL设计，将for_each进一步简化</p>
+<p>在这个c++20即将推出之际，可以看到，各种语言也是在为了便利性不断地向前延申</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+void print(const int &amp; x);
+
+int main()&#123;
+    int a[] &#x3D; &#123;1, 2, 3, 4, 5, 6&#125;;
+    vector&lt;int&gt; v(a, a + sizeof(a) &#x2F; sizeof(int));
+
+    for(auto &amp; i : v)&#123;&#x2F;&#x2F;新增的auto判断可以省略判断类型的过程&quot;int i&quot;
+        print(i);
+    &#125;
+
+    return 0;
+&#125;
+
+void print(const int &amp; x)&#123;
+    cout &lt;&lt; x &lt;&lt; endl;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<h3 id="泛型编程介绍"><a href="#泛型编程介绍" class="headerlink" title="泛型编程介绍"></a>泛型编程介绍</h3><br/>
+
+<p>在使用泛型编程之前，我们先回顾一下c链表的操作（基本的功能无非就是增删改查）</p>
+<p>（也算是看看现在我能不能看懂链表（x）</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+using namespace std;
+
+struct Node&#123;
+    double item;
+    Node * p_next;
+&#125;;
+typedef struct Node Node;
+
+Node *create();
+Node *num_sort(Node * head);
+void destroy(Node * head);
+void print(Node *head);
+
+int main()&#123;
+    Node *head;
+    head &#x3D; create();
+
+    cout &lt;&lt; &quot;origin version&quot; &lt;&lt; endl;
+    print(head);
+
+    head &#x3D; num_sort(head);
+    cout &lt;&lt; &quot;sorted version&quot; &lt;&lt; endl;
+    print(head);
+
+    destroy(head);
+
+    return 0;
+&#125;
+
+Node *create()&#123;
+    Node *p, *head, *tail;
+    int num;
+    head &#x3D; NULL;
+    tail &#x3D; NULL;
+    
+    cout &lt;&lt; &quot;enter a num (end with -999)&quot; &lt;&lt; endl;
+    cin &gt;&gt; num;
+    while(num !&#x3D; -999)&#123;
+        p &#x3D; new Node;
+        p-&gt;item &#x3D; num;
+        p-&gt;p_next &#x3D; NULL;
+
+        if(head &#x3D;&#x3D; NULL)&#123;
+            head &#x3D; p;
+        &#125;else&#123;
+            tail-&gt;p_next &#x3D; p;
+        &#125;
+        tail &#x3D; p;
+
+        cout &lt;&lt; &quot;enter a num (end with -999)&quot; &lt;&lt; endl;
+        cin &gt;&gt; num;
+    &#125;
+
+    return head;
+&#125;
+
+Node *num_sort(Node * head)&#123;
+    Node *p1, *p2, temp;
+    p1 &#x3D; head;
+
+    if(head &#x3D;&#x3D; NULL)&#123;
+        cout &lt;&lt; &quot;It&#39;s NULL&quot; &lt;&lt; endl;
+        return head;
+    &#125;else if(head-&gt;p_next &#x3D;&#x3D; NULL)&#123;
+        cout &lt;&lt; &quot;only one number, no need to sort&quot; &lt;&lt; endl;
+        return head;
+    &#125;
+
+    while(p1-&gt;p_next !&#x3D; NULL)&#123;
+        p2 &#x3D; p1-&gt;p_next;
+        while(p2 !&#x3D; NULL)&#123;
+            if(p1-&gt;item &gt; p2-&gt;item)&#123;
+                temp &#x3D; *p1;
+                *p1 &#x3D; *p2;
+                *p2 &#x3D; temp;
+                temp.p_next &#x3D; p1-&gt;p_next;
+                p1-&gt;p_next &#x3D; p2-&gt;p_next;
+                p2-&gt;p_next &#x3D; temp.p_next;
+            &#125;
+            p2 &#x3D; p2-&gt;p_next;
+        &#125;
+        p1 &#x3D; p1-&gt;p_next;
+    &#125;
+
+    return head;
+&#125;
+
+void print(Node *head)&#123;
+    Node *p;
+    p &#x3D; head;
+
+    if(head &#x3D;&#x3D; NULL)&#123;
+        cout &lt;&lt; &quot;nothing to print&quot; &lt;&lt; endl;
+    &#125;else&#123;
+        cout &lt;&lt; &quot;num is &quot; &lt;&lt; endl;
+        while(p !&#x3D; NULL)&#123;
+            cout &lt;&lt; p-&gt;item &lt;&lt; endl;
+            p &#x3D; p-&gt;p_next;
+        &#125;
+    &#125;
+&#125;
+
+void destroy(Node * head)&#123;
+    Node *p1, *p2;
+    p1 &#x3D; head;
+
+    while(p1 !&#x3D; NULL)&#123;
+        p2 &#x3D; p1;
+        p1 &#x3D; p1-&gt;p_next;
+        delete p2;
+    &#125;
+
+    cout &lt;&lt; &quot;release success&quot; &lt;&lt; endl;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>泛型编程旨在使用同一个find函数处理数组和链表问题，于是就产生了各种类型的迭代器</p>
+<blockquote>
+<p>输入迭代器：这种迭代器必须能够访问容器中的所有值（原理是根据++运算符来实现的）。并且，不能保证两次遍历容器时都是相同的顺序，也不能保证先前的值仍然可以被解除引用</p>
+<p>（输入迭代器是单向迭代器，可以递增不能倒退）</p>
+<p>输出迭代器：输出迭代器和输入迭代器类似，解除引用让程序能够修改容器值</p>
+<p>正向迭代器：正向迭代器只使用++运算符，每次遍历数组时都是使用同一个顺序。递增之后，仍然可以对前面的迭代器解除引用，并可以得到相同的值</p>
+<p>双向迭代器：显而易见，支持++运算符和–运算符</p>
+<p>随机访问迭代器：有些算法要求能够直接跳到容器中的任何一个元素</p>
+</blockquote>
+ <br/>
+
+<h3 id="迭代器实践"><a href="#迭代器实践" class="headerlink" title="迭代器实践"></a>迭代器实践</h3><br/>
+
+<p>之前在例子中已经介绍过了begin()&amp;end()这两种迭代器，vector是动态内存，所以需要这些机制来扩充自己</p>
+<blockquote>
+<p>front()：返回当前vector容器中起始元素的引用</p>
+<p>back()：返回当前vector容器中末尾元素的引用</p>
+<p>copy(start, end, container.begin()): 把一个序列拷贝到一个容器中去</p>
+</blockquote>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+const int SIZE &#x3D; 3;
+
+int main()&#123;
+
+    int a[SIZE] &#x3D; &#123;3, 4, 5&#125;;
+    int b[SIZE];
+    copy(a, a + SIZE, b);
+
+    &#x2F;&#x2F;可以看见，基于范围的for循环还是将值赋值给i
+    for(auto i : b)&#123;
+        cout &lt;&lt; i &lt;&lt; endl;&#x2F;&#x2F;不需要使用函数，直接通过这种方式也可以输出数组的值
+    &#125;
+
+    vector&lt;int&gt; temp(SIZE);
+    copy(a, a + SIZE, &amp;temp.front());&#x2F;&#x2F;要注意，front()的返回值是引用
+    for(auto i : temp)&#123;
+        cout &lt;&lt; i &lt;&lt; endl;
+    &#125;
+
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<h4 id="输入迭代器"><a href="#输入迭代器" class="headerlink" title="输入迭代器"></a>输入迭代器</h4><br/>
+
+<p>istream_iterator 定义在<code>&lt;iterator&gt;</code>头文件，并位于 std 命名空间中</p>
+<p>创建输入流迭代器的方式有 3 种</p>
+<blockquote>
+<p>调用 istream_iterator 模板类的默认构造函数</p>
+<p>创建一个可用来读取数据的输入流迭代器，<code>std::istream_iterator&lt;double&gt; iit(std::cin);</code></p>
+<p>支持用已创建好的 istream_iterator 迭代器为新建 istream_iterator 迭代器初始化，<code>std::istream_iterator&lt;double&gt; iit2(iit1);</code></p>
+</blockquote>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+int main()&#123;
+    double v1, v2;
+    int i;
+    istream_iterator&lt;double&gt; eos;&#x2F;&#x2F;创建表示结束的输入迭代器
+    istream_iterator&lt;double&gt; lit(cin);&#x2F;&#x2F;创建一个可逐个读取输入流中数据的迭代器，同时这里会让用户输入数据
+
+    if(lit !&#x3D; eos)&#123;
+        v1 &#x3D; *lit;
+    &#125;
+    lit++;
+    if(lit !&#x3D; eos)&#123;
+        v2 &#x3D; *lit;
+    &#125;
+
+    cout &lt;&lt; &quot;value1&#x3D; &quot; &lt;&lt; v1 &lt;&lt; endl;
+    cout &lt;&lt; &quot;value2&#x3D; &quot; &lt;&lt; v2 &lt;&lt; endl;
+
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>注意，只有读取到 EOF 流结束符时，程序中的 iit 才会和 eos 相等</p>
+<p>在这个例子中，输入迭代器会自动根据要赋值的个数决定用户输入的次数</p>
+<p>但我们大部分情况下会使用while循环进行赋值，这样就没办法通过自动判断的方法来中止了。Windows 平台上使用 Ctrl+Z 组合键输入 ^Z 表示 EOF 流结束符，此结束符需要单独输入，或者输入换行符之后再输入才有效</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+int main()&#123;
+    vector&lt;double&gt; v;
+    int i;
+    istream_iterator&lt;double&gt; eos;
+    istream_iterator&lt;double&gt; lit(cin);
+    
+    while(lit !&#x3D; eos)&#123;
+        v.push_back(*lit);
+        lit++;
+    &#125;&#x2F;&#x2F;停止输入需要手动输入^Z
+
+    for(auto j : v)&#123;
+        cout &lt;&lt; j &lt;&lt; &quot; &quot;;
+    &#125;
+    
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<h4 id="输出迭代器"><a href="#输出迭代器" class="headerlink" title="输出迭代器"></a>输出迭代器</h4><br/>
+
+<p>ostream_iterator 模板类中也提供了 3 种创建 ostream_iterator 迭代器的方法</p>
+<blockquote>
+<p>通过调用该模板类的默认构造函数</p>
+<p>在第一种方式的基础上，还可以为写入的元素之间指定一个分隔符，<code>std::ostream_iterator&lt;int&gt; out_it(std::cout，&quot;,&quot;);</code></p>
+<p>在创建输出流迭代器时，可以用已有的同类型的迭代器，为其初始化，<code>std::ostream_iterator&lt;int&gt; out_it1(out_it);</code></p>
+</blockquote>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main()&#123;
+    ostream_iterator&lt;string&gt; out(cout);
+    *out &#x3D; &quot;http:&#x2F;&#x2F;c.biancheng.net&#x2F;view&#x2F;7286.html&quot;;
+    cout &lt;&lt; endl;
+
+    ostream_iterator&lt;int&gt; out_iterator(cout, &quot;,&quot;);
+    *out_iterator &#x3D; 1;
+    *out_iterator &#x3D; 2;
+    *out_iterator &#x3D; 3; 
+    &#x2F;&#x2F;轮流输入之后，输出迭代器会自动将指针递增
+
+    return 0;    
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>和输入迭代器一样，在一般情况下，我们是不会这么简单地直接赋值地，大部分情况都需要使用第三者</p>
+<p>由于不能通过参数，所以就需要借用copy()</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;iterator&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main()&#123;
+    vector&lt;int&gt; v;
+    ostream_iterator&lt;int&gt; ov(cout, &quot; &quot;);
+    int num;
+
+    cin &gt;&gt; num;
+    while(num !&#x3D; -999)&#123;
+        v.push_back(num);
+        cin &gt;&gt; num;
+    &#125;
+
+    sort(v.begin(), v.end());
+    copy(v.begin(), v.end(), ov);
+
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
                 
             </div>
             <hr/>
@@ -1005,8 +1456,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/java/">
-                        <span class="chip bg-color">java</span>
+                    <a href="/tags/python/">
+                        <span class="chip bg-color">python</span>
                     </a>
                     
                     <a href="/tags/c/">
