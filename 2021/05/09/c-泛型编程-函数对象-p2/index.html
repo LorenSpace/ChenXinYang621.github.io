@@ -569,7 +569,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-05-14
+                    2021-05-15
                 </div>
                 
 
@@ -699,6 +699,253 @@ int main()&#123;
 <p>下面介绍不同序列的特点和用法</p>
 <p>1.deque：表示双端队列，其实现类似于vector容器，支持随机访问</p>
 <p>2.list：表示双向链表，除了第一个和最后一个元素意外，每个元素都与前后的元素相链接</p>
+<p>这意味这，你可以双向遍历链表。list对任一位置的插入和删除都是固定时间，vector强调的是通过随机访问进行快速访问，list强调的是元素的快速插入和删除</p>
+<p>和vector不同的是，list不支持数组表示法和随机访问。</p>
+<blockquote>
+<p>merge(list&lt;T, Alloc&gt; &amp;x)：将链表x和调用链表合并，合并前必须排序，合并完之后保存在调用链表里（合并之后，程序也会自动排序）</p>
+<p>remove(const T &amp;val)：删除链表中所有的val实例</p>
+<p>sort()：使用&lt;运算符进行正序排序</p>
+<p>unique()：清除重复的元素</p>
+<p>splice(iterator pos, lis&lt;T, Alloc A&gt; x)：将链表x的内容插入到pos前面，执行之后x将会清</p>
+</blockquote>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;list&gt;
+#include &lt;vector&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+void print(int x)&#123;cout &lt;&lt; x &lt;&lt; &quot; &quot;;&#125;
+
+int main()&#123;
+    vector&lt;int&gt; v;
+    int a[3] &#x3D; &#123;35, 35, 6&#125;;
+    int num;
+    cin &gt;&gt; num;
+    while(num !&#x3D; -999)&#123;
+        v.push_back(num);
+        cin &gt;&gt; num;
+    &#125;
+
+    list&lt;int&gt; l1;
+    list&lt;int&gt; l2;
+    &#x2F;&#x2F;无法使用copy将值复制到list中
+    l1.insert(l1.end(), v.begin(), v.end());
+    l2.insert(l2.end(), a, a + 3);
+    l1.sort();
+    l2.sort();
+
+    for_each(l1.begin(), l1.end(), print);
+    cout &lt;&lt; endl;
+    for_each(l2.begin(), l2.end(), print);
+    cout &lt;&lt; endl;
+
+    l1.splice(l1.begin(), l2);
+    for_each(l1.begin(), l1.end(), print);
+    cout &lt;&lt; endl;
+    for_each(l2.begin(), l2.end(), print);&#x2F;&#x2F;此时的l2中为空
+    cout &lt;&lt; endl;
+    l1.merge(l2);
+    for_each(l1.begin(), l1.end(), print);
+    cout &lt;&lt; endl;
+    l1.unique();
+    for_each(l1.begin(), l1.end(), print);
+    cout &lt;&lt; endl;
+   
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>3.forward_list：c++11新增的容器，只需要正向迭代器，不需要双向迭代器</p>
+<p>相比于list更加简单&amp;紧凑，但是对应的功能也就更少</p>
+<p>4.queue：在头文件queue中，限制更多，不仅不允许随机访问队列元素，甚至不允许遍历队列</p>
+<blockquote>
+<p>empty() const：如果队列为空，则返回true</p>
+<p>push(const T &amp;X)：在队尾插入x</p>
+<p>pop()：删除队首元素</p>
+</blockquote>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;queue&gt;
+using namespace std;
+
+int main()&#123;
+    queue&lt;int&gt; q;
+    int num;
+    cin &gt;&gt; num;
+    while(num !&#x3D; -999)&#123;
+        q.push(num);
+        cin &gt;&gt; num;
+    &#125;
+    
+    while(!q.empty())&#123;
+        cout &lt;&lt; q.front() &lt;&lt; &quot; &quot;;
+        q.pop();
+    &#125;
+    cout &lt;&lt; endl;
+
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>5.stack：和queue相似，添加了top()返回栈顶元素</p>
+<br/>
+
+<h4 id="关联容器"><a href="#关联容器" class="headerlink" title="关联容器"></a>关联容器</h4><br/>
+
+<p>关联容器你可以理解为php中的键值对概念</p>
+<p>最简单的就是set，键名和值的类型相同，每个键对应一个值（包含在set头文件中）</p>
+<p>再往上进阶一点就是map，键名可以和值类型不同，不过每个键也是只能对应一个值（再来就是multimap，一个键可以对应多个值）（包含在map头文件中）</p>
+<p>1.set：</p>
+<p>set_union()：将两个set的并集传到另一个容器中</p>
+<p>set_intersection()：查找两个set的交集</p>
+<p>set_difference()：查找两个set的差</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;set&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;iterator&gt;
+using namespace std;
+
+const int N &#x3D; 6;
+
+int main()&#123;
+    string s1[N] &#x3D; &#123;&quot;cxy&quot;, &quot;about&quot;, &quot;lgbt&quot;, &quot;nice&quot;, &quot;kpl&quot;, &quot;no&quot;&#125;;
+    string s2[N] &#x3D; &#123;&quot;customer&quot;, &quot;lgbt&quot;, &quot;arrange&quot;, &quot;no&quot;, &quot;please&quot;, &quot;go&quot;&#125;;
+    set&lt;string&gt; A(s1, s1 + N);
+    set&lt;string&gt; B(s2, s2 + N);
+    vector&lt;string&gt; C;
+    ostream_iterator&lt;string, char&gt; oit(cout, &quot; &quot;);&#x2F;&#x2F;set的输出会自动排序
+
+    cout &lt;&lt; &quot;A: &quot;;
+    copy(A.begin(), A.end(), oit);
+    cout &lt;&lt; endl;
+    cout &lt;&lt; &quot;B: &quot;;
+    copy(B.begin(), B.end(), oit);
+    cout &lt;&lt; endl;
+    cout &lt;&lt; &quot;A and B: &quot;;
+    set_union(A.begin(), A.end(), B.begin(), B.end(), oit);
+    cout &lt;&lt; endl;
+    cout &lt;&lt; &quot;A in B: &quot;;
+    set_intersection(A.begin(), A.end(), B.begin(), B.end(), oit);
+    cout &lt;&lt; endl;
+    cout &lt;&lt; &quot;A not B: &quot;;
+    set_difference(A.begin(), A.end(), B.begin(), B.end(), oit);
+    cout &lt;&lt; endl;
+
+    cout &lt;&lt; &quot;C: &quot;;
+    set_union(A.begin(), A.end(), B.begin(), B.end(), insert_iterator&lt;vector&lt;string&gt;&gt;(C, C.begin()));
+    &#x2F;&#x2F;不能直接使用c.begin(),需要使用插入迭代器进行显示插入
+    copy(C.begin(), C.end(), oit);
+    cout &lt;&lt; endl;
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>2.multimap：</p>
+<p><code>multimap&lt;int, string&gt; does;</code>：键名为int类型，储存的值为string类型</p>
+<p><code>pair&lt;class T, class U&gt; item(213, &quot;cxy&quot;);</code>：通过pair模板类储存这种键名</p>
+<p>（在pair对象中，可以使用first和second分别访问键名和值）</p>
+<blockquote>
+<p>count(KeyType)：返回键名匹配的值的个数</p>
+<p>equal_range()：返回键名相等的键值对（一般储存在pair中）</p>
+</blockquote>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;map&gt;
+#include &lt;iterator&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+typedef int KeyType;
+typedef string DataType;
+typedef pair&lt;KeyType, DataType&gt; Pair;
+typedef multimap&lt;KeyType, DataType&gt; Map;
+
+int main()&#123;
+
+    Map codes;
+    codes.insert(Pair(73042, &quot;cxy&quot;));
+    codes.insert(Pair(73042, &quot;ckt&quot;));
+    codes.insert(Pair(73041, &quot;zpy&quot;));
+    codes.insert(Pair(73041, &quot;lxq&quot;));
+
+    cout &lt;&lt; &quot;number in 73042: &quot; &lt;&lt; codes.count(73042) &lt;&lt; endl;
+    cout &lt;&lt; &quot;number\tname\t&quot;&lt;&lt; endl;
+    Map::iterator it;
+    for(it &#x3D; codes.begin(); it !&#x3D; codes.end(); it++)&#123;
+        cout &lt;&lt; (*it).first &lt;&lt; &quot;\t&quot; &lt;&lt; (*it).second &lt;&lt; endl;&#x2F;&#x2F;迭代器是指针的形式，调用对象方法的时候需要取地址
+    &#125;
+    pair&lt;Map::iterator, Map::iterator&gt; range &#x3D; codes.equal_range(73041);
+    cout &lt;&lt; &quot;name in 73041: &quot; &lt;&lt; endl;
+    for(it &#x3D; range.first; it !&#x3D; range.second; it++)&#123;&#x2F;&#x2F;这里不定义map的迭代器，直接使用auto i也没有问题
+        cout &lt;&lt; (*it).second &lt;&lt; endl;
+    &#125;
+
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<h3 id="函数对象"><a href="#函数对象" class="headerlink" title="函数对象"></a>函数对象</h3><br/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 
             </div>
