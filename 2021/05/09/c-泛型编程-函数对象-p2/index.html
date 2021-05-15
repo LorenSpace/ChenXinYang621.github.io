@@ -894,12 +894,44 @@ int main()&#123;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <br/>
 
-<h3 id="函数对象"><a href="#函数对象" class="headerlink" title="函数对象"></a>函数对象</h3><br/>
+<h3 id="函数对象引入"><a href="#函数对象引入" class="headerlink" title="函数对象引入"></a>函数对象引入</h3><br/>
 
+<p>很多STL算法都是用函数对象——函数符（即在类中定义了operator()类）</p>
+<br/>
 
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+using namespace std;
 
+class Linear&#123;
+    private:
+        double x;
+        double y;
+    
+    public:
+        Linear(double x0 &#x3D; 1, double y0 &#x3D; 1):x(x0), y(y0)&#123;cout &lt;&lt; &quot;created&quot; &lt;&lt; endl;&#125;
+        ~Linear()&#123;cout &lt;&lt; &quot;closed&quot; &lt;&lt; endl;&#125;
+        double operator() (double x0)&#123;return x + y * x0;&#125;
+&#125;;
 
+int main()&#123;
+    Linear l1;
+    Linear l2(2.5, 10.0);
+    double x1 &#x3D; l1(12.5);
+    double x2 &#x3D; l2(0.4);
+    cout &lt;&lt; x1 &lt;&lt; endl
+    &lt;&lt; x2 &lt;&lt; endl;
+    
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
 
+<p>list模板中存在remove_if()成员，这个稍微举个例子就能明白了</p>
+<p>简单来说，就是去除满足条件的元素</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">bool tooBig(int n)&#123; return n &gt; 100&#125;;
+list&lt;int&gt; scores;
+scores.remove_if(tooBig);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -1318,29 +1350,28 @@ int main()&#123;
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/05/09/c-%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B-%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1-p2/">
+                <a href="/2021/05/15/c-%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1-%E7%AE%97%E6%B3%95-%E6%A0%87%E5%87%86%E5%BA%93-p3/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/48.jpg" class="responsive-img" alt="c++ 泛型编程&amp;函数对象 p2">
+                        <img src="/medias/featureimages/49.jpg" class="responsive-img" alt="c++ 函数对象&amp;算法&amp;标准库 p3">
                         
-                        <span class="card-title">c++ 泛型编程&amp;函数对象 p2</span>
+                        <span class="card-title">c++ 函数对象&amp;算法&amp;标准库 p3</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            苦中有乐的STL
+                            标准库完结篇
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-09
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-15
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1353,7 +1384,6 @@ int main()&#123;
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
