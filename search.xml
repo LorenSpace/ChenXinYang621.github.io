@@ -4,6 +4,69 @@
   
     
     <entry>
+      <title>c++ c++11新规则</title>
+      <link href="2021/06/06/c-c-11%E6%96%B0%E8%A7%84%E5%88%99/"/>
+      <url>2021/06/06/c-c-11%E6%96%B0%E8%A7%84%E5%88%99/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> c++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>c++ IO文件操作</title>
+      <link href="2021/06/06/c-IO%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/"/>
+      <url>2021/06/06/c-IO%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>c++ 输入</title>
+      <link href="2021/05/22/c-%E8%BE%93%E5%85%A5/"/>
+      <url>2021/05/22/c-%E8%BE%93%E5%85%A5/</url>
+      
+        <content type="html"><![CDATA[<h3 id="c-对-gt-gt-运算符的重载"><a href="#c-对-gt-gt-运算符的重载" class="headerlink" title="c++对&gt;&gt;运算符的重载"></a>c++对&gt;&gt;运算符的重载</h3><br/><p>cin也可以像cout一样格式化输入格式，比如<code>cin &gt;&gt; hex</code>，将会把输入的12（0x12）理解成十进制的18或者十六进制的12</p><p>同时也可以直接使用cin来输入string或者是char *等类型，输入时编译器会自动在末尾处添加\0（空字符）（表示字符串）</p><p>在检查cin输入是否合理时，它会从非空白字符开始，一直到不同类型的第一个字符结束</p><br/><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;using namespace std;int main()&#123;    int count &#x3D; 0;    int num;    while(cin &gt;&gt; num)&#123;        count++;        cout &lt;&lt; count &lt;&lt; &quot; : &quot; &lt;&lt; num &lt;&lt; endl;    &#125;    return 0;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br/><p>c++中通过一些成员表示流的状态，一般为1（设置）、0（清除）</p><table><thead><tr><th align="center">成员</th><th align="center">描述</th></tr></thead><tbody><tr><td align="center">eofbit</td><td align="center">如果到达文件尾，则设置为1</td></tr><tr><td align="center">badbit</td><td align="center">如果流被破坏，则设置为1（比如：文件读取错误）</td></tr><tr><td align="center">failbit</td><td align="center">如果输入操作未能读取预期的字符或输出操作没有写入预期的字符，则设置为1</td></tr><tr><td align="center">eof()</td><td align="center">如果eofbit设置，则返回true</td></tr><tr><td align="center">bad()</td><td align="center">如果badbit设置，则返回true</td></tr><tr><td align="center">fail()</td><td align="center">如果badbit或failbit被设置，则返回true</td></tr><tr><td align="center">exceptions()</td><td align="center">返回一个位掩码，指出哪些标记导致异常被引发</td></tr><tr><td align="center">setstate()</td><td align="center">设置输入流中的错误</td></tr><tr><td align="center">clear()</td><td align="center">将流状态设置为s：s的默认值为0(goodbit)</td></tr></tbody></table><br/><p>clear()&amp;setstate()很相似，都可以重置状态，但是采取的方式不同</p><p>默认的clear()方法将三个为全部设置为0，但如果是clear(eofbit)，就是只将eofbit设置，其他被清除</p><p>setstate()方法之影响其参数中已设置的位，setstate(eofbit)，这个将设置eofbit（其他位不会受到影响）</p><p>exceptions()默认设置为goodbit（此时使用clear()&amp;setstate()修改位的状态不会出现问题，无法引发异常），如果将默认值修改为badbit，重载的函数就能控制这种行为（引发ios_base::failure异常，该类包含在exception类中）</p><br/><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;#include &lt;exception&gt;using namespace std;int main()&#123;    cin.exceptions(ios_base::failbit);    cout &lt;&lt; &quot;Enter a number:&quot; &lt;&lt; endl;    int sum &#x3D; 0;    int input;    try&#123;        while(cin &gt;&gt; input)&#123;            sum +&#x3D; input;        &#125;    &#125;catch(ios_base::failure &amp;ibf)&#123;        cout &lt;&lt; ibf.what() &lt;&lt; endl;        cout &lt;&lt; &quot;Error&quot; &lt;&lt; endl;    &#125;    cout &lt;&lt; &quot;Last value &#x3D; &quot; &lt;&lt; input &lt;&lt; endl;    cout &lt;&lt; &quot;sum &#x3D; &quot; &lt;&lt; sum &lt;&lt; endl;    return 0;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br/><p>如果在流意外错误结束的时候继续选择输入，将会失败（对后面的输入和输出关闭，直到流被清除）</p><p>可以使用两种方法，一个为isspace()函数，不断读取字符直到空白为止；另一种方法是使用get()，直接丢弃行中的剩余部分（）（如果想重读取数据，一般使用后者方法）</p><br/><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">cin.clear();while(!isspace(cin.get()))&#123;&#x2F;&#x2F;依然会读取已存在    continue;&#125;cin &gt;&gt; input;cout &lt;&lt; &quot;new value &#x3D; &quot; &lt;&lt; input &lt;&lt; endl;cin.clear();while(cin.get() !&#x3D; &#39;\n&#39;)&#123;    continue;&#125;cin &gt;&gt; input;cout &lt;&lt; &quot;new value &#x3D; &quot; &lt;&lt; input &lt;&lt; endl;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br/><h3 id="单字符输入"><a href="#单字符输入" class="headerlink" title="单字符输入"></a>单字符输入</h3><br/><p>在使用cin的输入方式中，如果想要输入空格，那便是比较尴尬的一件事情</p><p>因为space和’\n’都是编译器判断是否输入下个字符的依据，那么此时就应该使用get来避免错误</p><br/><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;using namespace std;int main()&#123;    int count;    char ch;    cin.get(ch);    while(ch !&#x3D; &#39;\n&#39;)&#123;&#x2F;&#x2F;但是不能使用cin &gt;&gt; ch进行判断        cout &lt;&lt; ch;        count++;        cin.get(ch);        &#125;    cout &lt;&lt; endl &lt;&lt; count &lt;&lt; endl;        return 0;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br/><p>单字符输入函数的cin.get(ch)和ch = cin.get()的特征是不一样的</p><p>因为cin.get()的返回值是int（或者更大储存范围的整形），但是并不是类对象。<code>cin.get().get() &gt;&gt; c3;</code>这种语句是违法的</p><table><thead><tr><th align="center">特征</th><th align="center">cin.get(ch)</th><th align="center">ch = cin.get()</th></tr></thead><tbody><tr><td align="center">传输输入字符的方法</td><td align="center">赋给参数ch</td><td align="center">将函数返回值赋给ch</td></tr><tr><td align="center">字符输入时函数的返回值</td><td align="center">指向istream对象的引用</td><td align="center">字符编码（int值）</td></tr><tr><td align="center">达到文件尾时函数的返回值</td><td align="center">转换为false</td><td align="center">EOF</td></tr></tbody></table><br/><h3 id="字符串输入"><a href="#字符串输入" class="headerlink" title="字符串输入"></a>字符串输入</h3><br/><p>在字符串中，我们一般使用getline()、get()、ignore()进行输入</p><p>对于前两种方法，都有两个重载，一种是两个参数，另一种是三个参数</p><p>第一个参数表示输入字符串的储存位置，第二个参数表示输入字符的数量（需要比实际输入量多一，用来储存’\0’），第三个被称作为分界符的字符（读取到特定字符时就判定尾停止输入字符）。在两个参数的函数中，默认换行符为分界符</p><p>（get和getline的区别在于，后者会舍弃分界符，而前者不会）</p><p>ignore()通常用来舍弃输入流中的字符，通过<code>ignore(255, &#39;\n&#39;)</code>就能舍弃一整行的255个字符</p><br/><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;using namespace std;const int Limit &#x3D; 25;int main()&#123;    char input[Limit];    cin.getline(input, Limit, &#39;#&#39;);    cout &lt;&lt; input &lt;&lt; endl;    char ch;    cin.get(ch);&#x2F;&#x2F;读取输入流中剩下的字符    cout &lt;&lt; ch &lt;&lt; endl;&#x2F;&#x2F;输出将会为#之后的一个字符    cin.ignore(Limit, &#39;\n&#39;);&#x2F;&#x2F;清除流中剩余的字符    cin.get(input, Limit, &#39;#&#39;);    cout &lt;&lt; input &lt;&lt; endl;    cin.get(ch);    cout &lt;&lt; ch &lt;&lt; endl;&#x2F;&#x2F;这里将会输出#（get会保留分界字符）    cin.ignore(Limit, &#39;\n&#39;);    return 0;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br/><h3 id="意外字符输入"><a href="#意外字符输入" class="headerlink" title="意外字符输入"></a>意外字符输入</h3><br/><p>对于意外输入的字符，一般都是通过setstate设置failbit来引发错误</p><p>但是有些时候这种方法并不能使用，一是输入方法一开始就在文件尾，另一种就是输入了空行（’\0’）</p><p>解决办法也比较简单，使用<code>while(cin.getline(temp, 80) &amp;&amp; temp[0] != &#39;\0&#39;)</code>判断即可</p><p>（在getline(temp, 30)中，如果字符输入数为29并且最后一个字符为换行符，则编译器会自动删除；如果不是就会设置failbait，超出设定的字符长度）</p><br/><h3 id="istream中的其他方法"><a href="#istream中的其他方法" class="headerlink" title="istream中的其他方法"></a>istream中的其他方法</h3><br/><p>peek()字符返回输入中的下一个字符，可以在向数组中输入字符时防止流中有残余</p><p>gcount()方法返回最后一个非格式化抽取方法抽取的字符数（作用于使用get()、getline()、ignore()、read()读取的字符）</p><p>（如果是&gt;&gt;向数组中输入，则使用strlen的效率更高）</p><p>putback()函数将将一个字符插入到输入字符串中，被插入的字符将是下一条输入语句读取的第一个字符</p><br/><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;using namespace std;int main()&#123;    char ch;    while(cin.peek() !&#x3D; &#39;#&#39;)&#123;        cin.get(ch);        cout &lt;&lt; ch;    &#125;    if(!cin.eof())&#123;        cin.get(ch);        cout &lt;&lt; endl &lt;&lt; ch &lt;&lt; &quot;next character&quot; &lt;&lt; endl;&#x2F;&#x2F;输出#     &#125;else&#123;        cout &lt;&lt; &quot;last line&quot; &lt;&lt; endl;    &#125;    return 0;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> c++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>c++ 输出</title>
       <link href="2021/05/20/c-%E8%BE%93%E5%87%BA/"/>
       <url>2021/05/20/c-%E8%BE%93%E5%87%BA/</url>
