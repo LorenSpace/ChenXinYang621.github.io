@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="c++ IO文件操作, 陈鑫扬的第一个hexo博客">
+    <meta name="keywords" content="c++ IO文件操作&amp;c++11新规则, 陈鑫扬的第一个hexo博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>c++ IO文件操作 | 陈鑫扬的第一个hexo博客</title>
+    <title>c++ IO文件操作&amp;c++11新规则 | 陈鑫扬的第一个hexo博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -421,7 +421,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">c++ IO文件操作</h1>
+                    <h1 class="description center-align post-title">c++ IO文件操作&amp;c++11新规则</h1>
                 </div>
             </div>
         </div>
@@ -596,7 +596,256 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h3 id="文件操作基本理解"><a href="#文件操作基本理解" class="headerlink" title="文件操作基本理解"></a>文件操作基本理解</h3><br/>
+
+<p>文件操作包含在头文件<code>fstream</code>中，打开文件之后编译器是可以自动关闭的，也可以使用显式方法close()来关闭文件（推荐）</p>
+<p>对于一般的文本读写，可以直接使用&gt;&gt;和&lt;&lt;，并且对于某些需要char *类型的函数，如果使用了string类型，可以使用c_str()来将其转化成c语言风格的字符串</p>
+<p>（使用is_open()查看是否成功打开文件）</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;cstdlib&gt;
+using namespace std;
+
+void CreateFile(string fileName);
+void ReadFile(string fileName);
+int main()&#123;
+    CreateFile(&quot;0x01.txt&quot;);
+    ReadFile(&quot;0x01.txt&quot;);
+
+    return 0;
+&#125;
+
+void CreateFile(string fileName)&#123;
+    ofstream fout(fileName.c_str());
+    string str;
+    if(!fout)&#123;
+        cout &lt;&lt; &quot;Open Error&quot; &lt;&lt; endl;
+        exit(1);
+    &#125;
+
+    cin &gt;&gt; str;
+    while(str !&#x3D; &quot;#&quot;)&#123;
+        fout &lt;&lt; str &lt;&lt; endl;
+        cin &gt;&gt; str;
+    &#125;
+    fout.close();
+&#125;
+
+void ReadFile(string fileName)&#123;
+    ifstream fin(fileName.c_str());
+    string str;
+    if(!fin)&#123;
+        cout &lt;&lt; &quot;Open Error&quot; &lt;&lt; endl;
+        exit(1);
+    &#125;
+    
+    while(getline(fin, str, &#39;\n&#39;))&#123;
+        cout &lt;&lt; str &lt;&lt; endl;
+    &#125;
+    fin.close();
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>当然你可以使用用一个对象进行多个文件打开的操作，不过要记得显式关闭并且清除流中的残余</p>
+<p>（使用clear()&amp;close()）</p>
+<br/>
+
+<h3 id="命令行处理"><a href="#命令行处理" class="headerlink" title="命令行处理"></a>命令行处理</h3><br/>
+
+<p>c++有在能在命令行环境中运行的程序能后访问命令行参数的机制（这个参数和Java有点像）</p>
+<p>具体表现为<code>int main(int argc, char *argv[])</code>，前者表示命令行参数的个数，后者变量则为一个指针（储存这命令行变量）。argv[0]就表示第一个命令行参数</p>
+<br/>
+
+<h3 id="文件模式精确操作"><a href="#文件模式精确操作" class="headerlink" title="文件模式精确操作"></a>文件模式精确操作</h3><br/>
+
+<table>
+<thead>
+<tr>
+<th align="center">常量</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">ios_base::in</td>
+<td align="center">打开文件，以便读取</td>
+</tr>
+<tr>
+<td align="center">ios_base::out</td>
+<td align="center">打开文件，以便写入</td>
+</tr>
+<tr>
+<td align="center">ios_base::ate</td>
+<td align="center">打开文件，并移到文件尾</td>
+</tr>
+<tr>
+<td align="center">ios_base::app</td>
+<td align="center">追加到文件尾（打开时不会重置文件内容）</td>
+</tr>
+<tr>
+<td align="center">ios_base::trunc</td>
+<td align="center">如果文件存在，则截短文件</td>
+</tr>
+<tr>
+<td align="center">ios_base::binary</td>
+<td align="center">二进制文件</td>
+</tr>
+</tbody></table>
+<p>ios_base::app模式只允许将数据添加到文件尾</p>
+<p>ios_base::ate模式将指针放到文件尾</p>
+<br/>
+
+<h3 id="二进制文件"><a href="#二进制文件" class="headerlink" title="二进制文件"></a>二进制文件</h3><br/>
+
+<p>在C语言中就有接触过二进制文件，后缀尾dat</p>
+<p>对于二进制文本的读写需要使用write()&amp;read()，第一个参数表示目标字符，第二个参数则是字符的大小</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;cstdlib&gt;
+#include &lt;string&gt;
+using namespace std;
+
+class Student&#123;
+    private:
+        char number[20];
+        char name[20];
+        char sex[5];
+        int scores;
+
+    public:
+        Student(char *nu &#x3D; &quot;&quot;, char *na &#x3D; &quot;&quot;, char *se &#x3D; &quot;&quot;, int s &#x3D; 0);
+        friend ostream&amp; operator&lt;&lt;(ostream &amp;out, const Student &amp;s);
+&#125;;
+
+Student::Student(char *nu, char *na, char *se, int s)&#123;
+    strcpy_s(number, nu);
+    strcpy_s(name, na);
+    strcpy_s(sex, se);
+    scores &#x3D; s;
+&#125;
+
+ostream&amp; operator&lt;&lt;(ostream &amp;out, const Student &amp;s)&#123;
+    out &lt;&lt; s.number &lt;&lt; &quot; &quot; &lt;&lt; s.name &lt;&lt; &quot; &quot; &lt;&lt; s.sex &lt;&lt; &quot; &quot; &lt;&lt; s.scores &lt;&lt; endl;
+    return out;
+&#125;
+
+void CreateBiFile(string filename);
+void ReadBiFile(string filename);
+int main()&#123;
+    CreateBiFile(&quot;stu.dat&quot;);
+    ReadBiFile(&quot;stu.dat&quot;);
+
+    return 0;
+&#125;
+
+void CreateBiFile(string filename)&#123;
+    ofstream out(filename.c_str());
+    if(!out)&#123;
+        cerr &lt;&lt; &quot;File open error&quot; &lt;&lt; endl;
+        exit(1);
+    &#125;
+
+    Student stu[3] &#x3D; &#123;Student(&quot;B20032025&quot;, &quot;陈鑫扬&quot;, &quot;男&quot;, 99),
+    Student(&quot;B20032024&quot;, &quot;陈彦轩&quot;, &quot;男&quot;, 98),
+    Student(&quot;B20032023&quot;, &quot;陈科廷&quot;, &quot;男&quot;, 87)&#125;;
+    out.write((char *)stu, sizeof(Student) * 3);
+    out.close();
+&#125;
+
+void ReadBiFile(string filename)&#123;
+    Student stu[5];
+	int i &#x3D; 0;
+    ifstream in(filename.c_str());
+    if(!in)&#123;
+        cerr &lt;&lt; &quot;File open error&quot; &lt;&lt; endl;
+        exit(1);
+    &#125;
+
+    while(!in.eof())&#123;
+        in.read((char *)&amp;stu[i++], sizeof(Student));
+    &#125;
+    for(i &#x3D; 0; i &lt; 3; i++)&#123;
+        cout &lt;&lt; stu[i];
+    &#125;
+    in.close();
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>C++也有将指针进行位移的函数，seekg将输入指针移动到指定位置，seekp将输出指针移动到指定位置</p>
+<p>包含两个参数，第一个是位移量，第二个是相对位置</p>
+<p>相对位置包含三个，ios_base::beg（开始位置）；ios_base::cur（当前位置）；ios_base::end（末尾）</p>
+<br/>
+
+<h4 id="C-11"><a href="#C-11" class="headerlink" title="C++11"></a>C++11</h4><br/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 
             </div>
             <hr/>
@@ -622,7 +871,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://chenxinyang621.github.io/2021/06/06/c-IO%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/">https://chenxinyang621.github.io/2021/06/06/c-IO%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/</a>
+                    <a href="https://chenxinyang621.github.io/2021/06/06/c-IO%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C-c++11%E6%96%B0%E8%A7%84%E5%88%99/">https://chenxinyang621.github.io/2021/06/06/c-IO%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C-c++11%E6%96%B0%E8%A7%84%E5%88%99/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -968,28 +1217,29 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/06/06/c-c-11%E6%96%B0%E8%A7%84%E5%88%99/">
+                <a href="/2021/06/06/c-IO%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C-c++11%E6%96%B0%E8%A7%84%E5%88%99/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/53.jpg" class="responsive-img" alt="c++ c++11新规则">
+                        <img src="/medias/featureimages/52.jpg" class="responsive-img" alt="c++ IO文件操作&amp;c++11新规则">
                         
-                        <span class="card-title">c++ c++11新规则</span>
+                        <span class="card-title">c++ IO文件操作&amp;c++11新规则</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            完结篇（结束之后重拾Java）
+                            最后的技术总结
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-06-06
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-06-06
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1002,6 +1252,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
