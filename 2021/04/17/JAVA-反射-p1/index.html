@@ -569,7 +569,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-06-15
+                    2021-06-16
                 </div>
                 
 
@@ -749,6 +749,7 @@ public class Class_ReflectField &#123;
 
 <h4 id="获取Field对象"><a href="#获取Field对象" class="headerlink" title="获取Field对象"></a>获取Field对象</h4><br/>
 
+<p>Field主要获取类中的各种成员变量，可以跟method类比</p>
 <p>Class.getDeclaredField(String name);</p>
 <p>返回一个 Field 对象，该对象反映此 Class 对象所表示的类或接口的指定已声明字段（包括私有成员）</p>
 <p>Class.getDeclaredFields();</p>
@@ -757,6 +758,92 @@ public class Class_ReflectField &#123;
 <p>返回一个 Field 对象，它反映此 Class 对象所表示的类或接口的指定公共成员字段</p>
 <p>Class.getFields();</p>
 <p>返回一个包含某些 Field 对象的<strong>数组</strong>，该数组包含此 Class 对象所表示的类或接口的所有可访问公共字段</p>
+<br/>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">package Reflect;
+
+import java.lang.reflect.Field;
+
+public class Dog &#123;
+    private String name;
+    protected String sex;
+    public int age;
+
+    public String getName() &#123;
+        return name;
+    &#125;
+
+    public void setName(String name) &#123;
+        this.name &#x3D; name;
+    &#125;
+
+    public String getSex() &#123;
+        return sex;
+    &#125;
+
+    public void setSex(String sex) &#123;
+        this.sex &#x3D; sex;
+    &#125;
+
+    public int getAge() &#123;
+        return age;
+    &#125;
+
+    public void setAge(int age) &#123;
+        this.age &#x3D; age;
+    &#125;
+
+    public Dog(String name, String sex, int age)&#123;
+        this.name &#x3D; name;
+        this.sex &#x3D; sex;
+        this.age &#x3D; age;
+    &#125;
+
+    public void information()&#123;
+        System.out.println(name + &quot; &quot; + sex + &quot; &quot; + age);
+    &#125;
+
+    public void bark()&#123;
+        System.out.println(&quot;汪汪汪&quot;);
+    &#125;
+
+    public void bite()&#123;
+        System.out.println(&quot;PrPr&quot;);
+    &#125;
+&#125;
+
+class Main&#123;
+    public static void main(String[] args) throws Exception&#123;
+        Dog dog &#x3D; new Dog(&quot;puppy&quot;, &quot;男&quot;, 18);
+        dog.bark();
+        dog.bite();
+
+        Class cls &#x3D; dog.getClass();
+        Field c1 &#x3D; cls.getDeclaredField(&quot;name&quot;);
+        Field c2 &#x3D; cls.getField(&quot;age&quot;);
+        System.out.println(c1);
+        System.out.println(c2);
+
+        Field[] fields1 &#x3D; dog.getClass().getFields();&#x2F;&#x2F;只获取public修饰的变量
+        Field[] fields2 &#x3D; dog.getClass().getDeclaredFields();&#x2F;&#x2F;获取程序中所有的成员变量
+        System.out.println(&quot;\n------------method.toString--------------&quot;);
+        for (Field field1 : fields1)&#123;
+            System.out.println(field1);
+        &#125;
+        System.out.println();
+        for (Field field2 : fields2)&#123;
+            System.out.println(field2);
+        &#125;
+        System.out.println(&quot;\n------------method.getName--------------&quot;);
+        for (Field field1 : fields1)&#123;
+            System.out.println(field1.getName());
+        &#125;
+        System.out.println();
+        for (Field field2 : fields2)&#123;
+            System.out.println(field2.getName());
+        &#125;
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <br/>
 
 <h4 id="使用method获取类方法"><a href="#使用method获取类方法" class="headerlink" title="使用method获取类方法"></a>使用method获取类方法</h4><br/>
