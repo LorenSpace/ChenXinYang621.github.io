@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="JAVA 反射 p2, 陈鑫扬的第一个hexo博客">
+    <meta name="keywords" content="JAVA 枚举&amp;泛型&amp;多线程, 陈鑫扬的第一个hexo博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>JAVA 反射 p2 | 陈鑫扬的第一个hexo博客</title>
+    <title>JAVA 枚举&amp;泛型&amp;多线程 | 陈鑫扬的第一个hexo博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -421,7 +421,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">JAVA 反射 p2</h1>
+                    <h1 class="description center-align post-title">JAVA 枚举&amp;泛型&amp;多线程</h1>
                 </div>
             </div>
         </div>
@@ -562,14 +562,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-06-15
+                    2021-06-17
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-06-17
+                    2021-06-19
                 </div>
                 
 
@@ -596,271 +596,218 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="深挖Field"><a href="#深挖Field" class="headerlink" title="深挖Field"></a>深挖Field</h3><br/>
+                <h3 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h3><br/>
 
-<h4 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h4><br/>
-
-<p>当然，如果不需要进行比较高级的操作，可以直接使用类名来进行反射操作</p>
-<p>不过对于一些调用属性的操作依然需要类的对象</p>
-<p><a target="_blank" rel="noopener" href="http://www.51gjie.com/java/792.html">getType()</a>： 获取属性声明时类型对象（返回class对象）</p>
-<p><a target="_blank" rel="noopener" href="http://www.51gjie.com/java/793.html">getGenericType() </a>： 返回属性声的Type类型</p>
-<p>getName() ： 获取属性声明时名字</p>
-<p>getAnnotations() ： 获得这个属性上所有的注释</p>
-<p>getModifiers() ： 获取属性的修饰</p>
-<p>isEnumConstant() ： 判断这个属性是否是枚举类</p>
-<p>isSynthetic() ： 判断这个属性是否是 复合类</p>
-<p><a target="_blank" rel="noopener" href="http://www.51gjie.com/java/795.html">get(Object obj) </a>： 取得obj对象这个Field上的值</p>
-<p><a target="_blank" rel="noopener" href="http://www.51gjie.com/java/794.html">set(Object obj, Object value)</a> ： 向obj对象的这个Field设置新值value</p>
-<p>可以通过以上方法来对其进行的属性进行调用，在之前的例子中就已经有所使用</p>
-<p>这些属性可以让反射编程快速调用一个类的各种具体信息，在Method中，方法也具体同理</p>
+<p>枚举没有什么好说明的，基本和C差不多的东西，但是有部分类中定义的方法作为稍微的了解</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法名称</th>
+<th align="center">具体含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">values()</td>
+<td align="center">该方法可以将枚举类型成员以数组的形式返回</td>
+</tr>
+<tr>
+<td align="center">valueOf()</td>
+<td align="center">该方法可以实现将普通字符串转换为枚举实例</td>
+</tr>
+<tr>
+<td align="center">compareTo()</td>
+<td align="center">该方法用于比较两个枚举对象在定义时的顺序</td>
+</tr>
+<tr>
+<td align="center">ordinal()</td>
+<td align="center">该方法用于得到枚举成员的位置索引</td>
+</tr>
+</tbody></table>
+<p>Java中的枚举也可以添加构造方法，不过必须使用private修饰符</p>
 <br/>
 
-<h4 id="小知识"><a href="#小知识" class="headerlink" title="小知识"></a>小知识</h4><br/>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">interface Constants&#123;
+    int Constants_A &#x3D; 1;
+    int Constants_B &#x3D; 12;
+&#125;&#x2F;&#x2F;把常数定义在接口中
 
-<p>AccessibleObject 类是 Field、Method 和 Constructor 对象的基类。它提供了将反射的对象标记为在使用时取消默认 Java 语言访问控制检查的能力。对于公共成员、默认（打包）访问成员、受保护成员和私有成员，在分别使用 Field、Method 或 Constructor 对象来设置或获得字段、调用方法，或者创建和初始化类的新实例的时候，会执行访问检查</p>
-<p>这样就可以直接去访问私有成员了（x</p>
-<br/>
+public class Ex_01 &#123;
+    enum Constants2&#123;Constants_A, Constants_B&#125;&#x2F;&#x2F;默认值为0
 
-<h4 id="set-amp-get"><a href="#set-amp-get" class="headerlink" title="set()&amp;get()"></a>set()&amp;get()</h4><br/>
-
-<p>set(Object obj, Object value);</p>
-<p>可以通过这种方法，快速修改所调用field里面变量的值</p>
-<p>public Object get(Object obj);</p>
-<p>通过这种方法获取field里的属性值</p>
-<p>这就很像类中固有的两种方法了，熟能生巧便能掌握全部（x</p>
-<br/>
-
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">import java.lang.reflect.Field;
-
-class Fish&#123;
-    private String name &#x3D; &quot;cxy&quot;;
-    private int age &#x3D; 5;
-&#125;
-
-public class Field_set_get &#123;
-    public static void main(String[] args) throws Exception&#123;
-        Fish fish &#x3D; new Fish();
-        Field field &#x3D; fish.getClass().getDeclaredField(&quot;name&quot;);
-        field.setAccessible(true);&#x2F;&#x2F;关闭Java访问规则，这样私有成员也能访问
-        System.out.println(field.get(fish));
-        field.set(fish, &quot;fwh&quot;);
-        System.out.println(field.get(fish));
-    &#125;
-&#125;
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<br/>
-
-<h3 id="访问构造方法"><a href="#访问构造方法" class="headerlink" title="访问构造方法"></a>访问构造方法</h3><br/>
-
-<blockquote>
-<p>getConstructors() 获取类中的公共方法</p>
-<p>getConstructor(Class[]  params) 获取类的特定构造方法,params参数指定构造方法的参数类型</p>
-<p>getDeclaredConstructors() 获取类中所有的构造方法(public、protected、default、private)</p>
-<p>getDeclaredConstructor(Class[] params) 获取类的特定构造方法,params参数指定构造方法的参数类型</p>
-</blockquote>
-<p>（1）得到这个类的所有构造方法：如得到上面示例中Person类的所有构造方法</p>
-<p>Constructor[] cons = Class.forName(“cn.itheima.Person”).getConstructors();</p>
-<p>（2）获取某一个构造方法：</p>
-<p>Constructor con=Person.class.getConstructor(String.class,int.class);</p>
-<p>写多了你就会发现反射的语法调用都是类似的几种方法</p>
-<p>要么就是直接连续调用，要么就是使用数组的东西获得整体</p>
-<br/>
-
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">package Reflect;
-
-import java.awt.*;
-import java.lang.reflect.Constructor;
-
-class Human&#123;
-    private String name;
-    private String sex;
-    private int age;
-    private double scores;
-
-    public Human(String name, String sex, int age, double scores)&#123;
-        this.name &#x3D; name;
-        this.sex &#x3D; sex;
-        this.age &#x3D; age;
-        this.scores &#x3D; scores;
-    &#125;
-
-    public Human()&#123;
-        this(&quot;&quot;, &quot;&quot;, 0, 0.0);
-    &#125;
-&#125;
-
-public class Class_Constructor &#123;
-    public static void main(String[] args) &#123;
-        try &#123;
-            Class c &#x3D; Class.forName(&quot;Reflect.Human&quot;);
-            Human co &#x3D; (Human) c.newInstance();
-            Constructor c1 &#x3D; co.getClass().getConstructor(null);
-            System.out.println(c1);
-            System.out.println();
-            c1 &#x3D; co.getClass().getConstructor(String.class, String.class, int.class, double.class);
-            System.out.println(c1);
-            System.out.println();
-
-            Constructor[] c2 &#x3D; co.getClass().getConstructors();
-            for (Constructor constructor : c2)&#123;
-                System.out.println(constructor);
-            &#125;
-        &#125; catch (Exception e) &#123;
-            e.printStackTrace();
+    public static void DoIt1(int c)&#123;
+        switch (c)&#123;
+            case Constants.Constants_A:
+                System.out.println(&quot;Constants_A1&quot;);
+                break;
+            case Constants.Constants_B:
+                System.out.println(&quot;Constants_B1&quot;);
+                break;
         &#125;
     &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+    public static void DoIt2(Constants2 c)&#123;
+        switch (c)&#123;
+            case Constants_A:
+                System.out.println(&quot;Constants_A2&quot;);
+                break;
+            case Constants_B:
+                System.out.println(&quot;Constants_B2&quot;);
+                break;
+        &#125;
+    &#125;
+
+    public static void main(String[] args) &#123;
+        Ex_01.DoIt1(Constants.Constants_A);
+        Ex_01.DoIt1(Constants.Constants_B);
+        Ex_01.DoIt2(Constants2.Constants_A);
+        Ex_01.DoIt2(Constants2.Constants_B);
+        System.out.println();
+        
+        for (int i &#x3D; 0; i &lt; Constants2.values().length; i++)&#123;
+            System.out.println(&quot;枚举类型成员变量&quot; + Constants2.values()[i]);
+        &#125;
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <br/>
 
-<h3 id="Annotation"><a href="#Annotation" class="headerlink" title="Annotation"></a>Annotation</h3><br/>
-
-<p>Annotation不影响程序的运行，但对编译器的警告工具会有一定作用（写在对应接口中）</p>
-<p>定义的关键字为@interface，隐含了继承相关接口的意思</p>
-<p><img src="https://www.runoob.com/wp-content/uploads/2019/08/28123151-d471f82eb2bc4812b46cc5ff3e9e6b82.jpg" alt="img"></p>
+<p>使用枚举的优势主要有以下几点：</p>
+<p>1.类型安全</p>
+<p>2.紧凑有效的数据定义</p>
+<p>3.可以和程序其他部分完美交互</p>
+<p>4.运行效率高</p>
 <br/>
 
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">public @interface OneMemberAnnotation&#123;
-        String value();
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h3 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h3><br/>
+
+<h4 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h4><br/>
+
+<p>具体使用的原理和好处可以参考Cprimer中对于泛型的讲解</p>
+<p>（这里只是对一些基本的进行了解，如果未来想要从事相关方面的工作，建议还是要深究）</p>
+<p>这里使用Object类型作为基本的向上转化类型</p>
 <br/>
 
-<p>String：成员类型，可用的类型有String、Class、primitive、enumerated、annotation，以及所有类型的数组</p>
-<p>value：成员名称，如果类中只包含一个成员，名称通常为value</p>
-<p><img src="https://www.runoob.com/wp-content/uploads/2019/08/28123653-84d14b886429482bb601dc97155220fb.jpg" alt="img"></p>
-<p>除此之外，还在ElementType中定义各种枚举常量进行注释（使用@target）</p>
-<table>
-<thead>
-<tr>
-<th align="center">枚举常量</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">ANNOTATION_TYPE</td>
-<td align="center">表示用于Annotation类型</td>
-</tr>
-<tr>
-<td align="center">TYPE</td>
-<td align="center">表示用于类、接口和枚举，以及Annotation类型</td>
-</tr>
-<tr>
-<td align="center">CONSTRUCTOR</td>
-<td align="center">表示用于构造方法</td>
-</tr>
-<tr>
-<td align="center">FIELD</td>
-<td align="center">表示用于成员变量和枚举变量</td>
-</tr>
-<tr>
-<td align="center">METHOD</td>
-<td align="center">表示用于方法</td>
-</tr>
-<tr>
-<td align="center">PARAMETER</td>
-<td align="center">表示用于参数</td>
-</tr>
-<tr>
-<td align="center">LOCAL_VARIABLE</td>
-<td align="center">表示用于局部变量</td>
-</tr>
-<tr>
-<td align="center">PACKAGE</td>
-<td align="center">表示用于包</td>
-</tr>
-</tbody></table>
-<p>也有RetentionPolicy类，表示Annotation的有效范围（使用@Retention）</p>
-<table>
-<thead>
-<tr>
-<th align="center">枚举常量</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">SOURCE</td>
-<td align="center">表示不编译Annotation到类文件中，有效范围最小</td>
-</tr>
-<tr>
-<td align="center">CLASS</td>
-<td align="center">表示编译Annotation盗垒文件中，但是在运行时不加载Annotation到JVM中</td>
-</tr>
-<tr>
-<td align="center">RUNTIME</td>
-<td align="center">表示在运行时加载Annotation到JVM中，有效范围最大</td>
-</tr>
-</tbody></table>
-<br/>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">public class Ex_02 &#123;
+    private Object b;
 
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">public class EX_01 &#123;
-    @Ex_01_1(describe &#x3D; &quot;编号&quot;, type &#x3D; int.class)&#x2F;&#x2F;Java的Annotation提供了自定义注释的方法，可以对特定的代码块进行注释
-    private int id;
-    @Ex_01_1(describe &#x3D; &quot;姓名&quot;, type &#x3D; String.class)
-    private String name;
+    public void setB(Object b) &#123;
+        this.b &#x3D; b;
+    &#125;
 
-    @Ex_01_2(&quot;初始化构造方法&quot;)
-    public EX_01(int id, String name)&#123;
-        this.id &#x3D; id;
-        this.name &#x3D; name;
-    &#125;
-    @Ex_01_2()&#x2F;&#x2F;调用注释中的默认值&quot;默认构造方法&quot;
-    public EX_01()&#123;
-        this(0, &quot;cxy&quot;);
-    &#125;
-    @Ex_01_1(describe &#x3D; &quot;获取姓名&quot;, type &#x3D; String.class)
-    public String getName() &#123;
-        return name;
-    &#125;
-    @Ex_01_1(describe &#x3D; &quot;设置姓名&quot;)&#x2F;&#x2F;默认参数值为void.class
-    public void setName(String name) &#123;
-        this.name &#x3D; name;
-    &#125;
-    @Ex_01_1(describe &#x3D; &quot;获取编号&quot;, type &#x3D; int.class)
-    public int getId() &#123;
-        return id;
-    &#125;
-    @Ex_01_1(describe &#x3D; &quot;设置编号&quot;)
-    public void setId(int id) &#123;
-        this.id &#x3D; id;
+    public Object getB() &#123;
+        return b;
     &#125;
 &#125;
 
 class Main&#123;
     public static void main(String[] args) &#123;
-        EX_01 e &#x3D; new EX_01();
-        System.out.println(e.getId() + &quot; &quot; + e.getName());
-        e.setId(20032025);
-        e.setName(&quot;cmk&quot;);
-        System.out.println(e.getId() + &quot; &quot; + e.getName());
+        Ex_02 ex02 &#x3D; new Ex_02();
+        ex02.setB(Boolean.TRUE);&#x2F;&#x2F;相当于new Boolean(true)
+        System.out.println(ex02.getB());
+        ex02.setB(12.3f);&#x2F;&#x2F;相当于new float(12.3f)
+        Float f &#x3D; (Float) ex02.getB();
+        System.out.println(f);
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>Java中的泛型主要跟类一起定义，使泛型变成一种类和对象的用法</p>
+<p>（不需要像C++一样添加template这样的关键字提示）</p>
+<br/>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">public class Ex_03&lt;T&gt;&#123;
+    private T over;
+
+    public void setOver(T over) &#123;
+        this.over &#x3D; over;
+    &#125;
+
+    public T getOver() &#123;
+        return over;
     &#125;
 &#125;
 
-&#x2F;&#x2F;以下是两个接口的代码
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Target(&#123;ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER&#125;)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Ex_01_1 &#123;
-    String describe();&#x2F;&#x2F;定义一个没有默认值的String类型成员
-    Class type() default void.class;&#x2F;&#x2F;定义一个具有默认值的Class值成员
-&#125;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Target(ElementType.CONSTRUCTOR)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Ex_01_2 &#123;
-    String value() default &quot;默认构造方法&quot;;&#x2F;&#x2F;定义一个具有默认值的String型成员
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+class Main03&#123;
+    public static void main(String[] args) &#123;
+        Ex_03&lt;Boolean&gt; e1 &#x3D; new Ex_03&lt;Boolean&gt;();
+        Ex_03&lt;Float&gt; e2 &#x3D; new Ex_03&lt;Float&gt;();
+        e1.setOver(false);
+        e2.setOver(2.555f);
+        System.out.println(e1.getOver());
+        System.out.println(e2.getOver());
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <br/>
 
-<p>当然，在这之上，你也可以获取Annotation中的信息</p>
-<p>不过，这个东西实在太麻烦了，就不讲了</p>
+<p>当然，在定义的时候可以加上两个不同的泛型，设置的变量也能是数组</p>
+<p>在之前，我们也了解过集合类，这就是Java系统中定义好的泛型操作</p>
+<table>
+<thead>
+<tr>
+<th align="center">集合类</th>
+<th align="center">泛型定义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">ArrayList</td>
+<td align="center">ArrayList<E></td>
+</tr>
+<tr>
+<td align="center">HashMap</td>
+<td align="center">HashMap&lt;K, V&gt;</td>
+</tr>
+<tr>
+<td align="center">HashSet</td>
+<td align="center">HashSet<E></td>
+</tr>
+<tr>
+<td align="center">Vector</td>
+<td align="center">Vector<E></td>
+</tr>
+</tbody></table>
+<br/>
+
+<h4 id="进阶用法"><a href="#进阶用法" class="headerlink" title="进阶用法"></a>进阶用法</h4><br/>
+
+<p>可以在定义时，加上extends+接口名，对泛型继承的接口的进行限制</p>
+<p>泛型的机制中，引入了类型通配符，要声明这样一个对象可以使用？通配符来表示，同时使用extends来加以限制</p>
+<p>通过通配符可以表示位置的类型</p>
+<br/>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class Ex_04&lt;T extends List&gt; &#123;
+    public static void main(String[] args) &#123;
+        Ex_04&lt;ArrayList&gt; l1 &#x3D; new Ex_04&lt;&gt;();
+        Ex_04&lt;LinkedList&gt; l2 &#x3D; new Ex_04&lt;&gt;();
+
+        Ex_04&lt;? extends List&gt; l3 &#x3D; null;
+        l3 &#x3D; new Ex_04&lt;ArrayList&gt;();
+        l3 &#x3D; new Ex_04&lt;LinkedList&gt;();
+    &#125;
+&#125;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class Ex_05 &#123;
+    public static void main(String[] args) &#123;
+        List&lt;String&gt; l1 &#x3D; new ArrayList&lt;&gt;();
+        l1.add(&quot;cxy&quot;);
+        l1.add(&quot;ckt&quot;);
+        List&lt;?&gt; l2 &#x3D; l1;
+        List&lt;?&gt; l3 &#x3D; new LinkedList&lt;Integer&gt;();
+        System.out.println(l2.get(0));&#x2F;&#x2F;获取l2中的第一个值
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>1.泛型的类型参数只能是类类型，不能是简单类型，如A<int>就是错误的</p>
+<p>2.泛型的类型个数可以是多个</p>
+<p>3.可以使用extends关键字限制泛型的类型</p>
+<p>4.可以使用通配符限制泛型的类型</p>
 
                 
             </div>
@@ -887,7 +834,7 @@ public @interface Ex_01_2 &#123;
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://chenxinyang621.github.io/2021/06/15/JAVA-%E5%8F%8D%E5%B0%84-p2/">https://chenxinyang621.github.io/2021/06/15/JAVA-%E5%8F%8D%E5%B0%84-p2/</a>
+                    <a href="https://chenxinyang621.github.io/2021/06/17/JAVA-%E6%9E%9A%E4%B8%BE-%E6%B3%9B%E5%9E%8B-%E5%A4%9A%E7%BA%BF%E7%A8%8B/">https://chenxinyang621.github.io/2021/06/17/JAVA-%E6%9E%9A%E4%B8%BE-%E6%B3%9B%E5%9E%8B-%E5%A4%9A%E7%BA%BF%E7%A8%8B/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1233,9 +1180,10 @@ public @interface Ex_01_2 &#123;
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/06/17/JAVA-%E6%9E%9A%E4%B8%BE-%E6%B3%9B%E5%9E%8B-%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
                     <div class="card-image">
@@ -1252,9 +1200,9 @@ public @interface Ex_01_2 &#123;
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-06-17
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-06-17
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1267,6 +1215,7 @@ public @interface Ex_01_2 &#123;
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1285,23 +1234,23 @@ public @interface Ex_01_2 &#123;
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/06/06/c-IO%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C-c++11%E6%96%B0%E8%A7%84%E5%88%99/">
+                <a href="/2021/06/15/JAVA-%E5%8F%8D%E5%B0%84-p2/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/52.jpg" class="responsive-img" alt="c++ IO文件操作&amp;c++11新规则">
+                        <img src="/medias/featureimages/53.jpg" class="responsive-img" alt="JAVA 反射 p2">
                         
-                        <span class="card-title">c++ IO文件操作&amp;c++11新规则</span>
+                        <span class="card-title">JAVA 反射 p2</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            完结篇，回去学Java了
+                            学明白之后就能很方便的知识（
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-06-06
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-06-15
                             </span>
                         <span class="publish-author">
                             
@@ -1318,8 +1267,8 @@ public @interface Ex_01_2 &#123;
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/c/">
-                        <span class="chip bg-color">c++</span>
+                    <a href="/tags/java/">
+                        <span class="chip bg-color">java</span>
                     </a>
                     
                 </div>
