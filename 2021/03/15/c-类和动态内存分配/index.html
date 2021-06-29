@@ -569,7 +569,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-04-17
+                    2021-06-28
                 </div>
                 
 
@@ -605,6 +605,7 @@
 
 <p>构造函数中，我们为类中表示的属性分配动态内存</p>
 <p>在析构函数中，我们使用delete释放内存，并可以加上提示信息，表示运行过程</p>
+<p><code>int a = new int(1);</code>表示初始化一个整形a，并且赋值为0</p>
 <br/>
 
 <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include&lt;bits&#x2F;stdc++.h&gt;
@@ -685,8 +686,8 @@ int main()&#123;
 
 <h3 id="复制构造函数"><a href="#复制构造函数" class="headerlink" title="复制构造函数"></a>复制构造函数</h3><br/>
 
-<p>如果没有定义默认构造函数，编译器会自动创建一个</p>
-<p>复制构造函数作用于将一个对象的常量引用，它使用于初始化过程中</p>
+<p>如果没有定义默认构造函数，编译器会自动创建一个，进行所谓的浅复制，这不足以应付所有的情况</p>
+<p>复制构造函数作用于将一个对象的常量引用，它使用于初始化过程中，这就是我们需要的深复制</p>
 <p>复制构造函数有三种应用场景：</p>
 <blockquote>
 <p>显示调用，即像一般构造函数使用一样</p>

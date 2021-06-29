@@ -569,7 +569,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-04-21
+                    2021-06-28
                 </div>
                 
 
@@ -656,6 +656,40 @@ double recube(double &amp;ra)&#123;&#x2F;&#x2F;可以是传进来的变量值发
 <br/>
 
 <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">recube(x + 3.0);&#x2F;&#x2F;这不是一个变量，所以编译器会报错<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<br/>
+
+<h4 id="引用作为返回值"><a href="#引用作为返回值" class="headerlink" title="引用作为返回值"></a>引用作为返回值</h4><br/>
+
+<p>C++中，除了可以返回值，也可以返回一个引用</p>
+<p>可以对函数使用引用，这样就可以使函数成为一个可以进行修改的<code>左值</code></p>
+<p>这是C++特有的属性，这在之后的运算符重载之中也会用到，一般作为位置的变换</p>
+<br/>
+
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;iostream&gt;
+using namespace std;
+
+int &amp;Fun(const int &amp;a, int &amp;b, int c);
+
+int main()&#123;
+    int a &#x3D; 1, b &#x3D; 2, c &#x3D; 3;
+    Fun(a, b, c) &#x3D; 20;&#x2F;&#x2F;相对于b&#x3D;20;
+    cout &lt;&lt; b &lt;&lt; endl;
+
+    return 0;
+&#125;
+
+int &amp;Fun(const int &amp;a, int &amp;b, int c)&#123;
+    b++;
+    c++;
+    return b;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>1.&amp;不是取地址符，和定义指针变量时的*类似</p>
+<p>2.如果不是作为函数参数，必须对引用进行初始化</p>
+<p>3.引用被声明之后就像普通变量一样，无须再次添加&amp;符号</p>
+<p>4.引用只是某一个变量的别名，系统不为其额外分配空间</p>
+<p>5.不是任何类型都能使用引用，不能建立void类型引用、引用的引用、指向引用的指针、引用数组</p>
 <br/>
 
 <h4 id="临时变量"><a href="#临时变量" class="headerlink" title="临时变量"></a>临时变量</h4><br/>
