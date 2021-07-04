@@ -8,9 +8,21 @@
       <link href="2021/06/30/JAVA-%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/"/>
       <url>2021/06/30/JAVA-%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<h3 id="线程的加入"><a href="#线程的加入" class="headerlink" title="线程的加入"></a>线程的加入</h3><br/><p>当你打游戏时正嗨，却被npy找的时候（不好意思，我忘了我没有女友</p><p>咳咳，言归正传，线程加入可以使其中一个线程的运行过程中突然加入另一个，从而执行另一个线程（NTR狂喜（bushi）</p><p>线程中可以使用join，来中途加入一个线程</p><br/><pre class="line-numbers language-java" data-language="java"><code class="language-java">package Multiply;import javax.swing.*;import java.awt.*;class JoinTest extends JFrame &#123;    private Thread threadA;    private Thread threadB;    private final JProgressBar bar1 &#x3D; new JProgressBar();&#x2F;&#x2F;创建进度条组件    private final JProgressBar bar2 &#x3D; new JProgressBar();    int countA &#x3D; 0;    int countB &#x3D; 0;    public JoinTest()&#123;        super(&quot;test about the &#39;Join&#39;&quot;);        Container c &#x3D; getContentPane();        c.add(bar1, BorderLayout.NORTH);        c.add(bar2, BorderLayout.SOUTH);        bar1.setStringPainted(true);&#x2F;&#x2F;设置进度条显示数字字符        bar2.setStringPainted(true);        threadA &#x3D; new Thread(() -&gt; &#123;            while (true) &#123;                try &#123;                    Thread.sleep(50);                    threadB.join();&#x2F;&#x2F;在使用join语句之前，两个线程会同步进行操作                &#125; catch (Exception e) &#123;                    e.printStackTrace();                &#125;                bar1.setValue(++countA);                if (countA &#x3D;&#x3D; 100)&#123;                    System.exit(0);                &#125;            &#125;        &#125;);        threadA.start();        threadB &#x3D; new Thread(() -&gt; &#123;            while(true)&#123;                bar2.setValue(++countB);                try &#123;                    Thread.sleep(50);                &#125;catch (Exception e)&#123;                    e.printStackTrace();                &#125;                if (countB &#x3D;&#x3D; 100)&#123;                    break;                &#125;            &#125;        &#125;);        threadB.start();        setSize(500, 500);        setVisible(true);        setLocationRelativeTo(null);        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);    &#125;&#125;public class Ex_04 &#123;    public static void main(String[] args) &#123;        JoinTest test &#x3D; new JoinTest();    &#125;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br/><h3 id="线程的中断"><a href="#线程的中断" class="headerlink" title="线程的中断"></a>线程的中断</h3><br/><p>远古版本的JDK是有stop的，现在已经被废除，不过可以使用boolean类型来代替</p><p>这个取决于在平时代码时的一个循环逻辑，使用while/if进行各种判断就行</p>]]></content>
       
       
+      <categories>
+          
+          <category> 学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> java </tag>
+            
+        </tags>
       
     </entry>
     
