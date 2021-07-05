@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="JAVA 多线程&amp;网络通信, 陈鑫扬的第一个hexo博客">
+    <meta name="keywords" content="JAVA 多线程&amp;网络通信初了解, 陈鑫扬的第一个hexo博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>JAVA 多线程&amp;网络通信 | 陈鑫扬的第一个hexo博客</title>
+    <title>JAVA 多线程&amp;网络通信初了解 | 陈鑫扬的第一个hexo博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -421,7 +421,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">JAVA 多线程&amp;网络通信</h1>
+                    <h1 class="description center-align post-title">JAVA 多线程&amp;网络通信初了解</h1>
                 </div>
             </div>
         </div>
@@ -569,7 +569,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-06-30
+                    2021-07-05
                 </div>
                 
 
@@ -596,7 +596,9 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="线程的加入"><a href="#线程的加入" class="headerlink" title="线程的加入"></a>线程的加入</h3><br/>
+                <h3 id="更加安全的线程"><a href="#更加安全的线程" class="headerlink" title="更加安全的线程"></a>更加安全的线程</h3><br/>
+
+<h4 id="线程的加入"><a href="#线程的加入" class="headerlink" title="线程的加入"></a>线程的加入</h4><br/>
 
 <p>当你打游戏时正嗨，却被npy找的时候（不好意思，我忘了我没有女友</p>
 <p>咳咳，言归正传，线程加入可以使其中一个线程的运行过程中突然加入另一个，从而执行另一个线程（NTR狂喜（bushi）</p>
@@ -668,10 +670,492 @@ public class Ex_04 &#123;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <br/>
 
-<h3 id="线程的中断"><a href="#线程的中断" class="headerlink" title="线程的中断"></a>线程的中断</h3><br/>
+<h4 id="线程的中断"><a href="#线程的中断" class="headerlink" title="线程的中断"></a>线程的中断</h4><br/>
 
 <p>远古版本的JDK是有stop的，现在已经被废除，不过可以使用boolean类型来代替</p>
 <p>这个取决于在平时代码时的一个循环逻辑，使用while/if进行各种判断就行</p>
+<br/>
+
+<h4 id="线程的优先级"><a href="#线程的优先级" class="headerlink" title="线程的优先级"></a>线程的优先级</h4><br/>
+
+<p>Thread类中包含的成员变量代表了线程的某些优先级</p>
+<p>如Thread.Min_PRIORITY（常数1）、Thread.MAX_PRIORITY（常数10）、Thread.NORM_PRIORITY（常数5）</p>
+<p>在默认情况下的优先级都是Thread.NORM_PRIORITY</p>
+<br/>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">import javax.swing.*;
+import java.awt.*;
+
+class PriorityTest extends JFrame&#123;
+    private Thread threadA;
+    private Thread threadB;
+    private Thread threadC;
+    private Thread threadD;
+    private JProgressBar bar1 &#x3D; new JProgressBar();
+    private JProgressBar bar2 &#x3D; new JProgressBar();
+    private JProgressBar bar3 &#x3D; new JProgressBar();
+    private JProgressBar bar4 &#x3D; new JProgressBar();
+
+    public PriorityTest()&#123;
+        super(&quot;线程优先级练习&quot;);
+        Container c &#x3D; getContentPane();
+        c.setLayout(new GridLayout(4, 1));
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setSize(1000, 1000);
+        setLocationRelativeTo(null);
+        setVisible(true);
+
+        c.add(bar1);
+        c.add(bar2);
+        c.add(bar3);
+        c.add(bar4);
+        bar1.setStringPainted(true);
+        bar2.setStringPainted(true);
+        bar3.setStringPainted(true);
+        bar4.setStringPainted(true);
+
+        threadA &#x3D; new Thread(new MyThread(bar1));
+        threadB &#x3D; new Thread(new MyThread(bar2));
+        threadC &#x3D; new Thread(new MyThread(bar3));
+        threadD &#x3D; new Thread(new MyThread(bar4));
+        setPriority(&quot;threadA&quot;, 5, threadA);
+        setPriority(&quot;threadB&quot;, 5, threadB);
+        setPriority(&quot;threadC&quot;, 2, threadC);
+        setPriority(&quot;threadD&quot;, 1, threadD);
+    &#125;
+
+    public void setPriority(String ThreadName, int priority, Thread t)&#123;
+        t.setPriority(priority);
+        t.setName(ThreadName);
+        t.start();
+    &#125;
+
+    private final class MyThread implements Runnable&#123;&#x2F;&#x2F;实现Runnable中的run方法
+        private final JProgressBar bar;
+        private int count &#x3D; 0;
+
+        private MyThread(JProgressBar bar)&#123;
+            this.bar &#x3D; bar;
+        &#125;
+
+        public void run()&#123;
+            while (true)&#123;
+                bar.setValue(count+&#x3D;1);
+                try &#123;
+                    Thread.sleep(50);
+                &#125;catch (Exception e)&#123;
+                    System.out.println(&quot;当前线程可能被中断&quot;);
+                    e.printStackTrace();
+                &#125;
+                if (count &#x3D;&#x3D; 100)&#123;
+                    JOptionPane.showMessageDialog(null, &quot;线程已结束&quot;);
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+&#125;
+
+public class Ex_05 &#123;
+    public static void main(String[] args) &#123;
+        PriorityTest test &#x3D; new PriorityTest();
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>这四个设定的进度条虽然看上去是统一加载，但是还是有细微的差别</p>
+<p>系统总是会处理前面两个，从而导致前两个进度条最先进行变化</p>
+<br/>
+
+<h4 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h4><br/>
+
+<p>不同步的线程会产生很多问题，比如地铁的购票系统中，如果同时进行了线程的操作，就会对同一事物判断两次</p>
+<p>购票系统，即使有0的判断，也可能出现负数的情况</p>
+<p>情况不仅仅如此，由于不是同步的线程，整个程序的逻辑顺序可能会变得混乱，设置优先级无法弥补这种错误</p>
+<br/>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">class ThreadSafeTest implements Runnable&#123;
+    private int sum &#x3D; 10;
+    public void run()&#123;
+        while (true)&#123;
+            if (sum &gt;&#x3D; 0)&#123;
+                try &#123;
+                    Thread.sleep(100);
+                &#125;catch (Exception e)&#123;
+                    e.printStackTrace();
+                &#125;
+                System.out.println(&quot;tickets &quot; + sum--);
+            &#125;
+        &#125;
+    &#125;
+&#125;
+
+public class Ex_06 &#123;
+    public static void main(String[] args) &#123;
+        ThreadSafeTest t &#x3D; new ThreadSafeTest();
+        Thread t1 &#x3D; new Thread(t);
+        Thread t2 &#x3D; new Thread(t);
+        Thread t3 &#x3D; new Thread(t);
+        Thread t4 &#x3D; new Thread(t);
+
+        t1.start();&#x2F;&#x2F;分开启动不同的线程，可能会使输出结果出现无法预知的问题
+        t2.start();
+        t3.start();
+        t4.start();
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>可以使用synchronized关键字进行共享线程的锁定</p>
+<p>就好像，一个人去上厕所时把门关上了一样，这样其他人就没法进去了（书上的奇妙比喻</p>
+<p>有两种方法进行这种操作</p>
+<br/>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">package Multiply;
+
+class ThreadSafeTest implements Runnable&#123;
+    private int sum &#x3D; 10;
+    public void run()&#123;
+        synchronized (&quot;&quot;)&#123;&#x2F;&#x2F;直接简单粗暴，在需要的代码块前加上synchronized
+            while (true)&#123;
+                if (sum &gt;&#x3D; 0)&#123;
+                    try &#123;
+                        Thread.sleep(100);
+                    &#125;catch (Exception e)&#123;
+                        e.printStackTrace();
+                    &#125;
+                    System.out.println(&quot;tickets &quot; + sum--);
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+    
+&#x2F;&#x2F;    public synchronized void Do()&#123; 通过单独定义一个函数进行实现
+&#x2F;&#x2F;        if (sum &gt;&#x3D; 0)&#123;
+&#x2F;&#x2F;            try &#123;
+&#x2F;&#x2F;                Thread.sleep(100);
+&#x2F;&#x2F;            &#125;catch (Exception e)&#123;
+&#x2F;&#x2F;                e.printStackTrace();
+&#x2F;&#x2F;            &#125;
+&#x2F;&#x2F;            System.out.println(&quot;tickets &quot; + sum--);
+&#x2F;&#x2F;        &#125;
+&#x2F;&#x2F;    &#125;
+&#x2F;&#x2F;    public void run()&#123;
+&#x2F;&#x2F;        while (true)&#123;
+&#x2F;&#x2F;            Do();
+&#x2F;&#x2F;        &#125;
+&#x2F;&#x2F;    &#125;
+    
+&#125;
+
+public class Ex_06 &#123;
+    public static void main(String[] args) &#123;
+        ThreadSafeTest t &#x3D; new ThreadSafeTest();
+        Thread t1 &#x3D; new Thread(t);
+        Thread t2 &#x3D; new Thread(t);
+        Thread t3 &#x3D; new Thread(t);
+        Thread t4 &#x3D; new Thread(t);
+
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<h3 id="网络通信"><a href="#网络通信" class="headerlink" title="网络通信"></a>网络通信</h3><br/>
+
+<h4 id="通信基本了解"><a href="#通信基本了解" class="headerlink" title="通信基本了解"></a>通信基本了解</h4><br/>
+
+<p>想要实现两台计算机的通信，则必须使用网络来进行连接</p>
+<p>简单归纳一下，可以简述为<code>服务器&lt;=&gt;网络&lt;=&gt;客户机</code>，从数台甚至几千台计算机连接的局域网，再到现在的互联网</p>
+<p>internet采用ip规则，使得不同的硬件组成电脑能够连接到互联网</p>
+<p>现在普遍使用的32位二进制，4个字节（IPv4），未来可能会使用16字节表示IP地址（IPv6）</p>
+<br/>
+
+<h4 id="TCP-UDP协议"><a href="#TCP-UDP协议" class="headerlink" title="TCP/UDP协议"></a>TCP/UDP协议</h4><br/>
+
+<p>TCP协议是一种以固结连线位基础的协议，他提供两台计算机间可靠的数据传送。特点是能够保证数据确实送达到另一端，数据的排列顺序和送出顺序和发出时一致，适用于对数据可靠性要求高的场合</p>
+<p>HTTP、FTP和telnet都是需要可靠的通信渠道，如果URL读取的信息和发送的信息不一致，就会出现错误的HTML</p>
+<p>UDP协议则是无连接通信协议，不保证数据传输的可靠传输，但是能向若干个目标发送数据，并且每个数据都是一个独立的包。类似于邮差将信送到不同人手中，这个时候送信的顺序就不可能和寄信顺序一致了</p>
+<p>UDP适用于对可靠性要求不高，但对于传输速度和时效性要求非常高的网站，如网络聊天室，在线影片等等。如果使用TCP会使得在认证上，传输速度缓慢，存在额外耗费。使用UDP即使一部分数据包遗失（我们所称为的丢包现象），也不会危害整个通信</p>
+<br/>
+
+<h4 id="Socket-TCP-编程"><a href="#Socket-TCP-编程" class="headerlink" title="Socket(TCP) 编程"></a>Socket(TCP) 编程</h4><br/>
+
+<p>套接字使用TCP提供了两台计算机之间的通信机制。 客户端程序创建一个套接字，并尝试连接服务器的套接字</p>
+<p>当连接建立时，服务器会创建一个 Socket 对象。客户端和服务器现在可以通过对 Socket 对象的写入和读取来进行通信</p>
+<p>java.net.Socket 类代表一个套接字，并且 java.net.ServerSocket 类为服务器程序提供了一种来监听客户端，并与他们建立连接的机制</p>
+<p>java中定义了InetAddress类来获取对应的信息</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">getByName(String host)</td>
+<td align="center">InetAddress</td>
+<td align="center">获取于Host相对应的InetAddress对象</td>
+</tr>
+<tr>
+<td align="center">getHostAddress()</td>
+<td align="center">String</td>
+<td align="center">获取inetAddress对象所包含的IP地址</td>
+</tr>
+<tr>
+<td align="center">getHostName()</td>
+<td align="center">String</td>
+<td align="center">获取此IP地址的主机名</td>
+</tr>
+<tr>
+<td align="center">getLocalHost()</td>
+<td align="center">InetAddress</td>
+<td align="center">返回本地主机的InetAddress对象</td>
+</tr>
+</tbody></table>
+<br/>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">import java.net.InetAddress;
+
+public class Ex_01 &#123;
+    public static void main(String[] args) &#123;
+        try &#123;
+            InetAddress ip &#x3D; InetAddress.getLocalHost();
+            String LocalName &#x3D; ip.getHostName();
+            String LocalIP &#x3D; ip.getHostAddress();
+            System.out.println(&quot;本机名:&quot; + LocalName);
+            System.out.println(&quot;本机IP地址:&quot; + LocalIP);
+        &#125;catch (Exception e)&#123;
+            e.printStackTrace();
+        &#125;
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>1.服务器实例化一个 ServerSocket 对象，表示通过服务器上的端口通信。</p>
+<p>2.服务器调用 ServerSocket 类的 accept() 方法，该方法将一直等待，直到客户端连接到服务器上给定的端口</p>
+<p>3.服务器正在等待时，一个客户端实例化一个 Socket 对象，指定服务器名称和端口号来请求连接</p>
+<p>4.Socket 类的构造函数试图将客户端连接到指定的服务器和端口号。如果通信被建立，则在客户端创建一个 Socket 对象能够与服务器进行通信</p>
+<p>5.在服务器端，accept() 方法返回服务器上一个新的 socket 引用，该 socket 连接到客户端的 socket</p>
+<br/>
+
+<h4 id="服务器端代码编写"><a href="#服务器端代码编写" class="headerlink" title="服务器端代码编写"></a>服务器端代码编写</h4><br/>
+
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">accept()</td>
+<td align="center">Socket</td>
+<td align="center">等待客户机的连接，若连接，则创建一个套接字</td>
+</tr>
+<tr>
+<td align="center">isBound()</td>
+<td align="center">boolean</td>
+<td align="center">判断ServerSocket的绑定状态</td>
+</tr>
+<tr>
+<td align="center">getInetAddress()</td>
+<td align="center">InetAddress</td>
+<td align="center">返回此服务器套接字的本地地址</td>
+</tr>
+<tr>
+<td align="center">isClosed()</td>
+<td align="center">boolean</td>
+<td align="center">返回服务器套接字的关闭状态</td>
+</tr>
+<tr>
+<td align="center">close()</td>
+<td align="center">void</td>
+<td align="center">关闭服务器套接字</td>
+</tr>
+<tr>
+<td align="center">bind(SocketAddress endpoint)</td>
+<td align="center">void</td>
+<td align="center">将ServerSocket绑定到特定地址（IP地址和端口号）</td>
+</tr>
+<tr>
+<td align="center">getInetAddress()</td>
+<td align="center">int</td>
+<td align="center">返回服务器套接字等待的端口号</td>
+</tr>
+</tbody></table>
+<br/>
+
+<p>首先，进行服务器（伪）的撰写，由于是由主机host决定的，所以在后续连接时取地址为127.0.0.1</p>
+<p>之后设置服务器的端口，客户机连接时需要和其一致</p>
+<p>通过BufferedReader读取相对应客户机中Writer写入的数据</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+class MyTCP&#123;
+    private BufferedReader reader;
+    private ServerSocket server;&#x2F;&#x2F;服务器
+    private Socket socket;&#x2F;&#x2F;客户机
+
+    public void getServer()&#123;
+        try &#123;
+            server &#x3D; new ServerSocket(8998);
+            System.out.println(&quot;服务器套接字已经创建成功&quot;);
+            while (true)&#123;
+                System.out.println(&quot;等待客户机的连接&quot;);
+                socket &#x3D; server.accept();
+                reader &#x3D; new BufferedReader(new InputStreamReader(socket.getInputStream()));&#x2F;&#x2F;通过socket获得输入流信息
+                getClientMessage();
+            &#125;
+        &#125;catch (IOException e)&#123;
+            e.printStackTrace();
+        &#125;
+    &#125;
+
+    private void getClientMessage()&#123;
+        try &#123;
+            while (true)&#123;
+                System.out.println(&quot;客户机:&quot; + reader.readLine());&#x2F;&#x2F;获得客户信息
+            &#125;
+        &#125;catch (Exception e)&#123;
+            e.printStackTrace();
+        &#125;
+        try &#123;
+            if (reader !&#x3D; null)&#123;
+                reader.close();
+            &#125;
+            if (socket !&#x3D; null)&#123;
+                socket.close();
+            &#125;
+        &#125;catch (IOException e)&#123;&#x2F;&#x2F;可能会引发IOException中的错误
+            e.printStackTrace();
+        &#125;
+    &#125;
+&#125;
+
+public class Ex_02_Server &#123;
+    public static void main(String[] args) &#123;
+        MyTCP tcp &#x3D; new MyTCP();
+        tcp.getServer();
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br/>
+
+<p>下面填写客户机的代码</p>
+<p>首先就是实例化socket跟服务器进行连接，规定IP和端口</p>
+<p>利用PrintWriter类将数据写进getOutputStream()，输出流中</p>
+<br/>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import java.awt.*;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+class MyClient extends JFrame&#123;
+    private PrintWriter writer;
+    private Socket socket;
+    private JTextArea ta &#x3D; new JTextArea();&#x2F;&#x2F;使用文本域作为整体过程的显示
+    private JTextField tf &#x3D; new JTextField();
+
+    public MyClient()&#123;
+        super(&quot;向服务器输入数据&quot;);
+        Container c &#x3D; getContentPane();
+        setVisible(true);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setSize(500, 500);
+        setLocationRelativeTo(null);
+
+        final JScrollPane scrollPane &#x3D; new JScrollPane();&#x2F;&#x2F;滚动界面
+        scrollPane.setBorder(new BevelBorder(BevelBorder.RAISED));
+        c.add(scrollPane, BorderLayout.CENTER);
+        scrollPane.setViewportView(ta);&#x2F;&#x2F;将关注点集中到文本域中
+        c.add(tf, &quot;South&quot;);&#x2F;&#x2F;可以直接使用字符串类型，代替BorderLayout.South
+        tf.addActionListener(e -&gt; &#123;
+            writer.println(tf.getText());
+            ta.append(tf.getText() + &quot;\n&quot;);
+            ta.setSelectionEnd(tf.getText().length());&#x2F;&#x2F;设置下一个点的具体位置
+            tf.setText(&quot;&quot;);
+        &#125;);
+    &#125;
+
+    public void connect()&#123;
+        ta.append(&quot;尝试连接\n&quot;);
+        try &#123;
+            socket &#x3D; new Socket(&quot;127.0.0.1&quot;, 8998);
+            writer &#x3D; new PrintWriter(socket.getOutputStream(), true);
+            ta.append(&quot;连接成功\n&quot;);
+        &#125;catch (Exception e)&#123;
+            e.printStackTrace();
+        &#125;
+    &#125;
+&#125;
+
+public class Ex_02_Client &#123;
+    public static void main(String[] args) &#123;
+        MyClient client &#x3D; new MyClient();
+        client.connect();
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 
             </div>
@@ -698,7 +1182,7 @@ public class Ex_04 &#123;
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://chenxinyang621.github.io/2021/06/30/JAVA-%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/">https://chenxinyang621.github.io/2021/06/30/JAVA-%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/</a>
+                    <a href="https://chenxinyang621.github.io/2021/06/30/JAVA-%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%88%9D%E4%BA%86%E8%A7%A3/">https://chenxinyang621.github.io/2021/06/30/JAVA-%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%88%9D%E4%BA%86%E8%A7%A3/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1049,12 +1533,12 @@ public class Ex_04 &#123;
                 <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/2021/06/30/JAVA-%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/">
+                <a href="/2021/06/30/JAVA-%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%88%9D%E4%BA%86%E8%A7%A3/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/56.jpg" class="responsive-img" alt="JAVA 多线程&amp;网络通信">
+                        <img src="/medias/featureimages/56.jpg" class="responsive-img" alt="JAVA 多线程&amp;网络通信初了解">
                         
-                        <span class="card-title">JAVA 多线程&amp;网络通信</span>
+                        <span class="card-title">JAVA 多线程&amp;网络通信初了解</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
