@@ -1,0 +1,1983 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="MySQL 授课讲义, 经验分享博客">
+    <meta name="description" content="仍有不足，还需进取">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>MySQL 授课讲义 | 经验分享博客</title>
+    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/css/my.css">
+    
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+
+    <style type="text/css" lang="css">
+    #loading-container{
+        position: fixed;
+        top: 0;
+        left: 0;
+        min-height: 100vh;
+        width: 100vw;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #FFF;
+        text-align: center;
+        /* loader页面消失采用渐隐的方式*/
+        -webkit-transition: opacity 1s ease;
+        -moz-transition: opacity 1s ease;
+        -o-transition: opacity 1s ease;
+        transition: opacity 1s ease;
+    }
+    .loading-image{
+        width: 120px;
+        height: 50px;
+        transform: translate(-50%);
+    }
+
+    .loading-image div:nth-child(2) {
+        -webkit-animation: pacman-balls 1s linear 0s infinite;
+        animation: pacman-balls 1s linear 0s infinite
+    }
+
+    .loading-image div:nth-child(3) {
+        -webkit-animation: pacman-balls 1s linear .33s infinite;
+        animation: pacman-balls 1s linear .33s infinite
+    }
+
+    .loading-image div:nth-child(4) {
+        -webkit-animation: pacman-balls 1s linear .66s infinite;
+        animation: pacman-balls 1s linear .66s infinite
+    }
+
+    .loading-image div:nth-child(5) {
+        -webkit-animation: pacman-balls 1s linear .99s infinite;
+        animation: pacman-balls 1s linear .99s infinite
+    }
+
+   .loading-image div:first-of-type {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_up .5s 0s infinite;
+        animation: rotate_pacman_half_up .5s 0s infinite;
+    }
+    .loading-image div:nth-child(2) {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_down .5s 0s infinite;
+        animation: rotate_pacman_half_down .5s 0s infinite;
+        margin-top: -50px;
+    }
+    @-webkit-keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @-webkit-keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @-webkit-keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+    @keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+
+    .loading-image div:nth-child(3),
+    .loading-image div:nth-child(4),
+    .loading-image div:nth-child(5),
+    .loading-image div:nth-child(6){
+        background-color: #49b1f5;
+        width: 15px;
+        height: 15px;
+        border-radius: 100%;
+        margin: 2px;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        transform: translateY(-6.25px);
+        top: 25px;
+        left: 100px;
+    }
+    .loading-text{
+        margin-bottom: 20vh;
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        box-sizing: border-box;
+        padding: 0 10px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    @media only screen and (max-width: 500px) {
+         .loading-text{
+            font-size: 1.5rem;
+         }
+    }
+    .fadeout {
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+    /* logo出现动画 */
+    @-webkit-keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0)}100%{opacity:1;-webkit-transform:none;transform:none}}
+    @keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);}}
+ </style>
+ <script>
+(function () {
+    const loaded = function(){
+       setTimeout(function(){
+            const loader = document.getElementById("loading-container");
+            loader.className="fadeout" ;//使用渐隐的方法淡出loading page
+            // document.getElementById("body-wrap").style.display="flex";
+            setTimeout(function(){
+                loader.style.display="none";
+            },2500); 
+        },1000);//强制显示loading page 1s  
+    };
+    loaded();
+})()
+</script>
+
+ 
+
+
+
+<body>
+
+    <script type="text/javascript"> 
+    var OriginTitile = document.title, st; 
+    document.addEventListener("visibilitychange", function () { 
+        document.hidden ? (document.title = "┭┮﹏┭┮你不要我了", clearTimeout(st)) : 
+        (document.title = "欢迎回来(｡･∀･)ﾉﾞ", st = setTimeout(function () { 
+            document.title = OriginTitile 
+        }, 3e3)) 
+    }) 
+    </script>
+
+
+    
+        <div id="loading-container">
+             <p class="loading-text">嘘~  正在从服务器偷取页面 . . . </p> 
+             <div class="loading-image">
+                 <div></div>
+                 <div></div>
+                 <div></div>
+                 <div></div> 
+                 <div></div>
+             </div>
+        </div>
+    
+
+    
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    <div>
+                        
+                        <img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                        
+                        <span class="logo-span">经验分享博客</span>
+                    </div>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fa fa-link" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">经验分享博客</div>
+        <div class="logo-desc">
+            
+            仍有不足，还需进取
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fa fa-link"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/ChenXinYang621/ChenXinYang621.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/ChenXinYang621/ChenXinYang621.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://gitee.com/chen-xinyang666/pictures/raw/master/202112181636696.png')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">MySQL 授课讲义</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget { 
+        width: 345px; 
+        padding-left: 20px; 
+        background-color: rgb(255, 255, 255,0.7); 
+        border-radius: 10px; 
+        box-shadow: 0 10px 35px 2px rgba(0, 0, 0, .15), 0 5px 15px rgba(0, 0, 0, .07), 0 2px 5px -5px rgba(0, 0, 0, .1) !important; 
+        opacity: 0.7; }
+
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/MySQL/">
+                                <span class="chip bg-color">MySQL</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E5%90%8E%E7%AB%AF/" class="post-category">
+                                后端
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-12-06
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2022-02-18
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    5.6k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    21 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="0x00-写在前面"><a href="#0x00-写在前面" class="headerlink" title="0x00 写在前面"></a>0x00 写在前面</h2><p>​    前四节课分别由我们Java组的组长、后端可靠大哥哥和协草带我们初识Java SE。这次由我带大家入门MySQL的基础，这节课我们主要讲一些MySQL的基本语法和CRUD（Creating、Retrieving、Updating、Deleting）。之后一些具体的东西还希望大家课后自己复习和掌握，具体的学习网站和推荐书籍会放在课件的最后。</p>
+<h2 id="0x01-引入"><a href="#0x01-引入" class="headerlink" title="0x01 引入"></a>0x01 引入</h2><p>​    说到数据库，其实就可以说到前后端的本质问题。后端的本质其实就是对数据库进行“CRUD”，其他的东西都是让我们更好的“CRUD”。前端的本质也就是把后端传递的数据库信息显示出来，把数据传给后端。 </p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112071451224.jpeg" alt="前后端交互图"></p>
+<h3 id="1-什么是数据库"><a href="#1-什么是数据库" class="headerlink" title="1.什么是数据库"></a>1.什么是数据库</h3><p>​    数据库（DB DataBase），顾名思义就是存储数据和管理数据的东西。在数据库之前，其实有很多东西都是作为存储数据的媒介，比如Excel，txt，io流，甚至是存储在变量中。数据库是数据仓库，它是一个软件，安装在操作系统之上（Windows、Linux、MacOs）。可以存储大量的数据，500万以下都没有什么问题，超过500万可能需要做一些索引优化。</p>
+<h3 id="2-为什么使用数据库"><a href="#2-为什么使用数据库" class="headerlink" title="2.为什么使用数据库"></a>2.为什么使用数据库</h3><ul>
+<li><p>数据库可以结构化存储大量的数据信息，方便用户进行有效的检索和访问。<br>数据库可以对数据进行分类保存，并且能够提供快速的查询。例如，我们平时使用百度搜索内容时，百度也是基于数据库和数据分类技术来达到快速搜索的目的。</p>
+</li>
+<li><p>数据库可以有效地保持数据信息的一致性、完整性、降低数据冗余。</p>
+</li>
+<li><p>数据库可以满足应用的共享和安全方面的要求，把数据放在数据库中在很多情况下也是出于安全的考虑。<br>例如，如果把所有员工信息和工资数据都放在磁盘文件上，则工资的保密性就无从谈起。如果把员工信息和工资数据放在数据库中，就可以只允许查询和修改员工信息，而工资信息只允许指定人（如财务人员）查看，从而保证数据的安全性。</p>
+</li>
+<li><p>数据库技术能够方便智能化地分析，产生新的有用信息</p>
+</li>
+</ul>
+<h3 id="3-DBMS分类"><a href="#3-DBMS分类" class="headerlink" title="3.DBMS分类"></a>3.DBMS分类</h3><p>​    DBMS即数据库管理系统（Database Management System），是操作和管理数据库的软件，用于建立、使用和维护数据库。</p>
+<p>​    我们最为熟知的MySQL就是典型的关系型数据库管理系统</p>
+<h4 id="a-关系型数据库管理系统：（SQL）"><a href="#a-关系型数据库管理系统：（SQL）" class="headerlink" title="a.关系型数据库管理系统：（SQL）"></a>a.关系型数据库管理系统：（SQL）</h4><p>​    关系型数据库是指采用了关系模型来组织数据的数据库。简单来说，关系模式就是一个二维表格模型，可以类比Excel。</p>
+<p>​    主要代表：MS SQL Server、Oracle、MySQL、PostgreSQL等等。</p>
+<p>​    优点：容易理解、使用方便、易于维护（方便我们进行查重等操作） 。</p>
+<h4 id="b-非关系型数据库管理系统：（NoSQL）"><a href="#b-非关系型数据库管理系统：（NoSQL）" class="headerlink" title="b.非关系型数据库管理系统：（NoSQL）"></a>b.非关系型数据库管理系统：（NoSQL）</h4><p>​    <del>No SQL</del>  Not Only SQL</p>
+<p>​    NoSQL提出了另一种理念，以键值来存储，且结构不稳定，每一个元组都可以有不一样的字段，这种就不会局限于固定的结构，可以减少一些时间和空间的开销。可以类比Java集合中的Map。</p>
+<p>​    主要代表：MongoDB（大数据处理），Redis（面向高性能并发读写）等等。</p>
+<h3 id="4-为什么使用MySQL"><a href="#4-为什么使用MySQL" class="headerlink" title="4.为什么使用MySQL"></a>4.为什么使用MySQL</h3><ul>
+<li>上手简单、容易安装。</li>
+<li>MySQL开放源码，一般可以免费使用。</li>
+<li>性能高。</li>
+<li>安全性高，可依赖。</li>
+</ul>
+<h2 id="0x02-前置知识"><a href="#0x02-前置知识" class="headerlink" title="0x02 前置知识"></a>0x02 前置知识</h2><h3 id="1-连接使用"><a href="#1-连接使用" class="headerlink" title="1.连接使用"></a>1.连接使用</h3><h5 id="a-简单控制台命令"><a href="#a-简单控制台命令" class="headerlink" title="a.简单控制台命令"></a>a.简单控制台命令</h5><p>​    上课之前已经让你们安装了MysQL和Navicat，Navicat其实是一个可视化管理数据库的软件，这样你就不需要使用丑陋的Windows Terminal和MySQL打交道了，但是这里我们还是简单提几句终端的指令。</p>
+<ul>
+<li>打开window终端。先输入<code>mysql --version</code>确认自己安装正确。</li>
+<li>之后我们使用<code>mysql -u root -p</code>准备连接（-u代表username，-p表示password），之后输入安装时设定的root密码便可以成功进入mysql的操作页面。</li>
+</ul>
+<pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">查看所有数据库名称：SHOW DATABASES;
+切换数据库：USE mydb1;
+创建数据库：CREATE DATABASE [IF NOT EXISTS] mydb1;
+删除数据库：DROP DATABASE [IF EXISTS] mydb1;
+修改数据库编码：ALTER DATABASE mydb1 CHARACTER SET utf8;
+查看当前数据库中所有表名称：SHOW TABLES;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>​    P.S. 这些指令都需要使用<code>;</code>进行结尾，不是回车。</p>
+<h5 id="b-使用navicat连接"><a href="#b-使用navicat连接" class="headerlink" title="b.使用navicat连接"></a>b.使用navicat连接</h5><p>​    使用可爱的navicat之后，我们就可以直接使用可视化界面进行管理。</p>
+<p>​    连接名随意，是方便我们区分的东西。主机就相当于我们的IP，如果是连接本地的数据库就是localhost或者127.0.0.1。端口使用的是MySQL的默认端口3306，用户名和密码就是最开始安装MySQL的时候设定的值。</p>
+<p>​    <img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202111301611860.png" alt="使用navicat连接MySQL"></p>
+<p>​    这样，我们对MySQL所有的管理都可以直接通过非常简单的“点击”完成，本质上我们每一次的操作，都是一行SQL命令。等一下我们的授课内容全都基于navicat进行讲解。</p>
+<h3 id="2-MySQL-基本内容"><a href="#2-MySQL-基本内容" class="headerlink" title="2.MySQL 基本内容"></a>2.MySQL 基本内容</h3><ul>
+<li>这个时候，可能有小朋友要问了，为什么创建一些字段的时候我们需要加上斜单引号呢？例如：</li>
+</ul>
+<pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">create database `teaching`;
+create table `student`;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>​    其实这个并不是必要的，添加斜单引号的时候是防止我们添加的字段名、表名和字段名跟MySQL自带的方法名冲突。这里我们用之前我出的一个招新题为例。</p>
+<pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">CREATE TABLE `student`  (
+   `id` int NOT NULL AUTO_INCREMENT,
+   `name` varchar(32) NOT NULL,
+   `position` varchar(32) NOT NULL,
+   `like` varchar(32) NOT NULL,
+   PRIMARY KEY (`id`)
+ ) ENGINE = InnoDB CHARACTER SET = utf8;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>​    这个时候，like这个字段名就和MySQL中模糊匹配的关键字like冲突了，如果不使用斜引号可能会出问题。</p>
+<ul>
+<li>另外还有一个问题，如果我将数据库表中的一个字段或者把命令行中的一个命令的字段改成大写，再执行之前的操作会不会有什么影响？</li>
+</ul>
+<p>​    答案是不会。在MySQL中，数据库与data目录中的目录相对应。数据库中的每个表都对应于数据库目录中的至少一个文件（可能是多个文件，具体取决于存储引擎）。因此，操作系统的大小写是否敏感决定了数据库大小写是否敏感，而Windows系统是对大小写不敏感的，Linux系统对大小写敏感默认情况下，库表名在Windows系统下是不区分大小写的，而在Linux系统下是区分大小写的。列名，索引名，存储过程、函数及事件名称在任何操作系统下都不区分大小写，列别名也不区分大小写。</p>
+<p>​    字段值的大小写则是由mysql的校对规则来控制。一般而言，校对规则以其相关的字符集名开始，通常包括一个语言名，并且以<code>_ci</code>（大小写不敏感）、<code>_cs</code>（大小写敏感）或者<code>_bin</code>（二元）结束。</p>
+<p>​    就比如我们最常见使用的utf8字符集：</p>
+<ul>
+<li>utf8_bin：utf8_bin将字符串中的每一个字符用二进制数据存储，区分大小写。</li>
+<li>utf8_general_ci：utf8_genera_ci不区分大小写，ci为case insensitive的缩写，即大小写不敏感。</li>
+<li>utf8_general_cs：utf8_general_cs区分大小写，cs为case sensitive的缩写，即大小写敏感。</li>
+</ul>
+<p>​    P.S. MySQL默认的字符集是不支持中文的，所以我们手动修改为utf8的编码格式，建议直接在创建表的时候就进行修改</p>
+<h4 id="a-数据类型"><a href="#a-数据类型" class="headerlink" title="a.数据类型"></a>a.数据类型</h4><h5 id="a-数值"><a href="#a-数值" class="headerlink" title="(a).数值"></a>(a).数值</h5><table>
+<thead>
+<tr>
+<th align="center">数据类型</th>
+<th align="center">字节数</th>
+<th align="center">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">tinyint</td>
+<td align="center">1</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">smallint</td>
+<td align="center">2</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">mediumint</td>
+<td align="center">3</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">4</td>
+<td align="center">最常用的int类型</td>
+</tr>
+<tr>
+<td align="center">bigint</td>
+<td align="center">8</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">4</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">8</td>
+<td align="center">精度更大</td>
+</tr>
+<tr>
+<td align="center">decimal</td>
+<td align="center"></td>
+<td align="center">字符串形式的浮点数，一般在金融计算中使用</td>
+</tr>
+</tbody></table>
+<h5 id="b-字符串"><a href="#b-字符串" class="headerlink" title="(b).字符串"></a>(b).字符串</h5><table>
+<thead>
+<tr>
+<th align="center">数据类型</th>
+<th align="center">字符串长度</th>
+<th align="center">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">char</td>
+<td align="center">固定长度大小0~255</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">varchar</td>
+<td align="center">可变字符串0~65535</td>
+<td align="center">可以指定长度大小</td>
+</tr>
+<tr>
+<td align="center">text</td>
+<td align="center">文本串2^16-1</td>
+<td align="center">保存大文本</td>
+</tr>
+</tbody></table>
+<h5 id="c-时间日期"><a href="#c-时间日期" class="headerlink" title="(c).时间日期"></a>(c).时间日期</h5><table>
+<thead>
+<tr>
+<th align="center">数据类型</th>
+<th align="center">时间格式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">date</td>
+<td align="center">YYYY-MM-DD，日期格式</td>
+</tr>
+<tr>
+<td align="center">time</td>
+<td align="center">HH:MM:SS，时间格式</td>
+</tr>
+<tr>
+<td align="center">datetime</td>
+<td align="center">YYYY-MM-DD HH:MM:SS，最常用的时间格式</td>
+</tr>
+</tbody></table>
+<h4 id="b-字段属性"><a href="#b-字段属性" class="headerlink" title="b.字段属性"></a>b.字段属性</h4><p>​    每个字段除了类型之外，还有一些字段可能会有的各种属性。可以直接在navicat的可视化界面中直接设定这些属性值。</p>
+<h5 id="a-主键"><a href="#a-主键" class="headerlink" title="(a).主键"></a>(a).主键</h5><p>​    主键是一个列或者多个列的组合（主键可以有多个），其值能唯一地标识表中的每一行。也就是说，我们在设计表时，需要有一个东西能够让每一行唯一确定，所以主键是强制要被设定的。并且，设定主键之后，主键是不能为null值的。</p>
+<p>​    也就是说，如果我们有两个相同的主键，会报错误，这样保证数据的唯一性。一般在开发中，我们基本会将id设置为主键，之后给一个自动递增防止重复。</p>
+<h5 id="b-默认值"><a href="#b-默认值" class="headerlink" title="(b).默认值"></a>(b).默认值</h5><p>​    默认值直观易懂，就是每个字段在初始化时如果没有赋值，那么就会给予一个设定的默认值。</p>
+<p>​    P.S. 需要注意的是，navicat中的默认的默认值是null，空字符串则是<code>EMPTY STRING</code>。</p>
+<h5 id="c-自动递增、无符号、填充零"><a href="#c-自动递增、无符号、填充零" class="headerlink" title="(c).自动递增、无符号、填充零"></a>(c).自动递增、无符号、填充零</h5><p>​    自动递增：每次增加一条==数据记录==时都会在原有的基础上+1。（默认）（通常用于设置唯一主键。当然，我们可以在设置中设定初始值的起始值和步长）</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112071451682.png" alt="在这里设置"></p>
+<p>​    无符号：相当于unsigned，声明这一列的数据不能是负数。</p>
+<p>​    填充零：字面意思，不够的位数使用0来填充，比如你使用了一个长度为3的int类型的字段。前面的空位会用0自动填充。</p>
+<p>​    P.S. 整形的长度并不会限制存储的数字范围，**”整型”的长度实际上可以理解为”显示长度”**，你们使用填充零之后就会有更好的理解。你们可以自己实验一下，及时在“长度”设定为3的整形字段中输入11111也能够成功输入。这就是为什么你在创建int类型的字段的时候，默认不能更改表中长度。</p>
+<h2 id="0x03-CRUD"><a href="#0x03-CRUD" class="headerlink" title="0x03 CRUD"></a>0x03 CRUD</h2><p>​    MySQL的DML（数据库操作语言）遵守SQL的DML规范，主要就是对数据库里的数据增删改查操作。</p>
+<p>​    如果你使用可爱的navicat，所有的增删改查操作都可以像Excel一样，直接使用可视化操作。这些操作的对应的SQL语句都可以直接在<code>SQL预览</code>中看到。当然，不能说你有可视化界面我们就可以不用去学MySQL的语句。我们这节课只是皮毛的东西，之后的包括事务、索引优化、三大范式等等，都需要你熟练掌握MySQL的基本的CRUD。不过不用太担心，你们之后的开发中会经常写到这些代码，多练就能熟练。</p>
+<h3 id="Select"><a href="#Select" class="headerlink" title="Select"></a>Select</h3><p>​    data表示我们数据库中表的字段名称，我们可以写一个也可以写多个，这里就拿我们刚建好的<code>student</code>表举例。</p>
+<pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">select &lt;data&gt; from &lt;tableName&gt;
+
+select `name`, `like` from `student`
+
+#我们可以使用*代表所有的字段
+select * from `student`<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>​    刚刚演示的是最基本的语法，当然我们在正常使用中肯定不会使用到所有的语句。所以我们需要使用一些条件语句帮助我们过滤那些不需要的数据值。</p>
+<ul>
+<li><p>在索引的前面使用 <code>distinct</code> 使搜索时可以自动规避重复的值。</p>
+</li>
+<li><p>在最后时候使用 <code>limit</code> 限制输出的行数（==行和数组的下标一样，从0开始==），limit 5表示不超过5。如果使用limit 5, 5则表示从下标为5的数据开始，向后查询5个数据。</p>
+</li>
+<li><p>可以通过 <code>order by</code> 指定输出时数据的顺序问题。（默认的排序方式时升序，可以在最后加上desc实现降序排序）</p>
+</li>
+</ul>
+<pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">CREATE TABLE `data` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `number` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+SELECT DISTINCT `number` FROM `data`;
+#并且你们如果使用distinct关键字，必须放在最前面
+
+SELECT * FROM `data` LIMIT 3;
+#表示查询前三个数据
+
+SELECT * FROM `data` LIMIT 3 OFFSET 1;
+#这就是一个简单的分页查询，offset表示第几组（下标从0开始）
+
+SELECT * FROM `data` LIMIT 3, 5;
+#表示从下标为3的数据开始（也就是第四行），往后查寻5个数据
+
+SELECT * FROM `data` order by `number` (ASC);
+#ASC表示正序排序，默认就是正序，可以不写
+
+SELECT * FROM `data` order by `number` DESC;
+#DESC表示倒序<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="条件查询"><a href="#条件查询" class="headerlink" title="条件查询"></a>条件查询</h4><p>​    通常我们一般只会检索大量数据中特定值的内容，这个时候我们使用<code>where</code>语句，这个语句很像我们程序中的if判断，表示对某个或者某几个字段进行判断。</p>
+<ul>
+<li>= 等于。</li>
+<li>&lt;&gt; /!=  这两个都是不等于。</li>
+<li>between 两个值之间，是一个闭区间。</li>
+<li>使用and和or进行连接，如果用得比较多还是建议用圆括号括起来。</li>
+<li>in 表示取括号内字段对应的值</li>
+</ul>
+<pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">SELECT * FROM student WHERE `name` = 'cxy';
+#在一般的项目开发中，一般都是前端传一个特定的值给我们，然后我们根据这个值返回数据库中的数据。所以这个语句使用非常频繁
+
+SELECT * FROM `data` WHERE `number` BETWEEN 1 AND 100 ORDER BY `number` DESC;
+#使用between and 进行一个区间内的查询，并且进行排序
+
+SELECT * FROM student WHERE `name` = 'cxy' AND `age` = 18;
+#使用and进行多个条件约束
+
+SELECT * FROM `data` WHERE `number` IN('1', '3');
+#选择表中，number值为1或者3的数据<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="模糊查询"><a href="#模糊查询" class="headerlink" title="模糊查询"></a>模糊查询</h4><p>​    这个时候就不是使用 = 了，而是通过 <code>like</code> 表示 sql 语句使用通配符进行数据索引的过滤</p>
+<p>​    最常见的就是 <code>%</code> 通配符，这种是通过特定位置出现的字符进行匹配得出最终的结果</p>
+<ul>
+<li><p><code>jet%</code> 就表示以 jet 开头的字段</p>
+</li>
+<li><p><code>%jet%</code> 表示在任意地方的存在jet字段的数据</p>
+</li>
+<li><p><code>e%f</code> 表示以 e 开头并以 f 结尾的字段</p>
+</li>
+</ul>
+<pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">SELECT * FROM student WHERE `like` LIKE '乐%';
+
+SELECT * FROM student WHERE `like` LIKE '%乐%';
+#只要字段中有这个值，就匹配出来<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>​    另一个有用的通配符是<code>_</code>，但是它只能匹配单个字符，而<code>%</code>是可以匹配多个字符的</p>
+<pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">SELECT * FROM student WHERE `like` LIKE '_ nice';
+#相当于用_代替任意一个字符
+
+SELECT * FROM student WHERE `like` LIKE '%nice';<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="分组查询"><a href="#分组查询" class="headerlink" title="分组查询"></a>分组查询</h4><pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql"># 案例1：查询一个公司每个工种的最高工资
+SELECT MAX(salary),job_id
+FROM employees
+GROUP BY job_id;
+ 
+ 
+# 案例2：查询每个位置上的部门个数
+SELECT COUNT(*),location_id
+FROM departments
+GROUP BY location_id;
+
+# 在分组查询后用having关键词取代where
+# 案例6：查询每个工种有奖金的员工的最高工资&gt;12000的工种编号和最高工资
+SELECT MAX(salary),job_id
+FROM employees
+GROUP By job_id
+HAVING MAX(salary)&gt;12000;
+ 
+# 案例7：查询领导编号&gt;102的每个领导手下的员工最低工资&gt;5000的领导编号，以及其最低工资
+SELECT MIN(salary),manager_id
+FROM employees
+WHERE manager_id&gt;102
+GROUP BY manager_id
+HAVING MIN(salary)&gt;5000<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h4><p>​    我们可以在select里嵌套一个select，这就是所谓的子查询。</p>
+<p>​    当然，有些子查询，我们也可以使用联表查询的形式。只不过看个人的使用。</p>
+<h5 id="放在where后面"><a href="#放在where后面" class="headerlink" title="放在where后面"></a>放在where后面</h5><pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">SELECT * FROM student WHERE age &gt;
+(SELECT age FROM student WHERE uid = 5);
+#查询age大于uid=5的age的数据值
+
+SELECT * FROM student WHERE age IN
+(SELECT DISTINCT age FROM student WHERE `name` = 'ckt');
+#使用子查询的好处就是我们可以不用使用硬编码，可以使用可变的数据替换
+
+SELECT id FROM `data` WHERE number =
+(SELECT MAX(number) FROM `data`);
+
+# 案例2：返回其它工种中比job_id为`IT_PROG`工种所有员工的工资都要低的员工的员工号、姓名
+select id,name
+from employees
+where salary &lt; all(  # min
+    select distinct salary 
+    from employees
+    where job_id = 'IT_PROG'
+) and job_id != 'IT_PROG';
+#all表示所有的
+#除了all之外，还有上面使用的in、not in、any(some)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h5 id="放from后面"><a href="#放from后面" class="headerlink" title="放from后面"></a>放from后面</h5><p>​    将select返回的结果当作表（数据源）来使用，必须起别名</p>
+<pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql"># 案例1、查询每个部门的平均工资的工资等级
+select ag_dep.*, grade.level
+from(
+   select avg(salary) ag ,department_id
+   from employees
+   group by department_id
+) ag_dep
+inner join job_grades g
+on ag_dep.ag between lowest_sal and highest_sal;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="笛卡尔乘积查询"><a href="#笛卡尔乘积查询" class="headerlink" title="笛卡尔乘积查询"></a>笛卡尔乘积查询</h4><p>​    在select操作中直接使用from连结多个表，这样的弊端就是结果就会变成 x * y，实现了一个超级加倍。</p>
+<pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">SELECT e.`name`, e.location_id, e.company_id, c.`name` `company`
+FROM employee e, company c
+WHERE e.company_id = c.uid;
+#MySQL中，我们可以直接在字段或者表名后面对其进行重新命名
+#字段可以像Java对象的属性一样，通过.进行调用<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>​    从这个糟糕的结果你可以看出来，如果使用这种查询方式，那么效率会非常低下。</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112030450649.png" alt="糟糕的结果"></p>
+<h4 id="连接查询"><a href="#连接查询" class="headerlink" title="连接查询"></a>连接查询</h4><p>​    连接查询是另一种类型的多表查询。连接查询对多个表进行JOIN运算，简单地说，就是先确定一个主表作为结果集，然后，把其他表的行有选择性地“连接”在主表结果集上。这种思想明显比之前那种全部拼接在一起的高明得多。</p>
+<ul>
+<li>内连接：inner join 需要两个表都有这个信息</li>
+<li>外连接：right(left) join 左（右）作为主表</li>
+</ul>
+<pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">SELECT e.`name`, e.location_id, e.company_id, c.`name` company_name
+FROM employee e
+INNER JOIN company c
+ON e.company_id = c.uid;
+
+SELECT e.`name`, e.location_id, e.company_id, c.`name` company_name
+FROM employee e
+RIGHT JOIN company c
+ON e.company_id = c.uid;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="Insert"><a href="#Insert" class="headerlink" title="Insert"></a>Insert</h3><pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">insert into &lt;tableName&gt; (&lt;content&gt;) values (&lt;content&gt;)
+
+INSERT INTO `student`(`name`, `age`, `scores`) VALUES
+('ckt', 18, 34.2),
+('ooo', 10, 30.4);
+#执行这条指令之后，我们就可以向数据库中添加这些数据数据，我们可以添加多行数据
+#因为我们的主键设置了自动递增，所以即使添加的命令中没有这个字段，数据库中会对其自动递增<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="update"><a href="#update" class="headerlink" title="update"></a>update</h3><pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">update &lt;tableName&gt; set &lt;data&gt; = &lt;content&gt;
+
+UPDATE student SET `name` = '嘉然' WHERE `name` = 'cxy';
+#将表中name字段为cxy的数据替换成嘉然<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="delete"><a href="#delete" class="headerlink" title="delete"></a>delete</h3><pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">delete from &lt;tableName&gt;
+
+DELETE FROM student WHERE `name` = 'ccc';
+
+#还有一个命令是truncate，和delete的区别在于它可以把自增的计数器置0
+#使用这个我们就可以删库跑路啦~
+TRUNCATE `user`<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="0x04-例题"><a href="#0x04-例题" class="headerlink" title="0x04 例题"></a>0x04 例题</h2><p>​    看着很熟悉嘛？没错，这就是我出的应应招新题中的SQL题。鉴于你们很多人都没做，这次我们就把这个题目当作课堂习题。</p>
+<p>​    最近天下都不太平，又是外卖被偷风波又是离奇失踪案件。可是最近，发生一件大事，平安学长的手办老婆被偷了！他悲愤欲绝，发誓一定要找出凶手，他已经通过监控将嫌疑犯锁定在科协内部。但是科协人员混杂，一般调查难以进行下去，好在有人已经将科协全部人员整合到一个MySQL数据库表中。可问题来了，这个学长对SQL操作并不是很熟练。请你运用你熟练的SQL知识，帮助这位可怜的学长，找到嫌犯并将其绳之以法。</p>
+<p>​    下面是需要使用的表的数据结构（ SQL 源码）</p>
+<pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">CREATE TABLE `student`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  `position` varchar(32) NOT NULL,
+  `like` varchar(32) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB CHARACTER SET = utf8;
+ 
+INSERT INTO `student` ( `id`, `name`, `position`, `like` ) VALUES
+( 1, '金老板', 'A', '想当嘉然小姐的狗' ),
+( 2, '栋栋子', 'A', '夸赞学弟好强啊' ),
+( 3, '夏桑', 'B', '嘉然我真的好喜欢你' ),
+( 4, '提莫', 'B', '种蘑菇' ),
+( 5, '陈三金', 'B', '女装引流' ),
+( 6, '金坷垃', 'B', '吸收氮磷钾' ),
+( 7, '祖师爷', 'C', '南邮还是宁最卷' ),
+( 8, '杂鱼', 'C', '欺负cxy' );<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<ol>
+<li>通过几天的不懈排查，有知情人士透露，当时有人正使用平安学长的电脑刷着 B 站。当时传来一阵“嘉然，我真的好喜欢你啊。为了你，我要听《猫中毒》”“呜呜，然然，我的然然”。可以确定嫌疑人是嘉心糖，他决定趁热打铁继续调查。所以，在他忙着进行接下来的调查的时候，请你使用SQL知识帮他解决问题。<br>要求：用一条SQL语句把兴趣中提到嘉然的同学都搜索出来。</li>
+</ol>
+<ol start="2">
+<li>但是很快疑点便浮出水面，无奈的平安学长只好去请教 F 侦探，在侦探的帮助下。很快就找到了相关的线索，但是还不能进行确认，所以侦探 F 为了比对证据，需要你查找出部分科协人员的名单，并且需要对名字进行排序。“真実はいつもひとつ”，F 丢下这句话后就走了，请你运用你熟练的 SQL 知识解决这个问题吧。<br>要求：用一条SQL语句对姓名进行排序并输出倒数三个人的名字（注意，F 侦探只需要名字）。</li>
+</ol>
+<ol start="3">
+<li>最后真相公之于众，原来是两位金同学联合偷走了平安学长的老婆。F 侦探觉得以平安学长的脾气，可能会把那两个人给鲨了，所以想请你根据科协公约审判这两个人的罪行，确保公平公正。（科协公约已经通过下表的形式给出）请你使用 SQL 的 连接查询 知识，给这两位同学处于恰当的惩罚。除了连接查询之外，还有一种多表查询的方式为笛卡尔乘积式查询，但是 F 侦探并不建议你使用这种方式，你能说说为什么嘛。</li>
+</ol>
+<pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">CREATE TABLE `crime`  (
+   `punish_id` int NOT NULL AUTO_INCREMENT,
+   `punishment` varchar(64) NOT NULL,
+   `position` varchar(32) NOT NULL,
+   PRIMARY KEY (`punish_id`)
+ ) ENGINE = InnoDB CHARACTER SET = utf8;
+ 
+ INSERT INTO `crime` VALUES  
+ (1, '禁止膜拜 JC', 'A'),
+ (2, '不准看 AS', 'B'),
+ (3, '打扫大活一个星期', 'C'),
+ (4, '自裁', 'A'),
+ (5, '拿来吧你', 'B'),
+ (6, '宵禁', 'C'),
+ (7, '异端教徒审判', 'A');<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>​    答案：</p>
+<pre class="line-numbers language-mysql" data-language="mysql"><code class="language-mysql">SELECT * FROM student WHERE `LIKE` LIKE '%嘉然%';
+
+SELECT `name` FROM student ORDER BY `name` DESC LIMIT 3;
+
+ SELECT 
+     student.`name`,
+     student.position,
+     crime.punishment
+ FROM student
+ INNER JOIN crime
+ ON student.position = crime.position
+ WHERE (student.position = 'A' OR student.position = 'B')
+ AND student.`name` LIKE '金%';<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">陈鑫扬</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://hexo.cxy621.top/2021/12/06/mysql-bi-zhi-bi-hui/">https://hexo.cxy621.top/2021/12/06/mysql-bi-zhi-bi-hui/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">陈鑫扬</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/MySQL/">
+                                    <span class="chip bg-color">MySQL</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="vcomments" class="card-content" style="display: grid">
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/valine/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/valine/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'zbDqCAB0sAdby2AghAS6OQuJ-gzGzoHsz',
+        appKey: 'WCwIWVgGnjVGtvrQQRumCG5E',
+        notify: 'false' === 'true',
+        verify: 'true' === 'true',
+        visitor: 'true' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'zh-cn',
+        placeholder: 'glad to see your comment'
+    });
+</script>
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/12/07/mysql-jin-jie/">
+                    <div class="card-image">
+                        
+                        <img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112181637772.png" class="responsive-img" alt="MySQL 进阶">
+                        
+                        <span class="card-title">MySQL 进阶</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            深入了解MySQL
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-12-07
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%90%8E%E7%AB%AF/" class="post-category">
+                                    后端
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/MySQL/">
+                        <span class="chip bg-color">MySQL</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/09/23/springboot-aop/">
+                    <div class="card-image">
+                        
+                        <img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112181637416.png" class="responsive-img" alt="Spring-Boot SpringSecuriry">
+                        
+                        <span class="card-title">Spring-Boot SpringSecuriry</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            终于能静下心来学习了
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-23
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%90%8E%E7%AB%AF/" class="post-category">
+                                    后端
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Java/">
+                        <span class="chip bg-color">Java</span>
+                    </a>
+                    
+                    <a href="/tags/Spring-Boot/">
+                        <span class="chip bg-color">Spring-Boot</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: 经验分享博客<br />'
+            + '文章作者: cxy621<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021-2022</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">cxy621</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">36.4k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2021";
+                    var startMonth = "2";
+                    var startDate = "12";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/ChenXinYang621" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1580779474@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+    <a href="https://twitter.com/xinyangchen7" class="tooltipped" target="_blank" data-tooltip="关注我的Twitter: https://twitter.com/xinyangchen7" data-position="top" data-delay="50">
+        <i class="fab fa-twitter"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1580779474" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1580779474" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+    <a href="https://www.zhihu.com/people/gu-du-xing-54-82" class="tooltipped" target="_blank" data-tooltip="关注我的知乎: https://www.zhihu.com/people/gu-du-xing-54-82" data-position="top" data-delay="50">
+        <i class="fab fa-zhihu1">知</i>
+    </a>
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+	
+    
+
+    
+
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/background/ribbon-dynamic.js" async="async"></script>
+    
+
+    
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=i;var e=n.imageLazyLoadSetting.isSPA,r=(n.imageLazyLoadSetting.preloadRatio,Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));function i(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight+240||document.documentElement.clientHeight+240)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}i(),n.addEventListener("scroll",function(){var t,e;t=i,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body>
+
+</html>

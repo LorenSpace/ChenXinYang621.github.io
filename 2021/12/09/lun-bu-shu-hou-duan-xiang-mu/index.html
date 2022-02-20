@@ -1,0 +1,2078 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="论部署后端项目, 经验分享博客">
+    <meta name="description" content="仍有不足，还需进取">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>论部署后端项目 | 经验分享博客</title>
+    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/css/my.css">
+    
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+
+    <style type="text/css" lang="css">
+    #loading-container{
+        position: fixed;
+        top: 0;
+        left: 0;
+        min-height: 100vh;
+        width: 100vw;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #FFF;
+        text-align: center;
+        /* loader页面消失采用渐隐的方式*/
+        -webkit-transition: opacity 1s ease;
+        -moz-transition: opacity 1s ease;
+        -o-transition: opacity 1s ease;
+        transition: opacity 1s ease;
+    }
+    .loading-image{
+        width: 120px;
+        height: 50px;
+        transform: translate(-50%);
+    }
+
+    .loading-image div:nth-child(2) {
+        -webkit-animation: pacman-balls 1s linear 0s infinite;
+        animation: pacman-balls 1s linear 0s infinite
+    }
+
+    .loading-image div:nth-child(3) {
+        -webkit-animation: pacman-balls 1s linear .33s infinite;
+        animation: pacman-balls 1s linear .33s infinite
+    }
+
+    .loading-image div:nth-child(4) {
+        -webkit-animation: pacman-balls 1s linear .66s infinite;
+        animation: pacman-balls 1s linear .66s infinite
+    }
+
+    .loading-image div:nth-child(5) {
+        -webkit-animation: pacman-balls 1s linear .99s infinite;
+        animation: pacman-balls 1s linear .99s infinite
+    }
+
+   .loading-image div:first-of-type {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_up .5s 0s infinite;
+        animation: rotate_pacman_half_up .5s 0s infinite;
+    }
+    .loading-image div:nth-child(2) {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_down .5s 0s infinite;
+        animation: rotate_pacman_half_down .5s 0s infinite;
+        margin-top: -50px;
+    }
+    @-webkit-keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @-webkit-keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @-webkit-keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+    @keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+
+    .loading-image div:nth-child(3),
+    .loading-image div:nth-child(4),
+    .loading-image div:nth-child(5),
+    .loading-image div:nth-child(6){
+        background-color: #49b1f5;
+        width: 15px;
+        height: 15px;
+        border-radius: 100%;
+        margin: 2px;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        transform: translateY(-6.25px);
+        top: 25px;
+        left: 100px;
+    }
+    .loading-text{
+        margin-bottom: 20vh;
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        box-sizing: border-box;
+        padding: 0 10px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    @media only screen and (max-width: 500px) {
+         .loading-text{
+            font-size: 1.5rem;
+         }
+    }
+    .fadeout {
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+    /* logo出现动画 */
+    @-webkit-keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0)}100%{opacity:1;-webkit-transform:none;transform:none}}
+    @keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);}}
+ </style>
+ <script>
+(function () {
+    const loaded = function(){
+       setTimeout(function(){
+            const loader = document.getElementById("loading-container");
+            loader.className="fadeout" ;//使用渐隐的方法淡出loading page
+            // document.getElementById("body-wrap").style.display="flex";
+            setTimeout(function(){
+                loader.style.display="none";
+            },2500); 
+        },1000);//强制显示loading page 1s  
+    };
+    loaded();
+})()
+</script>
+
+ 
+
+
+
+<body>
+
+    <script type="text/javascript"> 
+    var OriginTitile = document.title, st; 
+    document.addEventListener("visibilitychange", function () { 
+        document.hidden ? (document.title = "┭┮﹏┭┮你不要我了", clearTimeout(st)) : 
+        (document.title = "欢迎回来(｡･∀･)ﾉﾞ", st = setTimeout(function () { 
+            document.title = OriginTitile 
+        }, 3e3)) 
+    }) 
+    </script>
+
+
+    
+        <div id="loading-container">
+             <p class="loading-text">嘘~  正在从服务器偷取页面 . . . </p> 
+             <div class="loading-image">
+                 <div></div>
+                 <div></div>
+                 <div></div>
+                 <div></div> 
+                 <div></div>
+             </div>
+        </div>
+    
+
+    
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    <div>
+                        
+                        <img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                        
+                        <span class="logo-span">经验分享博客</span>
+                    </div>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fa fa-link" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">经验分享博客</div>
+        <div class="logo-desc">
+            
+            仍有不足，还需进取
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fa fa-link"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/ChenXinYang621/ChenXinYang621.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/ChenXinYang621/ChenXinYang621.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://gitee.com/chen-xinyang666/pictures/raw/master/202112181639237.png')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">论部署后端项目</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget { 
+        width: 345px; 
+        padding-left: 20px; 
+        background-color: rgb(255, 255, 255,0.7); 
+        border-radius: 10px; 
+        box-shadow: 0 10px 35px 2px rgba(0, 0, 0, .15), 0 5px 15px rgba(0, 0, 0, .07), 0 2px 5px -5px rgba(0, 0, 0, .1) !important; 
+        opacity: 0.7; }
+
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Java/">
+                                <span class="chip bg-color">Java</span>
+                            </a>
+                        
+                            <a href="/tags/Spring-Boot/">
+                                <span class="chip bg-color">Spring-Boot</span>
+                            </a>
+                        
+                            <a href="/tags/php/">
+                                <span class="chip bg-color">php</span>
+                            </a>
+                        
+                            <a href="/tags/laravel/">
+                                <span class="chip bg-color">laravel</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E8%BF%90%E7%BB%B4/" class="post-category">
+                                运维
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-12-09
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2022-02-16
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    4.8k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    19 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="获得一个服务器"><a href="#获得一个服务器" class="headerlink" title="获得一个服务器"></a>获得一个服务器</h2><p>我们可以自己在腾讯云上购买一个云服务器，之后我们就可以对它进行随意的折腾</p>
+<p>这里我们就直接使用科协的服务器举例，那么首先，我们不可能在整个服务器上都配置你的环境。我们需要一个虚拟机，然后我们在虚拟机上对环境进行配置。这里我们使用 ESXi，ESXi 是 vmware 推出的一款优秀的服务器级别的虚拟机。它与我们常用的虚拟机不同的是，日常使用的虚拟机是需要依赖于一个操作系统的，比如在 window 上使用 vmware，或者 linux 上使用 virtualbox。而 ESXi 不依赖于任何操作系统，它本身就可以看作一个操作系统，然后可以在它上面安装系统</p>
+<br>
+
+<h3 id="创建一个虚拟机"><a href="#创建一个虚拟机" class="headerlink" title="创建一个虚拟机"></a>创建一个虚拟机</h3><p>有了 ESXi 我们可以直接在上面创建一个虚拟机</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112091917355.png" alt="这里我创建了一个2核4G的虚拟机（就和学生特惠的一样）"></p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112091856047.png" alt="记得在驱动部分选择我们下载好的镜像文件"></p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112091917144.png" alt="之后我们便可以直接在 ESXi 上直接使用 bash"></p>
+<p>当然，如果你觉得 ESXI 的界面实在过于丑陋，你可以直接去 Vmware 上进行连接</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112091900916.png" alt="使用 Vmware 对服务器进行连接"></p>
+<p>在进行各种配置之后，我们的虚拟机就创建好了。但是有一个问题，这个虚拟机是没有 ip 地址的！这就导致我们只能在内网连接虚拟机才能使用，所以我们需要给我们的虚拟机分配 ip</p>
+<br>
+
+<h3 id="分配-ip"><a href="#分配-ip" class="headerlink" title="分配 ip"></a>分配 ip</h3><p>分配 ip 的话我们首先得修改一个 centos 的配置（这个东西坑了我一晚上，因为 ubuntu 是不需要配置的）</p>
+<p>我们首先需要进入 <code>/etc/sysconfig/network-scripts/</code> 进入网卡配置的文件夹，之后把 ifcfg-ens192 里面的 ONBOOT 改成 yes，这样我们就可以分配 ip 了</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112091913180.png" alt="对配置文件进行修改"></p>
+<p>之后我们使用 ip addr 查看我们的 Mac 地址和当前的 ip 地址，通过图片可以知道，我们的 Mac 地址是 00:0c:29:26:60:1b，ip 地址目前为空，也就表示我们还没进行地址的分配</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112091916141.png" alt="查看网络"></p>
+<p>说到地址的分配，我们就会使用 openwrt 进行简化操作</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112091921747.png" alt="给我们的虚拟机分配一个 ip 192.168.1.33"></p>
+<p>然后我们使用 systemctl restart network 重启网卡配置之后，我们就可以正常获取 ip 了。当然，如果担心，可以直接用 ip addr 检查一下。我们会用 DHCP 进行 ip 分配。**DHCP(Dynamic Host Configuration Protocol，动态主机配置协议)**是一个局域网的网络协议，使用UDP协议工作，主要有两个用途：给内部网络或网络服务供应商自动分配IP地址，给用户或者内部网络管理员作为对所有计算机作中央管理的手段</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112091948020.png" alt="可以看到，我们的 ip 已经被分配上去了"></p>
+<p>说明我们的 ip 已经分配上去了，过期时间是无限。如果不放心，可以使用 Xshell 进行测试</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112091923914.png" alt="openwrt 里显示我们已经分配好了"></p>
+<br>
+
+<h3 id="端口转发"><a href="#端口转发" class="headerlink" title="端口转发"></a>端口转发</h3><p>如果我们单纯使用局域网，那么我们就只能在目前服务器 lan（Local Area Network，即局域网） 的网络下进行访问。这个时候我们就采取端口转发，相当于我们在局域网的请求都转发到到 wan（Wide Area Network，即广域网） 上。因为科协的路由器的 wan 口对应的是校园网，这样只要连接上校园网，用户就可以进行访问了</p>
+<p>要注意的是，服务器默认是开启22端口的，如果我们以后需要转发其他端口我们得先在防火墙中开放端口</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112092015867.png" alt="在 openwrt 防火墙中端口转发的设置"></p>
+<p>这样，位于 lan 内部的这个 ip 的 22 端口就转发到了路由器对应 ip 的 7500 端口</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112092015518.png" alt="这样我们就可以使用转发的 ip 和端口进行登录"></p>
+<br>
+
+<h2 id="部署-jar-包"><a href="#部署-jar-包" class="headerlink" title="部署 jar 包"></a>部署 jar 包</h2><br>
+
+<h3 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h3><br>
+
+<h4 id="安装-jre"><a href="#安装-jre" class="headerlink" title="安装 jre"></a>安装 jre</h4><p>首先我们需要配置 jre(Java runtime environment) 这样我们才能运行 Java 程序</p>
+<p>在这之前我们需要安装一个 wget 命令，可以使用 yum install wget 来安装它</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#查看版本</span>
+yum list <span class="token operator">|</span><span class="token function">grep</span> java
+
+<span class="token comment">#安装jre</span>
+yum <span class="token function">install</span> java java-devel
+
+<span class="token comment">#配置环境变量</span>
+<span class="token function">vi</span> /etc/profile
+
+<span class="token comment">#set java environment</span>
+<span class="token assign-left variable">JAVA_HOME</span><span class="token operator">=</span>/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.171-7.b10.e17.x86_64
+<span class="token assign-left variable">JRE_HOME</span><span class="token operator">=</span><span class="token variable">$JAVA_HOME</span>/jre
+<span class="token assign-left variable">CLASS_PATH</span><span class="token operator">=</span>.:<span class="token variable">$JAVA_HOME</span>/lib/dt.jar:<span class="token variable">$JAVA_HOME</span>/lib/tools.jar:<span class="token variable">$JRE_HOME</span>/lib
+<span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token environment constant">$PATH</span><span class="token builtin class-name">:</span><span class="token variable">$JAVA_HOME</span>/BIN:<span class="token variable">$JRE_HOME</span>/bin
+<span class="token builtin class-name">export</span> JAVA_HOME JRE_HOME CLASS_PATH <span class="token environment constant">PATH</span>
+
+<span class="token comment">#使环境变量即时生效</span>
+<span class="token builtin class-name">source</span> /etc/profile<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br>
+
+<h4 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h4><p>因为在 centos 中配置 mysql 实在是太麻烦了，我们就直接使用 docker 了</p>
+<p>首先是对 docker 的安装</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#使用国内源一键安装命令</span>
+<span class="token function">curl</span> -sSL https://get.daocloud.io/docker <span class="token operator">|</span> <span class="token function">sh</span>
+
+<span class="token comment">#设置仓库</span>
+<span class="token function">sudo</span> yum <span class="token function">install</span> -y yum-utils <span class="token punctuation">\</span>
+  device-mapper-persistent-data <span class="token punctuation">\</span>
+  lvm2
+  
+<span class="token comment">#选择国内的一些源地址，设置清华大学源</span>
+<span class="token function">sudo</span> yum-config-manager <span class="token punctuation">\</span>
+    --add-repo <span class="token punctuation">\</span>
+    https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/docker-ce.repo
+    
+<span class="token comment">#安装 Docker Engine-Community</span>
+<span class="token function">sudo</span> yum <span class="token function">install</span> docker-ce docker-ce-cli containerd.io
+
+<span class="token comment">#启动 Docker</span>
+<span class="token function">sudo</span> systemctl start docker<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br>
+
+<h4 id="安装-mysql"><a href="#安装-mysql" class="headerlink" title="安装 mysql"></a>安装 mysql</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#拉取 mysql 的镜像</span>
+docker pull mysql
+
+<span class="token comment">#创建数据挂载点（即存储数据的地方，这样即便mysql容器删除了，数据还是在）</span>
+docker volume create mysql_data
+
+<span class="token comment">#运行 mysql 容器</span>
+docker run --name mysql -p <span class="token number">3306</span>:3306 -v mysql_data:/var/lib/mysql -e <span class="token assign-left variable">MYSQL_ROOT_PASSWORD</span><span class="token operator">=</span><span class="token number">123456</span> -d mysql:latest
+
+<span class="token comment">#进入容器 /bin/bash</span>
+docker <span class="token builtin class-name">exec</span> -it mysql <span class="token function">bash</span>
+
+<span class="token comment">#进入 mysql</span>
+mysql -u root -p
+<span class="token comment">#之后会提示你输入你设定的 root m</span>
+
+<span class="token comment">#mysql 授权</span>
+GRANT ALL PRIVILEGES ON *.* TO <span class="token string">'root'</span>@<span class="token string">'%'</span>WITH GRANT OPTION<span class="token punctuation">;</span>
+<span class="token comment">#刷新</span>
+FLUSH PRIVILEGES<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>–name 镜像名称 </p>
+<p>-p映射端口 </p>
+<p>-v /mysql/datadir:/var/lib/mysql 设置本地挂载点</p>
+<p>-e MYSQL_ROOT_PASSWORD=123456 设置密码</p>
+<p>-d mysql 容器名称</p>
+<p>这样我们在本机已经配置好了一个 mysql 的环境，但是这个环境只能在本机启动。这个时候我们就需要使用端口转发，这样我们也能在校园网内使用 navicat 操作 mysql 了</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#查看防火墙的状态</span>
+firewall-cmd --state<span class="token punctuation">;</span>
+
+<span class="token comment">#如果没有开启，输入命令</span>
+systemctl start firewalld.service<span class="token punctuation">;</span>
+
+<span class="token comment">#开启对应端口</span>
+firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span><span class="token string">"对应端口"</span>/tcp --permanent<span class="token punctuation">;</span>
+
+<span class="token comment">#重启防火墙</span>
+systemctl restart firewalld.service<span class="token punctuation">;</span>
+
+<span class="token comment">#重新载入配置</span>
+firewall-cmd --reload<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112092141618.png" alt="进行端口转发之后，我们就可以连接上了"></p>
+<br>
+
+<h4 id="安装-rz-sz"><a href="#安装-rz-sz" class="headerlink" title="安装 rz sz"></a>安装 rz sz</h4><p>安装这个之后我们就可以直接从我们本机直接上传文件到 ssh 连接的服务器上</p>
+<p>这个对于我们上传 jar 包是必要的</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#安装 rz</span>
+yum <span class="token function">install</span> -y lrzsz.x86_64
+
+<span class="token comment">#使用</span>
+rz<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br>
+
+<h3 id="部署项目"><a href="#部署项目" class="headerlink" title="部署项目"></a>部署项目</h3><br>
+
+<h4 id="上传-jar-包"><a href="#上传-jar-包" class="headerlink" title="上传 jar 包"></a>上传 jar 包</h4><p>在 Spring-Boot 中，jar 包内置了一个 tomcat。tomcat 简单地说就是一个运行 Java 的网络服务器，可以让别人也能访问我们的前端页面。所以我们把 jar 上传到我的服务器之后，只需要在后台一运行就可以跑了</p>
+<p>首先是通过 idea 进行 package 操作</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112101225260.png" alt="通过可视化操作，我们快速打包"></p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112101226718.png" alt="如果想要修改 jar 的名称，可以直接在 maven 包中进行改动"></p>
+<p>我们将打包好的 jar 包拷贝下来，使用 rz 命令进行上传，这样就可以了</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112101246981.png" alt="有时候使用 rz 可能会出错，这个时候再试一次基本就可以了"></p>
+<br>
+
+<h4 id="运行-jar-包"><a href="#运行-jar-包" class="headerlink" title="运行 jar 包"></a>运行 jar 包</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#当前ssh窗口被锁定，可按CTRL + C打断程序运行，或直接关闭窗口，程序退出</span>
+java -jar shareniu.jar
+
+<span class="token comment">#java -jar shareniu.jar &amp;</span>
+java -jar shareniu.jar <span class="token operator">&amp;</span>
+
+<span class="token comment">#nohup 意思是不挂断运行命令,当账户退出或终端关闭时,程序仍然运行</span>
+<span class="token comment">#当用 nohup 命令执行作业时，缺省情况下该作业的所有输出被重定向到nohup.out的文件中，除非另外指定了输出文件</span>
+<span class="token function">nohup</span> java -jar shareniu.jar <span class="token operator">&amp;</span>
+
+<span class="token comment">#command &gt;out.txt command 的输出重定向到 out.txt 文件，即输出内容不打印到屏幕上，而是输出到 out.txt 文件中</span>
+<span class="token function">nohup</span> java -jar shareniu.jar <span class="token operator">&gt;</span>temp.txt <span class="token operator">&amp;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当然，我们可以使用更加优雅的 screen 方法</p>
+<p><strong>GNU Screen</strong> 是一款由 GNU 计划开发的用于命令行终端切换的自由软件。用户可以通过该软件同时连接多个本地或远程的命令行会话，并在其间自由切换</p>
+<p>GNU Screen 可以看作是窗口管理器的命令行界面版本。它提供了统一的管理多个会话的界面和相应的功能，可以类比 windows 开多个桌面，熟练使用之后比直接后台运行更加优雅</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yum <span class="token function">install</span> -y <span class="token function">screen</span>
+
+<span class="token function">screen</span> -S yourname -<span class="token operator">&gt;</span> 新建一个叫yourname的session
+
+<span class="token function">screen</span> -ls -<span class="token operator">&gt;</span> 列出当前所有的session
+
+<span class="token function">screen</span> -r yourname -<span class="token operator">&gt;</span> 回到yourname这个session
+
+<span class="token function">screen</span> -d yourname -<span class="token operator">&gt;</span> 远程detach某个session
+
+<span class="token comment">#通过快捷键 ctrl+a+d 快速从我们创建的 screen 中回到我们的主窗口中</span>
+<span class="token comment">#从我个人的角度来看，使用 screen 无疑是更加优雅的一种方法</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果还想使用端口转发进行访问，需要提前开启对应端口的防火墙</p>
+<p>运行 jar 包时，使用指令 java -jar 时，如果涉及 IPV4,一定要把 IPv4 参数放前面，jar 包参数置后，不然 IPv4 不生效</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">java -Djava.net.preferIPv4Stack<span class="token operator">=</span>true -jar test.jar<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<br>
+
+<h2 id="部署-laravel"><a href="#部署-laravel" class="headerlink" title="部署 laravel"></a>部署 laravel</h2><p>在经历两个晚上的小崩溃之后，最后还是发现还是使用宝塔界面更加方便。手动配置 php 环境的时候，不知道为什么就会出现未知的错误（甚至需要你使用 gcc 手动编译）。再加上国内糟糕的编程论坛环境，导致这成一个非常麻烦的点</p>
+<br>
+
+<h3 id="配置宝塔面板"><a href="#配置宝塔面板" class="headerlink" title="配置宝塔面板"></a>配置宝塔面板</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#安装最新的宝塔面板</span>
+yum <span class="token function">install</span> -y <span class="token function">wget</span> <span class="token operator">&amp;&amp;</span> <span class="token function">wget</span> -O install.sh http://download.bt.cn/install/install_6.0.sh <span class="token operator">&amp;&amp;</span> <span class="token function">sh</span> install.sh
+
+<span class="token comment">#如果想要进行端口转发，首先得先开启 8888 端口，之后得删除一个配置文件</span>
+<span class="token function">rm</span> -f /www/server/panel/data/admin_path.pl<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112101458931.png" alt="安装之后会有给定的提示信息"></p>
+<p>之后我们就可以直接搭建 lnmp 环境（Linux nginx MySQL php），然后我们就可以开始准备 laravel 项目的构建了</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112101501369.png" alt="耐心等待后台安装"></p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112101504219.png" alt="我们可以在设置中调整我们的用户名和密码"></p>
+<br>
+
+<h3 id="配置-git"><a href="#配置-git" class="headerlink" title="配置 git"></a>配置 git</h3><p>因为 laravel 跟 jar 包不同，我们需要的是一个完整的项目，所以最好的办法是使用 git 将我们的项目 clone 到服务器上</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#开启 Wandisco GIT 源，这样能保证下载到较新版本的 git</span>
+<span class="token function">vi</span> /etc/yum.repos.d/wandisco-git.repo
+
+<span class="token comment">#这样就在 /etc/yum.repos.d/ 目录新建了一个 yum 源文件，我们修改它的配置</span>
+<span class="token punctuation">[</span>wandisco-git<span class="token punctuation">]</span>
+<span class="token assign-left variable">name</span><span class="token operator">=</span>Wandisco GIT Repository
+<span class="token assign-left variable">baseurl</span><span class="token operator">=</span>http://opensource.wandisco.com/centos/7/git/<span class="token variable">$basearch</span>/
+<span class="token assign-left variable">enabled</span><span class="token operator">=</span><span class="token number">1</span>
+<span class="token assign-left variable">gpgcheck</span><span class="token operator">=</span><span class="token number">1</span>
+<span class="token assign-left variable">gpgkey</span><span class="token operator">=</span>http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco
+
+<span class="token comment">#导入 GPG keys</span>
+<span class="token function">rpm</span> --import http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco
+
+<span class="token comment">#安装 git</span>
+yum <span class="token function">install</span> <span class="token function">git</span>
+
+<span class="token comment">#查看版本号</span>
+<span class="token function">git</span> --version<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112111041065.png" alt="我安装的 git 版本为2.31.1"></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#配置 git 对应的用户名和邮箱</span>
+<span class="token function">git</span> config --global user.name <span class="token string">"Your Name"</span>
+<span class="token function">git</span> config --global user.email <span class="token string">"youremail@yourdomain.com"</span>
+
+<span class="token comment">#通过以下命令生成我们的公钥</span>
+ssh-keygen -t rsa<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>之后将我们的公钥添加到我们 GitHub 的 ssh 中就可以使用了</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112111053535.png" alt="使用 xftp 打开我们的公钥文件夹（需要提前设置显示隐藏文件）"></p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112111102339.png" alt="我们的项目也成功克隆"></p>
+<br>
+
+<h3 id="配置-Composer"><a href="#配置-Composer" class="headerlink" title="配置 Composer"></a>配置 Composer</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#Composer 依赖 php-cli，该应用已经在搭建 LNMP 环境的时候安装了</span>
+yum -y update
+<span class="token builtin class-name">cd</span> /tmp
+<span class="token function">curl</span> -sS https://getcomposer.org/installer <span class="token operator">|</span> php
+
+<span class="token comment">#在执行第三步之前，我们先换源，这里使用阿里源</span>
+<span class="token function">composer</span> config -g repo.packagist <span class="token function">composer</span> https://mirrors.aliyun.com/composer/
+
+<span class="token comment">#让 composer 全局可用</span>
+<span class="token function">mv</span> composer.phar /usr/local/bin/composer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br>
+
+<h3 id="安装-redis"><a href="#安装-redis" class="headerlink" title="安装 redis"></a>安装 redis</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#安装 redis 依次执行以下命令</span>
+yum <span class="token function">install</span> epel-release
+yum <span class="token function">install</span> redis -y
+systemctl start redis.service
+systemctl <span class="token builtin class-name">enable</span> redis
+
+<span class="token comment">#查看运行状态</span>
+systemctl status redis.service
+
+<span class="token comment">#测试 redis</span>
+redis-cli <span class="token function">ping</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br>
+
+<h3 id="配置-laravel"><a href="#配置-laravel" class="headerlink" title="配置 laravel"></a>配置 laravel</h3><p>接下来就是比较麻烦的一个地方了，因为 php 默认禁止了一堆函数，所以在部署的使用我们可能需要开启一些。这里我们根据报错，一边看一边添加对应的配置</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#如果觉得 clone 下来的文件名太长，可以使用 mv 进行更改</span>
+<span class="token comment">#首先我们先进入我们的项目文件夹，你们可能还需要一个 fileinfo 的配置并开启 putenv()、proc_open</span>
+<span class="token function">composer</span> <span class="token function">install</span>
+
+<span class="token comment">#在安装失败之后，我们使用更新命令</span>
+<span class="token function">composer</span> update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112111124200.png" alt="可知，我们缺少 putenv() 函数"></p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112111129099.png" alt="缺少 fileinfo"><br><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112111131404.png" alt="缺少 proc_open()"></p>
+<p>P.S. 分享一个小笑话，之前在部署中，遇到了 undefined name 的错误。在 StackOverFlow 上查询还以为是版本的问题，结果对 Composer 进行换源之后，再执行 composer update 就可以了</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#复制 .env.example 为 .env</span>
+<span class="token function">cp</span> .env.example .env
+
+<span class="token comment">#生成 APP_KEY</span>
+php artisan key:generate
+
+<span class="token comment">#打开.env 进行配置</span>
+<span class="token function">vi</span> ./.env
+
+<span class="token comment">#需更改的配置如下，依照备注进行修改</span>
+<span class="token assign-left variable">APP_NAME</span><span class="token operator">=</span>你的APP名字
+<span class="token assign-left variable">APP_ENV</span><span class="token operator">=</span>production <span class="token comment"># 这里设为生成环境</span>
+<span class="token assign-left variable">APP_KEY</span><span class="token operator">=</span>base64:前面生成的key不用改
+<span class="token assign-left variable">APP_DEBUG</span><span class="token operator">=</span>false <span class="token comment"># 关闭调试模式</span>
+<span class="token assign-left variable">APP_URL</span><span class="token operator">=</span>你的主机地址
+<span class="token assign-left variable">LOG_CHANNEL</span><span class="token operator">=</span>stack
+<span class="token assign-left variable">DB_CONNECTION</span><span class="token operator">=</span>mysql
+<span class="token assign-left variable">DB_HOST</span><span class="token operator">=</span><span class="token number">127.0</span>.0.1
+<span class="token assign-left variable">DB_PORT</span><span class="token operator">=</span><span class="token number">3306</span>
+<span class="token assign-left variable">DB_DATABASE</span><span class="token operator">=</span>larabbs
+<span class="token assign-left variable">DB_USERNAME</span><span class="token operator">=</span>root
+<span class="token assign-left variable">DB_PASSWORD</span><span class="token operator">=</span>你的数据库密码
+<span class="token assign-left variable">BROADCAST_DRIVER</span><span class="token operator">=</span>log
+<span class="token assign-left variable">CACHE_DRIVER</span><span class="token operator">=</span>redis  <span class="token comment"># 这里使用redis</span>
+<span class="token assign-left variable">SESSION_DRIVER</span><span class="token operator">=</span>file
+<span class="token assign-left variable">SESSION_LIFETIME</span><span class="token operator">=</span><span class="token number">120</span>
+<span class="token assign-left variable">QUEUE_DRIVER</span><span class="token operator">=</span>redis <span class="token comment"># 这里使用redis</span>
+<span class="token builtin class-name">.</span>
+<span class="token builtin class-name">.</span>
+<span class="token builtin class-name">.</span>
+<span class="token assign-left variable">MAIL_DRIVER</span><span class="token operator">=</span>smtp
+<span class="token assign-left variable">MAIL_HOST</span><span class="token operator">=</span>smtp.qq.com
+<span class="token assign-left variable">MAIL_PORT</span><span class="token operator">=</span><span class="token number">25</span>
+<span class="token assign-left variable">MAIL_USERNAME</span><span class="token operator">=</span>你的QQ邮箱
+<span class="token assign-left variable">MAIL_PASSWORD</span><span class="token operator">=</span>你的smtp服务的密码
+<span class="token assign-left variable">MAIL_ENCRYPTION</span><span class="token operator">=</span>tls
+<span class="token assign-left variable">MAIL_FROM_ADDRESS</span><span class="token operator">=</span>你的邮箱地址
+<span class="token assign-left variable">MAIL_FROM_NAME</span><span class="token operator">=</span>LaraBBS
+<span class="token builtin class-name">.</span>
+<span class="token builtin class-name">.</span>
+<span class="token builtin class-name">.</span>
+<span class="token assign-left variable">BAIDU_TRANSLATE_APPID</span><span class="token operator">=</span>你的百度翻译APPID
+<span class="token assign-left variable">BAIDU_TRANSLATE_KEY</span><span class="token operator">=</span>你的百度翻译KEY
+
+<span class="token comment">#将数据库进行迁移</span>
+php artisan migrate
+
+<span class="token comment">#运行 passport:install 命令来创建生成安全访问令牌时所需的加密密钥，同时，这条命令也会创建用于生成访问令牌的「个人访问」客户端和「密码授权」客户端</span>
+php artisan passport:install<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br>
+
+<h3 id="配置-nginx"><a href="#配置-nginx" class="headerlink" title="配置 nginx"></a>配置 nginx</h3><p>在 /www/server/nginx/conf 中配置 nginx 的配置文件</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">server <span class="token punctuation">{</span>
+    listen <span class="token number">80</span><span class="token punctuation">;</span>
+    server_name localhost<span class="token punctuation">;</span>
+    root /home/laravel/sast<span class="token punctuation">;</span>
+
+    add_header X-Frame-Options <span class="token string">"SAMEORIGIN"</span><span class="token punctuation">;</span>
+    add_header X-XSS-Protection <span class="token string">"1; mode=block"</span><span class="token punctuation">;</span>
+    add_header X-Content-Type-Options <span class="token string">"nosniff"</span><span class="token punctuation">;</span>
+
+    index index.php index.html index.htm<span class="token punctuation">;</span>
+
+    charset utf-8<span class="token punctuation">;</span>
+
+    location / <span class="token punctuation">{</span>
+        try_files <span class="token variable">$uri</span> <span class="token variable">$uri</span>/ /index.php?<span class="token variable">$query_string</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    location <span class="token operator">=</span> /favicon.ico <span class="token punctuation">{</span> access_log off<span class="token punctuation">;</span> log_not_found off<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    location <span class="token operator">=</span> /robots.txt  <span class="token punctuation">{</span> access_log off<span class="token punctuation">;</span> log_not_found off<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+
+    error_page <span class="token number">404</span> /index.php<span class="token punctuation">;</span>
+
+    location ~ <span class="token punctuation">\</span>.php$ <span class="token punctuation">{</span>
+        root /home/laravel/sast<span class="token punctuation">;</span>
+        fastcgi_split_path_info ^<span class="token punctuation">(</span>.+<span class="token punctuation">\</span>.php<span class="token punctuation">)</span><span class="token punctuation">(</span>/.+<span class="token punctuation">)</span>$<span class="token punctuation">;</span>
+        fastcgi_pass <span class="token number">127.0</span>.0.1:9000<span class="token punctuation">;</span>
+        fastcgi_index index.php<span class="token punctuation">;</span>
+        fastcgi_param  SCRIPT_FILENAME  <span class="token variable">$document_root</span><span class="token variable">$fastcgi_script_name</span><span class="token punctuation">;</span>
+        include fastcgi_params<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    location ~ /<span class="token punctuation">\</span>.<span class="token punctuation">(</span>?<span class="token operator">!</span>well-known<span class="token punctuation">)</span>.* <span class="token punctuation">{</span>
+        deny all<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br>
+
+<h3 id="Crontab-配置"><a href="#Crontab-配置" class="headerlink" title="Crontab 配置"></a>Crontab 配置</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#对 crontab 进行配置</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">EDITOR</span><span class="token operator">=</span>vi <span class="token operator">&amp;&amp;</span> <span class="token function">crontab</span> -e
+
+* * * * * php /home/vagrant/Code/larabbs/artisan schedule:run <span class="token operator">&gt;&gt;</span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>&gt;</span><span class="token file-descriptor important">&amp;1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<br>
+
+<h3 id="启动-laravel"><a href="#启动-laravel" class="headerlink" title="启动 laravel"></a>启动 laravel</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">php artisan serve --port <span class="token number">8080</span> --host <span class="token number">0.0</span>.0.0
+<span class="token comment">#--host 防止 ip 无法被访问</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<br>
+
+<h2 id="番外"><a href="#番外" class="headerlink" title="番外"></a>番外</h2><br>
+
+<h3 id="Github与原仓库同步"><a href="#Github与原仓库同步" class="headerlink" title="Github与原仓库同步"></a>Github与原仓库同步</h3><p>实在是……有太多人同时在帮忙修订错别字或优化 xiaolai 的 <code>the-craft-of-selfteaching</code> 了。如果你提交的 pull request 未被接受且得到回复说：“重新fork”，其实是你遇到一个问题：</p>
+<blockquote>
+<ul>
+<li>在你 fork 之后， xiaolai 的仓库又更新了</li>
+<li>但 github 不会自动帮你把 xiaolai 的仓库 同步给你 fork 后的仓库</li>
+<li>导致你提交 pull request 时的版本和 xiaolai 的版本不一致</li>
+</ul>
+</blockquote>
+<p>这个问题，用显得更“专业点”的说法，叫做：<code>Github进行fork后如何与原仓库同步</code>。那到底怎么做呢</p>
+<p>最省事的办法可能是</p>
+<blockquote>
+<ul>
+<li>在你fork的仓库setting页翻到最下方，然后delete这个仓库</li>
+<li>然后重新fork xiaolai 的仓库，并 git clone 到你的本地</li>
+</ul>
+</blockquote>
+<p>有时候，你需要用到这个省事的办法，比如 xiaolai 的仓库再次整理了 commit 。但在更多情况下，删掉自己fork的库，应该是你的最后选择，而不应该是首选</p>
+<p>和很多人一起向 xiaolai 提交 pull request，这实在是一个反复练习 <code>merge</code> （中文说法：合并，或版本合并）的机会。毫不夸张地讲，版本管理是软件工程极其重要的规范，也是极其基础的必备技能。而 <code>merge</code> 则是版本管理中最必须也最常用的场景</p>
+<p>那要不然，就多练练？以下是傻瓜版操作步骤，还细心配了截图，保管你从 0 也能上手。至于原理嘛，慢慢再搞懂吧</p>
+<br>
+
+<h4 id="merge前的设定"><a href="#merge前的设定" class="headerlink" title="merge前的设定"></a>merge前的设定</h4><p>step 1、进入到本地仓库的目录</p>
+<p>下面所有操作，如无特别说明，都是在你的本地仓库的目录下操作。比如我的本地仓库为<code>/from-liujuanjuan-the-craft-of-selfteaching</code></p>
+<p><a target="_blank" rel="noopener" href="https://user-images.githubusercontent.com/31027645/54422899-6938e880-474a-11e9-8768-27ac24673e28.png"><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112181629383.png" alt="进入本地仓库"></a></p>
+<p>step 2、执行命令 <code>git remote -v</code> 查看你的远程仓库的路径：</p>
+<p><a target="_blank" rel="noopener" href="https://user-images.githubusercontent.com/31027645/54422975-95ed0000-474a-11e9-96bf-1018d6bc06f2.png"><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://user-images.githubusercontent.com/31027645/54422975-95ed0000-474a-11e9-96bf-1018d6bc06f2.png" alt="查看upstream是否连接远程仓库"></a></p>
+<p>如果只有上面2行，说明你未设置 <code>upstream</code> （中文叫：上游代码库）。一般情况下，设置好一次 <code>upstream</code> 后就无需重复设置</p>
+<p>step 3、执行命令 <code>git remote add upstream https://github.com/selfteaching/the-craft-of-selfteaching.git</code> 把 xiaolai 的仓库设置为你的 <code>upstream</code> 。这个命令执行后，没有任何返回信息；所以再次执行命令 <code>git remote -v</code> 检查是否成功</p>
+<p><a target="_blank" rel="noopener" href="https://user-images.githubusercontent.com/31027645/54423107-d8aed800-474a-11e9-9ab8-7bb901181283.png"><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://user-images.githubusercontent.com/31027645/54423107-d8aed800-474a-11e9-9ab8-7bb901181283.png" alt="检验操作是否成功"></a></p>
+<p>step 4、执行命令 <code>git status</code> 检查本地是否有未提交的修改。如果有，则把你本地的有效修改，先从本地仓库推送到你的github仓库。最后再执行一次 <code>git status</code> 检查本地已无未提交的修改。</p>
+<p><code>git add -A</code> 或者 <code>git add filename</code><br><code>git commit -m "your note"</code><br><code>git push origin master</code><br><code>git status</code></p>
+<p>注1：这一步作为新手，建议严格执行，是为了避免大量无效修改或文本冲突带来的更复杂局面</p>
+<p>注2：如果你已经在fork后的仓库提交了大量对 xiaolai 的仓库并没有价值的修改，那么想要pull request，还是重新回到本文最初的“最省事办法”吧</p>
+<br>
+
+<h4 id="merge-的关键命令"><a href="#merge-的关键命令" class="headerlink" title="merge 的关键命令"></a>merge 的关键命令</h4><p>以下操作紧接着上面的步骤。</p>
+<p>step 5、执行命令 <code>git fetch upstream</code> 抓取 xiaolai 原仓库的更新：</p>
+<p><a target="_blank" rel="noopener" href="https://user-images.githubusercontent.com/31027645/54448734-60b2d300-4787-11e9-9fdf-90fcc2e66052.png"><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://user-images.githubusercontent.com/31027645/54448734-60b2d300-4787-11e9-9fdf-90fcc2e66052.png" alt="抓取原仓库更新的内容"></a></p>
+<p>step 6、执行命令 <code>git checkout master</code> 切换到 master 分支：</p>
+<p><a target="_blank" rel="noopener" href="https://user-images.githubusercontent.com/31027645/54448759-6dcfc200-4787-11e9-8bbc-a5beef23ea88.png"><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://user-images.githubusercontent.com/31027645/54448759-6dcfc200-4787-11e9-8bbc-a5beef23ea88.png" alt="切换到你自己的分支"></a></p>
+<p>step 7、执行命令 <code>git merge upstream/master</code> 合并远程的master分支：</p>
+<p><a target="_blank" rel="noopener" href="https://user-images.githubusercontent.com/31027645/54449526-47128b00-4789-11e9-9add-09217eb91a68.png"><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://user-images.githubusercontent.com/31027645/54449526-47128b00-4789-11e9-9add-09217eb91a68.png" alt="合并操作"></a></p>
+<p>step 8、执行命令 <code>git push </code>把本地仓库向github仓库（你fork到自己名下的仓库）推送修改</p>
+<p>如果担心自己不小心改了哪里，可以再次执行命令 <code>git status</code> 检查哪些文件有变化。这个操作仅是检查，不会改变任何状态，放心用</p>
+<p><a target="_blank" rel="noopener" href="https://user-images.githubusercontent.com/31027645/54449665-a07aba00-4789-11e9-9181-bdcc814fffe6.png"><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112181629113.png" alt="最后检测一次"></a></p>
+<p>现在你已经解决了fork的仓库和原仓库版本不一致的问题。可以放心向 xiaolai 发起 pull request 了。如果以上操作你花了不少时间，而 xiaolai 的仓库 又恰好更新了。很好，一次新的练习机会来了……</p>
+<br>
+
+<h3 id="解决报错500-Server-Error："><a href="#解决报错500-Server-Error：" class="headerlink" title="解决报错500 Server Error："></a>解决报错500 Server Error：</h3><p>.env.example将其复制一份重命名为env</p>
+<p>1.打开配置文件 laravel/config/app.php</p>
+<p>2.找到 ‘debug’项 设置为 true</p>
+<p>3.刷新网页 抛出运行异常：No application encryption key has been specified.(未指定应用加密密钥)</p>
+<p>4.在laravel下找到 .env.example，将其复制一份重命名为 “.env”</p>
+<p>5.在laravel下执行命令：php artisan key:generate，后刷新页面（如果无法执行该命令，可以直接在报错页面一键生成key）</p>
+<br>
+
+<h3 id="中间件对输入的数据进行检验"><a href="#中间件对输入的数据进行检验" class="headerlink" title="中间件对输入的数据进行检验"></a>中间件对输入的数据进行检验</h3><p>主要是为了记录自己做锅的一些代码，也算对laravel基本知识的复刻</p>
+<br>
+
+<h4 id="路由的编写"><a href="#路由的编写" class="headerlink" title="路由的编写"></a>路由的编写</h4><p>这次的路由是指定在api.php中写一个指向控制器的路由，一般我们都是写在web.php上</p>
+<p>这两者的区别，就是api.php需要在跳转的时候添加一个api前缀</p>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token class-name static-context">Route</span><span class="token operator">::</span><span class="token function">middleware</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'work.feng'</span><span class="token punctuation">)</span><span class="token operator">-&gt;</span><span class="token function">any</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'/work'</span><span class="token punctuation">,</span><span class="token punctuation">[</span><span class="token class-name static-context">WorkController</span><span class="token operator">::</span><span class="token keyword">class</span><span class="token punctuation">,</span><span class="token string single-quoted-string">'GodWu'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//学长的例子</span>
+
+<span class="token class-name static-context">Route</span><span class="token operator">::</span><span class="token function">middleware</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'check.cxy'</span><span class="token punctuation">)</span><span class="token comment">//给中间件的定义</span>
+<span class="token operator">-&gt;</span><span class="token function">any</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'/user/{username?}/{password?}'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token class-name static-context">WorkController</span><span class="token operator">::</span><span class="token keyword">class</span><span class="token punctuation">,</span><span class="token string single-quoted-string">'check'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token operator">-&gt;</span><span class="token function">where</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'password'</span> <span class="token operator">=&gt;</span> <span class="token string single-quoted-string">'[0-9]+'</span><span class="token punctuation">,</span> <span class="token string single-quoted-string">'username'</span> <span class="token operator">=&gt;</span> <span class="token string single-quoted-string">'[a-z]+'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//使用正则规定输入的值</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br>
+
+<h4 id="中间件的使用"><a href="#中间件的使用" class="headerlink" title="中间件的使用"></a>中间件的使用</h4><p>可以使用artisan命令创建一个中间件，系统会帮你设置好要使用的接口</p>
+<p>但是先不要着急，你现在需要在kernel.php中定义中间件的名称，并规定对应位置</p>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token keyword">protected</span> <span class="token variable">$routeMiddleware</span> <span class="token operator">=</span> <span class="token punctuation">[</span>
+
+<span class="token string single-quoted-string">'work.feng'</span> <span class="token operator">=&gt;</span> <span class="token class-name class-name-fully-qualified static-context"><span class="token punctuation">\</span>App<span class="token punctuation">\</span>Http<span class="token punctuation">\</span>Middleware<span class="token punctuation">\</span>Work<span class="token punctuation">\</span>work</span><span class="token operator">::</span><span class="token keyword">class</span><span class="token punctuation">,</span>
+<span class="token string single-quoted-string">'check.cxy'</span> <span class="token operator">=&gt;</span> <span class="token class-name class-name-fully-qualified static-context"><span class="token punctuation">\</span>App<span class="token punctuation">\</span>Http<span class="token punctuation">\</span>Middleware<span class="token punctuation">\</span>Work<span class="token punctuation">\</span>check</span><span class="token operator">::</span><span class="token keyword">class</span><span class="token comment">//将对应名称指向中间件</span>
+
+<span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token keyword">class</span> check<span class="token punctuation">{</span>
+
+    <span class="token comment">/**
+     * 判断传入的类型是否是post
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">handle</span><span class="token punctuation">(</span><span class="token class-name type-declaration">Request</span> <span class="token variable">$request</span><span class="token punctuation">,</span> <span class="token class-name type-declaration">Closure</span> <span class="token variable">$next</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	
+        <span class="token comment">//将输入的数据传入到指定的变量中，以便判断使用</span>
+        <span class="token variable">$username</span> <span class="token operator">=</span> <span class="token variable">$request</span><span class="token operator">-&gt;</span><span class="token property">username</span><span class="token punctuation">;</span>
+        <span class="token variable">$password</span> <span class="token operator">=</span> <span class="token variable">$request</span><span class="token operator">-&gt;</span><span class="token property">password</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$request</span><span class="token operator">-&gt;</span><span class="token function">method</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string single-quoted-string">'GET'</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+            <span class="token function">abort</span><span class="token punctuation">(</span><span class="token number">404</span><span class="token punctuation">,</span> <span class="token string single-quoted-string">'not support for GET'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//报错函数，可以设置报错信息</span>
+
+        <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+
+            <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$username</span> <span class="token operator">&amp;&amp;</span> <span class="token variable">$password</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+                 <span class="token keyword">return</span> <span class="token function">response</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-&gt;</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token comment">//设置返回json数据的信息</span>
+
+                <span class="token string single-quoted-string">'ret'</span>  <span class="token operator">=&gt;</span> <span class="token number">200</span><span class="token punctuation">,</span>
+                <span class="token string single-quoted-string">'desc'</span> <span class="token operator">=&gt;</span> <span class="token string single-quoted-string">'success!'</span><span class="token punctuation">,</span>
+                <span class="token string single-quoted-string">'data'</span> <span class="token operator">=&gt;</span> <span class="token string single-quoted-string">'a good saster'</span>
+
+                <span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+
+                <span class="token function">abort</span><span class="token punctuation">(</span><span class="token number">403</span><span class="token punctuation">,</span> <span class="token string single-quoted-string">'the message was not complete'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token punctuation">}</span>
+
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">return</span> <span class="token variable">$next</span><span class="token punctuation">(</span><span class="token variable">$request</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<br>
+
+<h3 id="postman测试"><a href="#postman测试" class="headerlink" title="postman测试"></a>postman测试</h3><p>可以模拟前端页面，对传入的数据进行分析返回对应的前端页面和json数据</p>
+<p>（在前端制作天气demo的时候使用过，不过当时的天气api太拉了）</p>
+<p>最后成功显示</p>
+<p>对应的403，404&amp;json格式，完成这个锅（好耶）</p>
+<br>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">陈鑫扬</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://hexo.cxy621.top/2021/12/09/lun-bu-shu-hou-duan-xiang-mu/">https://hexo.cxy621.top/2021/12/09/lun-bu-shu-hou-duan-xiang-mu/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">陈鑫扬</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Java/">
+                                    <span class="chip bg-color">Java</span>
+                                </a>
+                            
+                                <a href="/tags/Spring-Boot/">
+                                    <span class="chip bg-color">Spring-Boot</span>
+                                </a>
+                            
+                                <a href="/tags/php/">
+                                    <span class="chip bg-color">php</span>
+                                </a>
+                            
+                                <a href="/tags/laravel/">
+                                    <span class="chip bg-color">laravel</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="vcomments" class="card-content" style="display: grid">
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/valine/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/valine/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'zbDqCAB0sAdby2AghAS6OQuJ-gzGzoHsz',
+        appKey: 'WCwIWVgGnjVGtvrQQRumCG5E',
+        notify: 'false' === 'true',
+        verify: 'true' === 'true',
+        visitor: 'true' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'zh-cn',
+        placeholder: 'glad to see your comment'
+    });
+</script>
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2022/01/03/uwp-tong-yong-windows-kai-fa-fu-xi/">
+                    <div class="card-image">
+                        
+                        <img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202201031537084.png" class="responsive-img" alt="UWP 复习">
+                        
+                        <span class="card-title">UWP 复习</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            对 UWP 基本用法的整理
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-01-03
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/UWP/" class="post-category">
+                                    UWP
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/C/">
+                        <span class="chip bg-color">C#</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/12/07/mysql-jin-jie/">
+                    <div class="card-image">
+                        
+                        <img src="https://gitee.com/chen-xinyang666/pictures/raw/master/images/202202171840333.gif" data-original="https://gitee.com/chen-xinyang666/pictures/raw/master/202112181637772.png" class="responsive-img" alt="MySQL 进阶">
+                        
+                        <span class="card-title">MySQL 进阶</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            深入了解MySQL
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-12-07
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%90%8E%E7%AB%AF/" class="post-category">
+                                    后端
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/MySQL/">
+                        <span class="chip bg-color">MySQL</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: 经验分享博客<br />'
+            + '文章作者: cxy621<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021-2022</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">cxy621</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">36.4k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2021";
+                    var startMonth = "2";
+                    var startDate = "12";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/ChenXinYang621" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1580779474@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+    <a href="https://twitter.com/xinyangchen7" class="tooltipped" target="_blank" data-tooltip="关注我的Twitter: https://twitter.com/xinyangchen7" data-position="top" data-delay="50">
+        <i class="fab fa-twitter"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1580779474" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1580779474" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+    <a href="https://www.zhihu.com/people/gu-du-xing-54-82" class="tooltipped" target="_blank" data-tooltip="关注我的知乎: https://www.zhihu.com/people/gu-du-xing-54-82" data-position="top" data-delay="50">
+        <i class="fab fa-zhihu1">知</i>
+    </a>
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+	
+    
+
+    
+
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/background/ribbon-dynamic.js" async="async"></script>
+    
+
+    
+    <script src="https://cdn.jsdelivr.net/gh/ChenXinYang621/ChenXinYang621.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=i;var e=n.imageLazyLoadSetting.isSPA,r=(n.imageLazyLoadSetting.preloadRatio,Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));function i(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight+240||document.documentElement.clientHeight+240)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}i(),n.addEventListener("scroll",function(){var t,e;t=i,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body>
+
+</html>
