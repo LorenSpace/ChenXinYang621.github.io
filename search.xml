@@ -203,214 +203,6 @@ $ docker run -itd --name test2 --network test-net ubuntu /bin/bash<span aria-hid
       </tags>
   </entry>
   <entry>
-    <title>Java Redis</title>
-    <url>/2021/08/29/java-redis/</url>
-    <content><![CDATA[<h3 id="什么是-Redis"><a href="#什么是-Redis" class="headerlink" title="什么是 Redis"></a>什么是 Redis</h3><p>我们使用 Redis 来实现 NoSQL （not only sql）</p>
-<p>主要是作为一个中间件，在真实的服务中，有时像后端发送的信息量会很大，如果这期间还是使用数据库的话，读取速度会很慢。Redis 提供了一个缓存，这样写入和读取数据都要快上不少</p>
-<blockquote>
-<p>1.方便扩展（数据之间没有关系，很好扩展）</p>
-<p>2.大数据高性能（Redis一秒写八万次，读取11万，NoSQL缓存记录级）</p>
-<p>3.数据类型是多样的</p>
-<p>4.传统 RDBMS 和 NoSQL</p>
-</blockquote>
-<p>Redis在windows中使用很简单，但是已经停更很久了。所以建议还是在Linux操作系统下使用</p>
-<p>Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。 它支持多种类型的数据结构，如 <a href="http://www.redis.cn/topics/data-types-intro.html#strings">字符串（strings）</a>， <a href="http://www.redis.cn/topics/data-types-intro.html#hashes">散列（hashes）</a>， <a href="http://www.redis.cn/topics/data-types-intro.html#lists">列表（lists）</a>， <a href="http://www.redis.cn/topics/data-types-intro.html#sets">集合（sets）</a>， <a href="http://www.redis.cn/topics/data-types-intro.html#sorted-sets">有序集合（sorted sets）</a> 与范围查询， <a href="http://www.redis.cn/topics/data-types-intro.html#bitmaps">bitmaps</a>， <a href="http://www.redis.cn/topics/data-types-intro.html#hyperloglogs">hyperloglogs</a> 和 <a href="http://www.redis.cn/commands/geoadd.html">地理空间（geospatial）</a> 索引半径查询。 Redis 内置了 <a href="http://www.redis.cn/topics/replication.html">复制（replication）</a>，<a href="http://www.redis.cn/commands/eval.html">LUA脚本（Lua scripting）</a>， <a href="http://www.redis.cn/topics/lru-cache.html">LRU驱动事件（LRU eviction）</a>，<a href="http://www.redis.cn/topics/transactions.html">事务（transactions）</a> 和不同级别的 <a href="http://www.redis.cn/topics/persistence.html">磁盘持久化（persistence）</a>， 并通过 <a href="http://www.redis.cn/topics/sentinel.html">Redis哨兵（Sentinel）</a>和自动 <a href="http://www.redis.cn/topics/cluster-tutorial.html">分区（Cluster）</a>提供高可用性（high availability）</p>
-<p>Redis 是单线程的，但是运行速度十分的快，一秒钟读取接近十万条读取数据</p>
-<p>CPU&gt;内存&gt;硬盘</p>
-<p>核心：Redis 将所有数据全部放在内存中，所以读写速度非常快</p>
-<h3 id="启动-Redis"><a href="#启动-Redis" class="headerlink" title="启动 Redis"></a>启动 Redis</h3><p>在 Windows 和 Linux 的系统配置文件中，我们能看到 Redis 的映射端口等等</p>
-<p>一般默认的端口为6379，据说跟开发者喜欢的一个女明星的姓名有关，咳咳，扯远了</p>
-<p>Windows 下的 Redis 只需要打开 exe 文件即可，Linux 需要使用 redis-cli</p>
-<p>启动 redis 服务器，打开终端并输入命令 <strong>redis-cli</strong>，该命令会连接本地的 redis 服务</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ redis-cli
-redis <span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span>
-redis <span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> PING
-
-PONG<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="Redis-命令"><a href="#Redis-命令" class="headerlink" title="Redis 命令"></a>Redis 命令</h3><h4 id="Redis-基本"><a href="#Redis-基本" class="headerlink" title="Redis 基本"></a>Redis 基本</h4><p>select index 切换数据库 一共有16个数据库 默认为1</p>
-<p>keys * 查询当前数据库中所有的键</p>
-<p>FLUSHALL 清空全部数据库内容</p>
-<p>flushdb 清除当前数据库的内容</p>
-<p>DBSIZE 查询当前数据库中的各种数据</p>
-<p>EXISTS 判断键名是否存在</p>
-<p>move 将数据进行移除</p>
-<h4 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a>String类型</h4><p>（90%java程序员只会用这个类型（x）</p>
-<p>append 通过这个命令，将String类型的值添加进去</p>
-<p>strlen 获取当前字符串的长度</p>
-<p>type 判断某个key的类型</p>
-<p>incr 使字段自增1</p>
-<p>decr 使字段自减1</p>
-<p>INCRBY 设置增加自增步长，相当于设定自增长度</p>
-<p>DECRBY 设置增加自减步长，相当于设定自减长度</p>
-<p>GETRANGE 截取范围内长度的字符串</p>
-<p>SETRANGE 设定特定位置的字符</p>
-<p>setex （设置存在）设置过期时间</p>
-<p>setnx （设置不存在） 设置存在时间</p>
-<p>ttl 查看当前字段过期时间</p>
-<p>rename 重命名一个key</p>
-<p>randomkey 随机一个key</p>
-<p>mset 批量设置键值</p>
-<p>mget 批量获取键值</p>
-<p>msetnx 是一个原子性操作，要么一起成功，要么一起失败</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> mset user:2:name cxy user:2:age <span class="token number">3</span>
-<span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> mget user:2:name user:2:age
-<span class="token comment">#设置json数组</span>
-<span class="token comment">#获取json数组中的值</span>
-
-<span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> <span class="token builtin class-name">set</span> user:1 <span class="token punctuation">{</span>name:zhangsan,age:3<span class="token punctuation">}</span>
-<span class="token comment">#设置json数组的另外一种方式</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>getset 先获取值，再将值设置为之后的值（如果没有值，会报错）</p>
-<p>String类型能做的事情</p>
-<p>1.计数器（可以对一个字段设置自增）</p>
-<p>2.统计多单位的数量</p>
-<h4 id="List"><a href="#List" class="headerlink" title="List"></a>List</h4><p>基本数据类型，列表，所有的 list 命令都是 l 开头的</p>
-<p>（Redis 不区分大小写命令）</p>
-<p>LPUSH 将一个值添加到左边</p>
-<p>RPUSH 将一个值添加到右边</p>
-<p>LRANGE 获取0 -1 表示获取全部的值（0 1表示获取两个值）（-1 表示整个链表的倒数第一个）</p>
-<p>LPOP 将一个左边的值移除</p>
-<p>RPOP 将一个右边的值移除</p>
-<p>Lindex 获取某个特定下标的值</p>
-<p>LLEN 获取list类型的具体长度</p>
-<p>lrem 移除集合中特定的值，并且可以设置移除个数 </p>
-<p>ltrim 截取特定长度</p>
-<p>rpoplpush 将左边的键中的值移动到另一个键中</p>
-<p>exists 判断一个表知否存在</p>
-<p>lset 设置表中某个具体的下标中的值</p>
-<p>linsert <listname> before 在指定值前面添加一个值</listname></p>
-<p>其实这个东西就相当于一个链表，左右两边都是可以插入值</p>
-<p>如果key不存在，创建新的链表</p>
-<p>如果key存在，新增内容</p>
-<p>如果移除了所有的值，空链表，也代表不存在</p>
-<p>可以实现的东西：</p>
-<p>消息排队，消息队列，栈</p>
-<h4 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h4><p>（命令都是s开头）</p>
-<p>sadd 向一个key中添加一个值（set中的值是不能重复的）</p>
-<p>smembers 查看指定key中的所有值</p>
-<p>sismember 查看某个值是否在对应key中</p>
-<p>srem 移除key中的指定元素</p>
-<p>scard 获取key中的元素个数</p>
-<p>set因为是无序不重复键值，可以做一个随机筛选</p>
-<p>srandmember 在某个key中进行随机的筛选</p>
-<p>smove 将某个key中的值移到另一个key中</p>
-<p>set可以使用数字集合类指令</p>
-<p>sdiff 取两个key中的差集</p>
-<p>sinter 取两个key中的交集（实现共同好友）</p>
-<p>sunion 取两个key中的并集</p>
-<p>可以实现的功能：</p>
-<p>共同信息，共同爱好。通过取两个 key 中的交集</p>
-<p>二度好友（六度分割，认为世界上任何互不相识的两人，只需要很少的中间人就能够建立起联系。<a href="https://zh.wikipedia.org/wiki/%E5%93%88%E4%BD%9B%E5%A4%A7%E5%AD%B8">哈佛大学</a>心理学教授<a href="https://zh.wikipedia.org/wiki/%E6%96%AF%E5%9D%A6%E5%88%A9%C2%B7%E7%B1%B3%E5%B0%94%E6%A0%BC%E6%8B%89%E5%A7%86">斯坦利·米尔格拉姆</a>于1967年根据这个概念做过一次连锁信实验，尝试证明平均只需要6步就可以联系任何两个互不相识的人）</p>
-<h4 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h4><p> 相当于一个Map集合</p>
-<p>hset 为一个key设置值</p>
-<p>hget 获取一个key的值（也可以获取多个key值）</p>
-<p>hgetall 获取key中的所有值</p>
-<p>hdel 删除对应key字段</p>
-<p>hlen获取key表的字段数量</p>
-<p>hexists 判断key中指定的字段是否存在</p>
-<p>hkeys 只获得所有的field</p>
-<p>hvals 只获得所有的value</p>
-<p>（像是hincrby hdecrby这种命令也是可以使用的）</p>
-<p>hash主要用来存储经常变更的信息，主要是对象的存储</p>
-<p>String更适合字符串的存储</p>
-<h4 id="Zset（有序集合）"><a href="#Zset（有序集合）" class="headerlink" title="Zset（有序集合）"></a>Zset（有序集合）</h4><p>zadd 向一个zset类型中添加值，可以添加多个值</p>
-<p>（- +）inf（正负无穷的大小排序）</p>
-<p>zrangebyscore 通过特定的key对数据进行排序，可以设置从负无穷到正无穷</p>
-<p>（之前的一些命令都是共同的，可以使用zrange命令）</p>
-<p>zrem 移除某个东西</p>
-<p>zcard 获取有序集合中的个数</p>
-<p>zrevrange 从大到小进行排序</p>
-<p>zcout 指定区间key的个数</p>
-<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>（一组命令的集合）</p>
-<p>一次性、顺序性、排他性，执行一系列的命令</p>
-<p>Redis单条命令是保存原子性的（要么同时成功，要么同时失败）</p>
-<p>但是Redis事务是不保证原子性的</p>
-<p>1.开启事务（multi）</p>
-<p>2.添加命令</p>
-<p>3.执行事务（exec）（在执行事务之前，如果不执行事务，是不会启动的）</p>
-<p>discard 取消事务</p>
-<h3 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h3><p>watch 给特定的key添加一个乐观锁</p>
-<p>unwatch 解除key的乐观锁</p>
-<p>这样就可以防止多线程的重复操作，防止并发</p>
-<p>编译性错误：事务中的所有命令都无法执行（代码语法错误）</p>
-<p>运行性错误：事务中的除错误命令之外，其他的命令都是可以执行的</p>
-<h3 id="Spring-Boot-整合-redis"><a href="#Spring-Boot-整合-redis" class="headerlink" title="Spring-Boot 整合 redis"></a>Spring-Boot 整合 redis</h3><p>jedis（使用Java来操作redis）（在springboot2.x之后已经被改成lettuce）</p>
-<p>jedis：采用的直连，多个线程操作话是不安全的，如果想要避免</p>
-<p>lettuce：采用netty（高性能网络结构，异步传值），实例可以在多个线程中进行共享，不存在线程不安全的情况，可以减少线程数据</p>
-<p>原子性（atomicity）：</p>
-<p>一个事务是一个不可分割的最小工作单位，事务中包括的诸操作要么都做，要么都不做。</p>
-<p>Redis所有单个命令的执行都是原子性的，这与它的单线程机制有关；</p>
-<p>Redis命令的原子性使得我们不用考虑并发问题，可以方便的利用原子性自增操作INCR实现简单计数器功能;</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>sast<span class="token punctuation">.</span>atsast</span><span class="token punctuation">;</span>
-
-<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>jupiter<span class="token punctuation">.</span>api<span class="token punctuation">.</span></span><span class="token class-name">Test</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Autowired</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>boot<span class="token punctuation">.</span>test<span class="token punctuation">.</span>context<span class="token punctuation">.</span></span><span class="token class-name">SpringBootTest</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>redis<span class="token punctuation">.</span>connection<span class="token punctuation">.</span></span><span class="token class-name">RedisConnection</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>redis<span class="token punctuation">.</span>core<span class="token punctuation">.</span></span><span class="token class-name">RedisTemplate</span><span class="token punctuation">;</span>
-
-<span class="token comment">/**
- * @program: atSast
- * @summary: 对jedis进行测试
- * @author: cxy621
- * @create: 2021-07-23 13:45
- **/</span>
-<span class="token annotation punctuation">@SpringBootTest</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JedisTest</span> <span class="token punctuation">{</span>
-
-    <span class="token annotation punctuation">@Autowired</span>
-    <span class="token keyword">private</span> <span class="token class-name">RedisTemplate</span> redisTemplate<span class="token punctuation">;</span>
-	<span class="token comment">//opsforValue String</span>
-    <span class="token comment">//opsforList List</span>
-    <span class="token comment">//opsforSet Set</span>
-    <span class="token comment">//opsforHash Hash</span>
-    <span class="token comment">//opsforZSet Zset</span>
-    <span class="token annotation punctuation">@Test</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">lettuceTest</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-<span class="token comment">//        RedisConnection redisConnection = redisTemplate.getConnectionFactory().getConnection();</span>
-<span class="token comment">//        redisConnection.flushAll();</span>
-<span class="token comment">//        redisConnection.flushDb();</span>
-
-        redisTemplate<span class="token punctuation">.</span><span class="token function">opsForValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">,</span> <span class="token string">"cxy"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>redisTemplate<span class="token punctuation">.</span><span class="token function">opsForValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token punctuation">}</span>
-
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>所有的对象需要序列化</p>
-<p>如果没有序列化就会报错</p>
-<p>对于没有序列化的值，Java中会有自带的jdk自带的序列化，但是如果不自己配置redis，会自动出现转义字符</p>
-<p>可以自己自己去设置redis工具类，重写redisUtil，就不需要调用原生麻烦的包了</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">spring</span><span class="token punctuation">:</span>
-  <span class="token key atrule">redis</span><span class="token punctuation">:</span>
-    <span class="token comment"># Redis数据库索引（默认为0）</span>
-    <span class="token key atrule">database</span><span class="token punctuation">:</span> <span class="token number">0</span>
-    <span class="token key atrule">host</span><span class="token punctuation">:</span> localhost
-    <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">6379</span>
-    <span class="token key atrule">password</span><span class="token punctuation">:</span>
-    <span class="token key atrule">connect-timeout</span><span class="token punctuation">:</span> <span class="token number">300</span>
-    <span class="token key atrule">jedis</span><span class="token punctuation">:</span>
-      <span class="token key atrule">pool</span><span class="token punctuation">:</span>
-        <span class="token comment">#连接池最大连接数（使用负值表示没有限制）</span>
-        <span class="token key atrule">max-active</span><span class="token punctuation">:</span> <span class="token number">8</span>
-        <span class="token comment"># 连接池最大阻塞等待时间（使用负值表示没有限制）</span>
-        <span class="token key atrule">max-wait</span><span class="token punctuation">:</span> <span class="token number">-1</span>
-        <span class="token comment"># 连接池中的最大空闲连接</span>
-        <span class="token key atrule">max-idle</span><span class="token punctuation">:</span> <span class="token number">8</span>
-        <span class="token comment"># 连接池中的最小空闲连接</span>
-        <span class="token key atrule">min-idle</span><span class="token punctuation">:</span> <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><strong>通过源码可以看出，SpringBoot 自动帮我们在容器中生成了一个 RedisTemplate 和一个 StringRedisTemplate。</strong>但是，这个RedisTemplate 的泛型是 &lt;Object,Object&gt;，写代码不方便，需要写好多类型转换的代码；我们需要一个泛型为 &lt;String,Object&gt; 形式的RedisTemplate。并且，这个RedisTemplate没有设置数据存在 Redis 时，key 及 value 的序列化方式</p>
-<p>编写redis配置类，内容如下，在该类中完成Jedis池、Redis连接和RedisTemplate序列化三个配置完成springboot整合redis的进一步配置。其中RedisTemplate对key和value的序列化类，各人结合自己项目情况进行选择即可</p>
-<p>除此之外，直接这样使用 RedisTemplate 还是会比较麻烦，我们可以自己写一个工具类，这样</p>
-]]></content>
-      <categories>
-        <category>后端</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>Spring-Boot</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ATSAST 项目学习（Spring）</title>
     <url>/2021/07/12/java-spring/</url>
     <content><![CDATA[<h3 id="Maven-项目"><a href="#Maven-项目" class="headerlink" title="Maven 项目"></a>Maven 项目</h3><p>在maven创建时候的测试名就是GroupId就是运行的主类</p>
@@ -678,6 +470,214 @@ PONG<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span
       </tags>
   </entry>
   <entry>
+    <title>Java Redis</title>
+    <url>/2021/08/29/java-redis/</url>
+    <content><![CDATA[<h3 id="什么是-Redis"><a href="#什么是-Redis" class="headerlink" title="什么是 Redis"></a>什么是 Redis</h3><p>我们使用 Redis 来实现 NoSQL （not only sql）</p>
+<p>主要是作为一个中间件，在真实的服务中，有时像后端发送的信息量会很大，如果这期间还是使用数据库的话，读取速度会很慢。Redis 提供了一个缓存，这样写入和读取数据都要快上不少</p>
+<blockquote>
+<p>1.方便扩展（数据之间没有关系，很好扩展）</p>
+<p>2.大数据高性能（Redis一秒写八万次，读取11万，NoSQL缓存记录级）</p>
+<p>3.数据类型是多样的</p>
+<p>4.传统 RDBMS 和 NoSQL</p>
+</blockquote>
+<p>Redis在windows中使用很简单，但是已经停更很久了。所以建议还是在Linux操作系统下使用</p>
+<p>Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。 它支持多种类型的数据结构，如 <a href="http://www.redis.cn/topics/data-types-intro.html#strings">字符串（strings）</a>， <a href="http://www.redis.cn/topics/data-types-intro.html#hashes">散列（hashes）</a>， <a href="http://www.redis.cn/topics/data-types-intro.html#lists">列表（lists）</a>， <a href="http://www.redis.cn/topics/data-types-intro.html#sets">集合（sets）</a>， <a href="http://www.redis.cn/topics/data-types-intro.html#sorted-sets">有序集合（sorted sets）</a> 与范围查询， <a href="http://www.redis.cn/topics/data-types-intro.html#bitmaps">bitmaps</a>， <a href="http://www.redis.cn/topics/data-types-intro.html#hyperloglogs">hyperloglogs</a> 和 <a href="http://www.redis.cn/commands/geoadd.html">地理空间（geospatial）</a> 索引半径查询。 Redis 内置了 <a href="http://www.redis.cn/topics/replication.html">复制（replication）</a>，<a href="http://www.redis.cn/commands/eval.html">LUA脚本（Lua scripting）</a>， <a href="http://www.redis.cn/topics/lru-cache.html">LRU驱动事件（LRU eviction）</a>，<a href="http://www.redis.cn/topics/transactions.html">事务（transactions）</a> 和不同级别的 <a href="http://www.redis.cn/topics/persistence.html">磁盘持久化（persistence）</a>， 并通过 <a href="http://www.redis.cn/topics/sentinel.html">Redis哨兵（Sentinel）</a>和自动 <a href="http://www.redis.cn/topics/cluster-tutorial.html">分区（Cluster）</a>提供高可用性（high availability）</p>
+<p>Redis 是单线程的，但是运行速度十分的快，一秒钟读取接近十万条读取数据</p>
+<p>CPU&gt;内存&gt;硬盘</p>
+<p>核心：Redis 将所有数据全部放在内存中，所以读写速度非常快</p>
+<h3 id="启动-Redis"><a href="#启动-Redis" class="headerlink" title="启动 Redis"></a>启动 Redis</h3><p>在 Windows 和 Linux 的系统配置文件中，我们能看到 Redis 的映射端口等等</p>
+<p>一般默认的端口为6379，据说跟开发者喜欢的一个女明星的姓名有关，咳咳，扯远了</p>
+<p>Windows 下的 Redis 只需要打开 exe 文件即可，Linux 需要使用 redis-cli</p>
+<p>启动 redis 服务器，打开终端并输入命令 <strong>redis-cli</strong>，该命令会连接本地的 redis 服务</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ redis-cli
+redis <span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span>
+redis <span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> PING
+
+PONG<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="Redis-命令"><a href="#Redis-命令" class="headerlink" title="Redis 命令"></a>Redis 命令</h3><h4 id="Redis-基本"><a href="#Redis-基本" class="headerlink" title="Redis 基本"></a>Redis 基本</h4><p>select index 切换数据库 一共有16个数据库 默认为1</p>
+<p>keys * 查询当前数据库中所有的键</p>
+<p>FLUSHALL 清空全部数据库内容</p>
+<p>flushdb 清除当前数据库的内容</p>
+<p>DBSIZE 查询当前数据库中的各种数据</p>
+<p>EXISTS 判断键名是否存在</p>
+<p>move 将数据进行移除</p>
+<h4 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a>String类型</h4><p>（90%java程序员只会用这个类型（x）</p>
+<p>append 通过这个命令，将String类型的值添加进去</p>
+<p>strlen 获取当前字符串的长度</p>
+<p>type 判断某个key的类型</p>
+<p>incr 使字段自增1</p>
+<p>decr 使字段自减1</p>
+<p>INCRBY 设置增加自增步长，相当于设定自增长度</p>
+<p>DECRBY 设置增加自减步长，相当于设定自减长度</p>
+<p>GETRANGE 截取范围内长度的字符串</p>
+<p>SETRANGE 设定特定位置的字符</p>
+<p>setex （设置存在）设置过期时间</p>
+<p>setnx （设置不存在） 设置存在时间</p>
+<p>ttl 查看当前字段过期时间</p>
+<p>rename 重命名一个key</p>
+<p>randomkey 随机一个key</p>
+<p>mset 批量设置键值</p>
+<p>mget 批量获取键值</p>
+<p>msetnx 是一个原子性操作，要么一起成功，要么一起失败</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> mset user:2:name cxy user:2:age <span class="token number">3</span>
+<span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> mget user:2:name user:2:age
+<span class="token comment">#设置json数组</span>
+<span class="token comment">#获取json数组中的值</span>
+
+<span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> <span class="token builtin class-name">set</span> user:1 <span class="token punctuation">{</span>name:zhangsan,age:3<span class="token punctuation">}</span>
+<span class="token comment">#设置json数组的另外一种方式</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>getset 先获取值，再将值设置为之后的值（如果没有值，会报错）</p>
+<p>String类型能做的事情</p>
+<p>1.计数器（可以对一个字段设置自增）</p>
+<p>2.统计多单位的数量</p>
+<h4 id="List"><a href="#List" class="headerlink" title="List"></a>List</h4><p>基本数据类型，列表，所有的 list 命令都是 l 开头的</p>
+<p>（Redis 不区分大小写命令）</p>
+<p>LPUSH 将一个值添加到左边</p>
+<p>RPUSH 将一个值添加到右边</p>
+<p>LRANGE 获取0 -1 表示获取全部的值（0 1表示获取两个值）（-1 表示整个链表的倒数第一个）</p>
+<p>LPOP 将一个左边的值移除</p>
+<p>RPOP 将一个右边的值移除</p>
+<p>Lindex 获取某个特定下标的值</p>
+<p>LLEN 获取list类型的具体长度</p>
+<p>lrem 移除集合中特定的值，并且可以设置移除个数 </p>
+<p>ltrim 截取特定长度</p>
+<p>rpoplpush 将左边的键中的值移动到另一个键中</p>
+<p>exists 判断一个表知否存在</p>
+<p>lset 设置表中某个具体的下标中的值</p>
+<p>linsert <listname> before 在指定值前面添加一个值</listname></p>
+<p>其实这个东西就相当于一个链表，左右两边都是可以插入值</p>
+<p>如果key不存在，创建新的链表</p>
+<p>如果key存在，新增内容</p>
+<p>如果移除了所有的值，空链表，也代表不存在</p>
+<p>可以实现的东西：</p>
+<p>消息排队，消息队列，栈</p>
+<h4 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h4><p>（命令都是s开头）</p>
+<p>sadd 向一个key中添加一个值（set中的值是不能重复的）</p>
+<p>smembers 查看指定key中的所有值</p>
+<p>sismember 查看某个值是否在对应key中</p>
+<p>srem 移除key中的指定元素</p>
+<p>scard 获取key中的元素个数</p>
+<p>set因为是无序不重复键值，可以做一个随机筛选</p>
+<p>srandmember 在某个key中进行随机的筛选</p>
+<p>smove 将某个key中的值移到另一个key中</p>
+<p>set可以使用数字集合类指令</p>
+<p>sdiff 取两个key中的差集</p>
+<p>sinter 取两个key中的交集（实现共同好友）</p>
+<p>sunion 取两个key中的并集</p>
+<p>可以实现的功能：</p>
+<p>共同信息，共同爱好。通过取两个 key 中的交集</p>
+<p>二度好友（六度分割，认为世界上任何互不相识的两人，只需要很少的中间人就能够建立起联系。<a href="https://zh.wikipedia.org/wiki/%E5%93%88%E4%BD%9B%E5%A4%A7%E5%AD%B8">哈佛大学</a>心理学教授<a href="https://zh.wikipedia.org/wiki/%E6%96%AF%E5%9D%A6%E5%88%A9%C2%B7%E7%B1%B3%E5%B0%94%E6%A0%BC%E6%8B%89%E5%A7%86">斯坦利·米尔格拉姆</a>于1967年根据这个概念做过一次连锁信实验，尝试证明平均只需要6步就可以联系任何两个互不相识的人）</p>
+<h4 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h4><p> 相当于一个Map集合</p>
+<p>hset 为一个key设置值</p>
+<p>hget 获取一个key的值（也可以获取多个key值）</p>
+<p>hgetall 获取key中的所有值</p>
+<p>hdel 删除对应key字段</p>
+<p>hlen获取key表的字段数量</p>
+<p>hexists 判断key中指定的字段是否存在</p>
+<p>hkeys 只获得所有的field</p>
+<p>hvals 只获得所有的value</p>
+<p>（像是hincrby hdecrby这种命令也是可以使用的）</p>
+<p>hash主要用来存储经常变更的信息，主要是对象的存储</p>
+<p>String更适合字符串的存储</p>
+<h4 id="Zset（有序集合）"><a href="#Zset（有序集合）" class="headerlink" title="Zset（有序集合）"></a>Zset（有序集合）</h4><p>zadd 向一个zset类型中添加值，可以添加多个值</p>
+<p>（- +）inf（正负无穷的大小排序）</p>
+<p>zrangebyscore 通过特定的key对数据进行排序，可以设置从负无穷到正无穷</p>
+<p>（之前的一些命令都是共同的，可以使用zrange命令）</p>
+<p>zrem 移除某个东西</p>
+<p>zcard 获取有序集合中的个数</p>
+<p>zrevrange 从大到小进行排序</p>
+<p>zcout 指定区间key的个数</p>
+<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>（一组命令的集合）</p>
+<p>一次性、顺序性、排他性，执行一系列的命令</p>
+<p>Redis单条命令是保存原子性的（要么同时成功，要么同时失败）</p>
+<p>但是Redis事务是不保证原子性的</p>
+<p>1.开启事务（multi）</p>
+<p>2.添加命令</p>
+<p>3.执行事务（exec）（在执行事务之前，如果不执行事务，是不会启动的）</p>
+<p>discard 取消事务</p>
+<h3 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h3><p>watch 给特定的key添加一个乐观锁</p>
+<p>unwatch 解除key的乐观锁</p>
+<p>这样就可以防止多线程的重复操作，防止并发</p>
+<p>编译性错误：事务中的所有命令都无法执行（代码语法错误）</p>
+<p>运行性错误：事务中的除错误命令之外，其他的命令都是可以执行的</p>
+<h3 id="Spring-Boot-整合-redis"><a href="#Spring-Boot-整合-redis" class="headerlink" title="Spring-Boot 整合 redis"></a>Spring-Boot 整合 redis</h3><p>jedis（使用Java来操作redis）（在springboot2.x之后已经被改成lettuce）</p>
+<p>jedis：采用的直连，多个线程操作话是不安全的，如果想要避免</p>
+<p>lettuce：采用netty（高性能网络结构，异步传值），实例可以在多个线程中进行共享，不存在线程不安全的情况，可以减少线程数据</p>
+<p>原子性（atomicity）：</p>
+<p>一个事务是一个不可分割的最小工作单位，事务中包括的诸操作要么都做，要么都不做。</p>
+<p>Redis所有单个命令的执行都是原子性的，这与它的单线程机制有关；</p>
+<p>Redis命令的原子性使得我们不用考虑并发问题，可以方便的利用原子性自增操作INCR实现简单计数器功能;</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>sast<span class="token punctuation">.</span>atsast</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>jupiter<span class="token punctuation">.</span>api<span class="token punctuation">.</span></span><span class="token class-name">Test</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Autowired</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>boot<span class="token punctuation">.</span>test<span class="token punctuation">.</span>context<span class="token punctuation">.</span></span><span class="token class-name">SpringBootTest</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>redis<span class="token punctuation">.</span>connection<span class="token punctuation">.</span></span><span class="token class-name">RedisConnection</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>redis<span class="token punctuation">.</span>core<span class="token punctuation">.</span></span><span class="token class-name">RedisTemplate</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @program: atSast
+ * @summary: 对jedis进行测试
+ * @author: cxy621
+ * @create: 2021-07-23 13:45
+ **/</span>
+<span class="token annotation punctuation">@SpringBootTest</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JedisTest</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">RedisTemplate</span> redisTemplate<span class="token punctuation">;</span>
+	<span class="token comment">//opsforValue String</span>
+    <span class="token comment">//opsforList List</span>
+    <span class="token comment">//opsforSet Set</span>
+    <span class="token comment">//opsforHash Hash</span>
+    <span class="token comment">//opsforZSet Zset</span>
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">lettuceTest</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token comment">//        RedisConnection redisConnection = redisTemplate.getConnectionFactory().getConnection();</span>
+<span class="token comment">//        redisConnection.flushAll();</span>
+<span class="token comment">//        redisConnection.flushDb();</span>
+
+        redisTemplate<span class="token punctuation">.</span><span class="token function">opsForValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">,</span> <span class="token string">"cxy"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>redisTemplate<span class="token punctuation">.</span><span class="token function">opsForValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>所有的对象需要序列化</p>
+<p>如果没有序列化就会报错</p>
+<p>对于没有序列化的值，Java中会有自带的jdk自带的序列化，但是如果不自己配置redis，会自动出现转义字符</p>
+<p>可以自己自己去设置redis工具类，重写redisUtil，就不需要调用原生麻烦的包了</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">spring</span><span class="token punctuation">:</span>
+  <span class="token key atrule">redis</span><span class="token punctuation">:</span>
+    <span class="token comment"># Redis数据库索引（默认为0）</span>
+    <span class="token key atrule">database</span><span class="token punctuation">:</span> <span class="token number">0</span>
+    <span class="token key atrule">host</span><span class="token punctuation">:</span> localhost
+    <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">6379</span>
+    <span class="token key atrule">password</span><span class="token punctuation">:</span>
+    <span class="token key atrule">connect-timeout</span><span class="token punctuation">:</span> <span class="token number">300</span>
+    <span class="token key atrule">jedis</span><span class="token punctuation">:</span>
+      <span class="token key atrule">pool</span><span class="token punctuation">:</span>
+        <span class="token comment">#连接池最大连接数（使用负值表示没有限制）</span>
+        <span class="token key atrule">max-active</span><span class="token punctuation">:</span> <span class="token number">8</span>
+        <span class="token comment"># 连接池最大阻塞等待时间（使用负值表示没有限制）</span>
+        <span class="token key atrule">max-wait</span><span class="token punctuation">:</span> <span class="token number">-1</span>
+        <span class="token comment"># 连接池中的最大空闲连接</span>
+        <span class="token key atrule">max-idle</span><span class="token punctuation">:</span> <span class="token number">8</span>
+        <span class="token comment"># 连接池中的最小空闲连接</span>
+        <span class="token key atrule">min-idle</span><span class="token punctuation">:</span> <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>通过源码可以看出，SpringBoot 自动帮我们在容器中生成了一个 RedisTemplate 和一个 StringRedisTemplate。</strong>但是，这个RedisTemplate 的泛型是 &lt;Object,Object&gt;，写代码不方便，需要写好多类型转换的代码；我们需要一个泛型为 &lt;String,Object&gt; 形式的RedisTemplate。并且，这个RedisTemplate没有设置数据存在 Redis 时，key 及 value 的序列化方式</p>
+<p>编写redis配置类，内容如下，在该类中完成Jedis池、Redis连接和RedisTemplate序列化三个配置完成springboot整合redis的进一步配置。其中RedisTemplate对key和value的序列化类，各人结合自己项目情况进行选择即可</p>
+<p>除此之外，直接这样使用 RedisTemplate 还是会比较麻烦，我们可以自己写一个工具类，这样</p>
+]]></content>
+      <categories>
+        <category>后端</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Spring-Boot</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL 进阶</title>
     <url>/2021/12/07/mysql-jin-jie/</url>
     <content><![CDATA[<h2 id="MySQL常用函数"><a href="#MySQL常用函数" class="headerlink" title="MySQL常用函数"></a>MySQL常用函数</h2><h3 id="字符函数"><a href="#字符函数" class="headerlink" title="字符函数"></a>字符函数</h3><table>
@@ -942,6 +942,420 @@ mysql -u root -p
       </categories>
       <tags>
         <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>UWP 复习</title>
+    <url>/2022/01/03/uwp-tong-yong-windows-kai-fa-fu-xi/</url>
+    <content><![CDATA[<h2 id="0x00-写在前面"><a href="#0x00-写在前面" class="headerlink" title="0x00 写在前面"></a>0x00 写在前面</h2><p>因为马上就要考试了，所以写一个博客对知识点进行总结</p>
+<p>自己写 Java 后端也有一定的时间了，所以想着尝试用其他的语言进行后端开发</p>
+<h2 id="0x01-文件结构"><a href="#0x01-文件结构" class="headerlink" title="0x01 文件结构"></a>0x01 文件结构</h2><ul>
+<li><p>我们首先会创建了一个解决方案，一个解决方案里面可能有很多项目（加粗的项目作为启动项目，只有启动项目启动之后剩余的项目才能进行加载）。默认的解决方案中，我们只有一个项目</p>
+</li>
+<li><p>在 Properties 中，保存我们相关项目的信息</p>
+</li>
+<li><p>引用中包含我们调用的各种库</p>
+</li>
+<li><p>App.xaml/App.xaml.cs 表示应用程序的最先加载的程序</p>
+</li>
+<li><p>MainPage.xaml UWP 默认加载的主页面</p>
+</li>
+</ul>
+<p>每一个界面中都会有一个 InitializeComponent 方法，在这个方法的源代码中，会有对 xaml 中各种控件(control)的加载，这样就能在启动之后显示我们的所设置的布局</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/202201031721990.png" alt="InitializeComponent 源代码"></p>
+<h2 id="0x02-生命周期"><a href="#0x02-生命周期" class="headerlink" title="0x02 生命周期"></a>0x02 生命周期</h2><p>应用程序的生命周期是指从应用程序部署到计算机上到应用程序从计算机中删除 的整个阶段</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/202201040941156.png" alt="在 app.xaml.cs 中定义的几个状态"></p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/202201040942779.png" alt="显示应用执行状态之间转换的状态图"></p>
+<p>当启动或激活应用时，这些应用会进入在后台运行状态。 如果应用由于前台应用启动而需要移动到前台，则该应用将获取 <a href="https://docs.microsoft.com/en-us/uwp/api/windows.applicationmodel.core.coreapplication.leavingbackground"><strong>LeavingBackground</strong></a> 事件</p>
+<p>由于预启动，应用的 <strong>OnLaunched ()</strong> 方法可能由系统启动，而不是由用户启动。 由于应用在后台预启动，因此可能需要在 <strong>OnLaunched()</strong> 中采取不同操作</p>
+<p>当用户最小化某个应用时，Windows 会等待数秒，以查看用户是否会切换回该应用。 如果用户在此时间范围内未切换回，并且任何扩展执行、后台任务或活动赞助执行都未处于活动状态，则 Windows 将暂停该应用。 只要应用中不存在任何处于活动状态的扩展执行会话等，该应用也将在出现锁屏界面时暂停</p>
+<h3 id="app-data-session-data"><a href="#app-data-session-data" class="headerlink" title="app data/session data"></a>app data/session data</h3><p>app data 是和应用程序相关的内容，在应用程序的整个生命周期中都存在的</p>
+<p>当我们需要保存应用程序的某些数据以便下一次访问时依然可以 使用时，我们可以将数据保存成应用程序数据（即 app data），也可以将数据写到 文件中</p>
+<pre class="line-numbers language-c#" data-language="c#"><code class="language-c#">Windows.Storage.ApplicationDataContainer localSettings = 
+    Windows.Storage.ApplicationData.Current.LocalSettings;
+localSettings.Values["Name"] = TextBox1.Text;
+//将我们的数据暂存到 localSetting 中，可以理解为一个缓存<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="0x03-基本控件"><a href="#0x03-基本控件" class="headerlink" title="0x03 基本控件"></a>0x03 基本控件</h2><h3 id="选择控件"><a href="#选择控件" class="headerlink" title="选择控件"></a>选择控件</h3><ul>
+<li><p>RadioButton 单选按钮，在多个选项中可以使用 GroupName 进行分组</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;StackPanel&gt;
+    &lt;RadioButton Content="好" GroupName="comment"/&gt;
+    &lt;RadioButton Content="一般" GroupName="comment"/&gt;
+    &lt;RadioButton Content="差" GroupName="comment"/&gt;
+&lt;/StackPanel&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>ComboBox 下拉框，可以在下拉框中添加各种奇怪的控件（x</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml"> &lt;ComboBox Header="show something to me" FontSize="32"
+                      PlaceholderText="take a ability"
+                      PlaceholderForeground="Gray"&gt;
+	&lt;x:String&gt;Blue&lt;/x:String&gt;
+    &lt;x:String&gt;Green&lt;/x:String&gt;
+    &lt;x:String&gt;Red&lt;/x:String&gt;
+    &lt;x:String&gt;Yellow&lt;/x:String&gt;
+    &lt;TextBlock Text="this is just a test"/&gt;
+     &lt;!--这种控件添加到 ComboBox 也是被允许的--&gt;
+&lt;/ComboBox&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>CheckBox 复选框，提供多选功能。可以有三种状态，表示未选中、未全选、完全选中</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;CheckBox Content="hello" FontSize="32" IsThreeState="True" IsChecked="{x:Null}"/&gt;
+&lt;!--对应代码为 false, x:null, true--&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li><p>Button 最常用的按钮控件（在这里提醒一点，基本所有控件的大小默认都是根据字体大小，即 FontSize 自动调整的，默认的属性为 Auto）。除了在按钮中使用默认的 Content 属性，还可以使用 Image、TextBlock 控件包裹在里面</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;Button Content="Standard XAML button" Click="Button_Click" /&gt;
+
+&lt;Button Content="Button" Click="Button_Click" AutomationProperties.Name="Pie"&gt;
+    &lt;Image Source="/Assets/Slices.png" AutomationProperties.Name="Slice"/&gt;
+&lt;/Button&gt;
+
+&lt;StackPanel&gt;
+    &lt;TextBlock Text="The following buttons' content may get 
+                     clipped if we don't pay careful attention to their layout containers." 
+               Margin="0,0,0,8" TextWrapping="Wrap"/&gt;
+    &lt;TextBlock Text="One option to mitigate clipped content 
+                     is to place Buttons underneath each other, allowing for more space to grow horizontally:" 
+               Margin="0,0,0,8" TextWrapping="Wrap"/&gt;
+    &lt;Button HorizontalAlignment="Stretch" Margin="0,0,0,5"&gt;
+        This is some text that is too long and will get cut off
+    &lt;/Button&gt;
+    &lt;Button HorizontalAlignment="Stretch"&gt;
+        This is another text that would result in being cut off
+    &lt;/Button&gt;
+    &lt;TextBlock Text="Another option is to explicitly wrap the Button's content" Margin="0,8,0,8"/&gt;
+    &lt;StackPanel Orientation="Horizontal" HorizontalAlignment="Center"&gt;
+        &lt;Button MaxWidth="240" Margin="0,0,8,0"&gt;
+            &lt;TextBlock Text="This is some text that is too long and will get cut off" 
+                       TextWrapping="WrapWholeWords"/&gt;
+        &lt;/Button&gt;
+        &lt;Button MaxWidth="240"&gt;
+            &lt;TextBlock Text="This is another text that would result in being cut off" 
+                       TextWrapping="WrapWholeWords"/&gt;
+        &lt;/Button&gt;
+    &lt;/StackPanel&gt;
+&lt;/StackPanel&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>HyperlinkButton 表示超链接跳转</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;HyperlinkButton Content="Microsoft home page" NavigateUri="http://www.microsoft.com"/&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>RepeatButton 提供一个可以按住之后，连续触发的按钮</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;RepeatButton Content="Click and hold" Click="RepeatButton_Click"/&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>ToggleButon 看起来像一个Button，但工作起来像一个CheckBox。它通常有两种状态，但是跟 CheckBox 一样，也是存在三种状态的情况（虽然第三种状态并不是很能看得出来）</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;ToggleButton Content="ToggleButton" Click="Button_Click"/&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>ToggleSwitch 这就表示一个开关，拥有两种状态，可以设置它开启或者关闭时显示的不同内容</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;StackPanel Orientation="Horizontal"&gt;
+    &lt;ToggleSwitch OnContent="开启啦" OffContent="关闭咯" FontSize="32" 
+                  x:Name="state" IsOn="True"/&gt;
+    &lt;ProgressRing IsActive="{Binding ElementName=state, Path=IsOn, Mode=OneWay}" 
+                  Width="40"/&gt;
+    &lt;!--使用了一个最基本的绑定，之后会提--&gt;
+&lt;/StackPanel&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+</li>
+</ul>
+<h3 id="进度控件"><a href="#进度控件" class="headerlink" title="进度控件"></a>进度控件</h3><ul>
+<li><p>Slider 进度条控件，是表示<strong>连续区间数值</strong>的控件</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;Slider Width="200" Minimum="500" Maximum="1000" StepFrequency="10"
+        SmallChange="10" LargeChange="100" Value="800" /&gt;
+&lt;!--设置进度条最大值、最小值、每次跳转的步数、当前数值以及最大最小变化量--&gt;
+
+&lt;Slider AutomationProperties.Name="Slider with ticks" 
+        TickFrequency="10" TickPlacement="Outside" /&gt;
+&lt;!--可以设置平均刻度，以及刻度的位置--&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>ProcessRing 加载进度条</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;muxc:ProgressRing IsActive="True" /&gt;
+
+&lt;ProgressRing Width="60" Height="60" Value="0" IsIndeterminate="False"/&gt;
+&lt;!--IsIndeterminate 表示进度条是否是不确定的，默认是 true--&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+</li>
+</ul>
+<h3 id="文本控件"><a href="#文本控件" class="headerlink" title="文本控件"></a>文本控件</h3><ul>
+<li><p>TextBlock 只读文本显示控件，可以使用内联的元素进行各种精确的设定</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;TextBlock Text="I am a TextBlock"/&gt;
+
+&lt;Page.Resources&gt;
+    &lt;Style TargetType="TextBlock" x:Key="CustomTextBlockStyle"&gt;
+        &lt;Setter Property="FontFamily" Value="Comic Sans MS"/&gt;
+        &lt;Setter Property="FontStyle" Value="Italic"/&gt;
+    &lt;/Style&gt;
+&lt;Page.Resources&gt;
+&lt;!--设定基本的 TextBlock 样式--&gt;
+&lt;TextBlock Text="I am a styled TextBlock" Style="{StaticResource CustomTextBlockStyle}"/&gt;
+    
+&lt;TextBlock&gt;
+    &lt;Run FontFamily="Times New Roman" Foreground="DarkGray"&gt;
+        Text in a TextBlock doesn't have to be a simple string.&lt;/Run&gt;
+    &lt;LineBreak/&gt;&lt;!--进行换行--&gt;
+    &lt;Span&gt;Text can be &lt;Bold&gt;bold&lt;/Bold&gt;,
+	&lt;Italic&gt;italic&lt;/Italic&gt;, or &lt;Underline&gt;underlined&lt;/Underline&gt;. &lt;/Span&gt;
+&lt;/TextBlock&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>TextBox TextBox 相当于可编辑的 TextBlock（当然，我们可以使用 IsReadOnly 让它不可编辑）</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;TextBox AutomationProperties.Name="simple TextBox"/&gt;
+
+&lt;TextBox Text="I am super excited to be here!"
+    AutomationProperties.Name="customized TextBox" IsReadOnly="True"
+    FontFamily="Arial" FontSize="24" FontStyle="Italic"
+    CharacterSpacing="200" Foreground="CornflowerBlue" /&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>RichTextBlock 富文本控件，使用 Paragraph 进行分段。如果需要在其中加入控件，需要使用 InlineUIContainer</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;RichTextBlock&gt;
+    &lt;Paragraph&gt;
+        &lt;InlineUIContainer&gt;
+            &lt;Image Source="https://gitee.com/chen-xinyang666/pictures/raw/master/202112211555684.jpg"
+            Stretch="Uniform" Width="500" Height="600"/&gt;
+        &lt;/InlineUIContainer&gt;
+	&lt;/Paragraph&gt;
+    &lt;Paragraph&gt;
+        &lt;x:String&gt;hello World&lt;/x:String&gt;
+        &lt;InlineUIContainer&gt;
+        	&lt;TextBlock Text="这只是一个测试，咕咕咕"/&gt;
+        &lt;/InlineUIContainer&gt;
+    &lt;/Paragraph&gt;
+&lt;/RichTextBlock&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+</li>
+</ul>
+<h3 id="媒体控件"><a href="#媒体控件" class="headerlink" title="媒体控件"></a>媒体控件</h3><ul>
+<li><p>image 显示图片的控件。image 控件的伸缩有四种情况：</p>
+<ul>
+<li>None 按照正常图片大小进行填充</li>
+<li>Fill 忽视原图的横纵比，将图片缩放到规定的大小</li>
+<li>Uniform 保持图片的横纵比，将图片尽可能地缩放到规定地大小，如果超出则留空</li>
+<li>UniformToFill 保持图片地横纵比，将图片通过横纵比进行放大，如果过大，会有超出的部分</li>
+</ul>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;InlineUIContainer&gt;
+	&lt;Image Source="https://gitee.com/chen-xinyang666/pictures/raw/master/202112211555684.jpg"
+		Stretch="Uniform" Width="500" Height="600"/&gt;
+&lt;/InlineUIContainer&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>MediaPlayerElement 媒体播放器，播放视频或者展示图片</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;MediaPlayerElement Source="/Assets/SampleMedia/ladybug.wmv"
+                    MaxWidth="400"
+                    AutoPlay="False"
+                    AreTransportControlsEnabled="True" /&gt;
+&lt;!--AreTransportControlsEnabled 是自带的播放控件--&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>WebView 显示对应的网络链接内容</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;WebView Source="https://docs.microsoft.com/en-us/windows/uwp/design/controls-and-patterns/web-view" /&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+</li>
+</ul>
+<h3 id="物件集合"><a href="#物件集合" class="headerlink" title="物件集合"></a>物件集合</h3><ul>
+<li><p>FlipView 可以将多个图片“打包”成一个整体，拥有自带的前后切换框</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;FlipView MaxWidth="400" Height="270"&gt;
+    &lt;Image Source="ms-appx:///Assets/SampleMedia/cliff.jpg" AutomationProperties.Name="Cliff"/&gt;
+    &lt;Image Source="ms-appx:///Assets/SampleMedia/grapes.jpg" AutomationProperties.Name="Grapes"/&gt;
+    &lt;Image Source="ms-appx:///Assets/SampleMedia/rainier.jpg" AutomationProperties.Name="Rainier"/&gt;
+    &lt;Image Source="ms-appx:///Assets/SampleMedia/sunset.jpg" AutomationProperties.Name="Sunset"/&gt;
+    &lt;Image Source="ms-appx:///Assets/SampleMedia/valley.jpg" AutomationProperties.Name="Valley"/&gt;
+&lt;/FlipView&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>GridView 可以自动排列行和列，如果图片显示超出范围，会进行自动排版</p>
+</li>
+<li><p>ListView/ListBox ListBox 算是 ListView 的简化版本，可以使用 SelectIndex 和 SelectItem 获取对应选取的元素</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;ListBox ItemsSource="{x:Bind Fonts}" DisplayMemberPath="Item1" 
+         SelectedValuePath="Item2" Height="164" Loaded="ListBox2_Loaded"/&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+</li>
+</ul>
+<h2 id="0x04-布局"><a href="#0x04-布局" class="headerlink" title="0x04 布局"></a>0x04 布局</h2><ul>
+<li><p>Grid 网格布局，可以类比为 Excel 的行和列，在 Grid.RowDefinitions 和 Grid.ColumnDefinitons 中进行定义：</p>
+<ul>
+<li>默认是<code>*</code>，表示布局的占比</li>
+<li>可以设置数据，表示正常的像素</li>
+<li>设置 Auto，宽度/高度会根据控件的大小进行调整</li>
+</ul>
+<p>Grid 可以使用 RowSpan/ColumnSpan 进行“单元格合并”</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;Grid Width="240" Height="120" Background="Gray"&gt;
+    &lt;Grid.ColumnDefinitions&gt;
+        &lt;ColumnDefinition Width="50" /&gt;
+        &lt;ColumnDefinition Width="Auto" /&gt;
+        &lt;ColumnDefinition /&gt;
+    &lt;/Grid.ColumnDefinitions&gt;
+    &lt;Grid.RowDefinitions&gt;
+        &lt;RowDefinition Height="50" /&gt;
+        &lt;RowDefinition Height="Auto" /&gt;
+        &lt;RowDefinition /&gt;
+    &lt;/Grid.RowDefinitions&gt;
+    &lt;Rectangle Fill="Red" Grid.Column="0" Grid.Row="0" /&gt;
+    &lt;Rectangle Fill="Blue" Grid.Row="1" /&gt;
+    &lt;Rectangle Fill="Green" Grid.Column="1" /&gt;
+    &lt;Rectangle Fill="Yellow" Grid.Row="1" Grid.Column="1" /&gt;
+&lt;/Grid&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>StackPanel 将各种物件整合成一行的布局，也是最基本的布局</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;StackPanel Orientation="Vertical"&gt;
+    &lt;Rectangle Fill="Red"/&gt;
+    &lt;Rectangle Fill="Blue"/&gt;
+    &lt;Rectangle Fill="Green"/&gt;
+    &lt;Rectangle Fill="Yellow"/&gt;
+&lt;/StackPanel&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>ViewBox 限制这个布局中的内容放大或是缩小</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;Viewbox Height="300" Width="300" Stretch="Uniform" StretchDirection="UpOnly"&gt;
+    &lt;Border BorderBrush="Gray" BorderThickness="15"&gt;
+        &lt;StackPanel Background="DarkGray"&gt;
+            &lt;StackPanel Orientation="Horizontal"&gt;
+                &lt;Rectangle Fill="Blue" Height="10" Width="40"/&gt;
+                &lt;Rectangle Fill="Green" Height="10" Width="40"/&gt;
+                &lt;Rectangle Fill="Red" Height="10" Width="40"/&gt;
+                &lt;Rectangle Fill="Yellow" Height="10" Width="40"/&gt;
+            &lt;/StackPanel&gt;
+            &lt;Image Source="ms-appx:///Assets/Slices.png"/&gt;
+            &lt;TextBlock Text="This is text." HorizontalAlignment="Center"/&gt;
+        &lt;/StackPanel&gt;
+    &lt;/Border&gt;
+&lt;/Viewbox&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>Canvas 绝对布局控件，可以使用 Canvas.left 等等进行绝对方位的布局。Canvas 还有一个 Z 轴，表示深度</p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;Canvas Width="120" Height="120" Background="Gray"&gt;
+    &lt;Rectangle Fill="Red" Canvas.Left="0" Canvas.Top="0" Canvas.ZIndex="0" /&gt;
+    &lt;Rectangle Fill="Blue" Canvas.Left="20" Canvas.Top="20" Canvas.ZIndex="1" /&gt;
+    &lt;Rectangle Fill="Green" Canvas.Left="40" Canvas.Top="40" Canvas.ZIndex="2" /&gt;
+    &lt;Rectangle Fill="Yellow" Canvas.Left="60" Canvas.Top="60" Canvas.ZIndex="3" /&gt;
+&lt;/Canvas&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+</li>
+</ul>
+<h2 id="0x05-事件触发"><a href="#0x05-事件触发" class="headerlink" title="0x05 事件触发"></a>0x05 事件触发</h2><h3 id="添加控件"><a href="#添加控件" class="headerlink" title="添加控件"></a>添加控件</h3><ul>
+<li><p>XAML 在设计阶段中添加控件，即就是在 xaml 中写下控件代码</p>
+</li>
+<li><p>C# 在运行中添加各种控件</p>
+<pre class="line-numbers language-C#" data-language="C#"><code class="language-C#">Button button = new Button();
+button.Content = "mission complete";
+grid.Children.Add(button);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/202201032135627.png" alt="源码如下，获得面板的子元素的集合"></p>
+</li>
+</ul>
+<h3 id="事件绑定"><a href="#事件绑定" class="headerlink" title="事件绑定"></a>事件绑定</h3><p>事件绑定的函数基本模板 <code>____(object sender, RoutedEventArgs e)</code></p>
+<ul>
+<li><p>XAML 直接在控件中写，<code>Click="button_name_Click"</code></p>
+</li>
+<li><p>C# 在初始页面加载时进行绑定 <code>button_name.Click += button_name_Click;</code></p>
+<p>这里使用 += 的原因在于，对于这个控件，我们进行事件的绑定是一个委托类型。我们正常来说是应该叠加上去，而不是单纯的用 = 把原有的事件替代掉</p>
+</li>
+</ul>
+<h3 id="页面跳转"><a href="#页面跳转" class="headerlink" title="页面跳转"></a>页面跳转</h3><ul>
+<li><p>Frame.Navigate(typeof(Page1)) Page1 是要跳转的页面，根据要跳转的页面进行修改 </p>
+</li>
+<li><p>Frame.Navigate(typeof(Page1), obj); obj 是要传递的参数，可以变化的 </p>
+</li>
+<li><p>Frame.GoBack()/Frame.GoForward() 向后/向前</p>
+</li>
+<li><p>Frame.CanGoBack/Frame.CanGoForward 是否能够向后/向前</p>
+</li>
+</ul>
+<h3 id="数据绑定"><a href="#数据绑定" class="headerlink" title="数据绑定"></a>数据绑定</h3><p>对一些控件值，我们除了硬编码或者通过事件的触发进行更改，我们还可能让其根据某个值进行更改</p>
+<ul>
+<li>oneWay 在数据源更改之后，对绑定数据进行变更</li>
+<li>oneTime 只有在初始化的时候才会进行变更</li>
+<li>TwoWay 绑定值的更改同样会作用于数据源</li>
+</ul>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;Slider Width="800" HorizontalAlignment="Center" VerticalAlignment="Center"
+        x:Name="slider_value" Maximum="400" Value="50"
+        TickFrequency="10" TickPlacement="Inline"&gt;
+    &lt;Slider.HeaderTemplate&gt;
+        &lt;DataTemplate&gt;
+            &lt;StackPanel Orientation="Vertical"&gt;
+                &lt;TextBlock Text="Height" FontSize="40"/&gt;
+                &lt;TextBlock Text="全体目光向我看齐，嘉然是我爹" FontSize="40"/&gt;
+            &lt;/StackPanel&gt;
+        &lt;/DataTemplate&gt;
+    &lt;/Slider.HeaderTemplate&gt;
+&lt;/Slider&gt;
+&lt;TextBox Width="400" Grid.Row="1" HorizontalAlignment="Center"
+         Height="Auto" FontSize="50"
+         VerticalAlignment="Center" x:Name="textBox_value" 
+         Text="{Binding ElementName=slider_value, Path=Value, Mode=TwoWay, 
+               UpdateSourceTrigger=PropertyChanged}"/&gt;
+&lt;!--因为默认是失去焦点之后才会进行更改，这里改成 PropertyChanged--&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="数据模板-样式"><a href="#数据模板-样式" class="headerlink" title="数据模板/样式"></a>数据模板/样式</h3><p>data template/style</p>
+<ul>
+<li>Inline 内嵌在某一个控件内部</li>
+<li>Page resource 定义在页面的 xaml 代码中，紧跟<page>在元素的里面 </page></li>
+<li>App resource 定义在 app.xaml 代码中，紧跟在<application>元素的里面 </application></li>
+<li>Resource dictionary 定义在单独的文件中，在<resourcedictionary>里面</resourcedictionary></li>
+</ul>
+<p>x:Name=”” 控件的命名 x:Key=”” 资源的名称</p>
+<p>在 Style 中，可以使用 BaseOn 继承之前写的数据样式，可以直接在内部进行重写</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/202201040906429.png" alt="style 样例"></p>
+<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;Page.Resources&gt;
+    &lt;DataTemplate x:Key="ViewNotesDataTemplate"&gt;
+        &lt;Grid&gt;
+            &lt;TextBlock x:Name="txtNoteTitle" Text="{Binding Title}" FontSize="24" &gt;&lt;/TextBlock&gt;
+        &lt;/Grid&gt;
+    &lt;/DataTemplate&gt;
+&lt;/Page.Resources&gt;
+
+&lt;ListBox x:Name="lstBoxNotes"  ScrollViewer.HorizontalScrollMode="Auto" 
+         ScrollViewer.VerticalScrollMode="Auto" 
+         ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+         ScrollViewer.VerticalScrollBarVisibility="Auto" 
+         Margin="279,97,278,97" Width="809"
+         ItemTemplate="{StaticResource ViewNotesDataTemplate}"/&gt;
+&lt;!--DataTemplate 使用样例。使用 ScrollViewer 显示下拉框--&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="弹出窗体"><a href="#弹出窗体" class="headerlink" title="弹出窗体"></a>弹出窗体</h3><p>注意，MessageDialog、PopupMenu 是在 Windows.UI.Popups 这个包中</p>
+<ul>
+<li><p>ToolTip 表示一个弹出的消息提示框</p>
+<pre class="line-numbers language-c#" data-language="c#"><code class="language-c#">ToolTip tool = new ToolTip();
+tool.Content = "click to start";
+ToolTipService.SetToolTip(tool, button_name);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+<li><p>PopupMenu 本质是一个菜单栏，可以类比于 Windows 中的右键菜单</p>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/202201040932002.png" alt="添加弹出菜单步骤"></p>
+<pre class="line-numbers language-c#" data-language="c#"><code class="language-c#">Windows.Ui.Popups.PopupMenu pMenu = new Windows.Ui.Popups.PopupMenu();
+UICommand redCommand = new UICommand();
+redCommand.Label = "Red";
+redCommand.Id = 1;
+pMenu.Command.Add(redCommand);
+var chosenCommand = await pMenu.ShowForSelectionAsync(
+new Rect(e.GetPosition(null)), e.GetPosition(null));
+//因为这里的操作是耗时的，所以我们需要使用异步(async)
+//await 就像服务员点餐给你菜单一样，程序在这里会进行等待；等待结束就像是告诉服务员餐点好了，程序就继续进行了<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/202201040940380.png" alt="各种显示方法"></p>
+</li>
+</ul>
+<h2 id="0x06-文件存储"><a href="#0x06-文件存储" class="headerlink" title="0x06 文件存储"></a>0x06 文件存储</h2><p>每一个通用应用程序默认只有权限访问三个路径（app 安装目录、app data 目录、下载目录），其他的路径如果要访 问的话有两种办法：</p>
+<p>（1）在 manifest 文件中声明能力，即增加权限</p>
+<p>（2）使用 FilePicker</p>
+<p>其中第一种办法适用于常见的知名文件夹，如文档库、视频库、音乐库等，第二种 方法适用于所有的文件夹</p>
+<h3 id="使用-FilePicker"><a href="#使用-FilePicker" class="headerlink" title="使用 FilePicker"></a>使用 FilePicker</h3><p>通过使用 FilePicker 来增加文件读取写入的范围</p>
+<pre class="line-numbers language-c#" data-language="c#"><code class="language-c#">FileOpenPicker openPicker = new FileOpenPicker()
+{
+    CommitButtonText = "Open this!",
+    ViewMode = PickerViewMode.List,
+    SuggestedStartLocation = PickerLocationId.Downloads
+};
+openPicker.FileTypeFilter.Add(".txt");
+StorageFile file = await openPicker.PickSingleFileAsync();
+if (file != null)
+{
+    try
+    {
+        await new MessageDialog(await FileIO.ReadTextAsync(file)).ShowAsync();
+    }
+    catch (Exception ex)
+    {
+        await new MessageDialog(ex.ToString()).ShowAsync();
+    }
+}
+
+FileSavePicker savePicker = new FileSavePicker()
+{
+    CommitButtonText = "Save Here!",
+    SuggestedFileName = "cxy可爱捏",
+};
+savePicker.FileTypeChoices.Add("the format we can read", 
+                               new[] { ".txt", ".md" });
+StorageFile store = await savePicker.PickSaveFileAsync();
+if (store != null)
+{
+    try
+    {
+        await FileIO.WriteTextAsync(store, "114514");
+    }
+    catch (Exception ex)
+    {
+        await new MessageDialog(ex.ToString()).ShowAsync();
+    }
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+      <categories>
+        <category>UWP</category>
+      </categories>
+      <tags>
+        <tag>C#</tag>
       </tags>
   </entry>
   <entry>
@@ -1523,420 +1937,6 @@ mysql -u root -p
       <tags>
         <tag>Java</tag>
         <tag>Spring-Boot</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>UWP 复习</title>
-    <url>/2022/01/03/uwp-tong-yong-windows-kai-fa-fu-xi/</url>
-    <content><![CDATA[<h2 id="0x00-写在前面"><a href="#0x00-写在前面" class="headerlink" title="0x00 写在前面"></a>0x00 写在前面</h2><p>因为马上就要考试了，所以写一个博客对知识点进行总结</p>
-<p>自己写 Java 后端也有一定的时间了，所以想着尝试用其他的语言进行后端开发</p>
-<h2 id="0x01-文件结构"><a href="#0x01-文件结构" class="headerlink" title="0x01 文件结构"></a>0x01 文件结构</h2><ul>
-<li><p>我们首先会创建了一个解决方案，一个解决方案里面可能有很多项目（加粗的项目作为启动项目，只有启动项目启动之后剩余的项目才能进行加载）。默认的解决方案中，我们只有一个项目</p>
-</li>
-<li><p>在 Properties 中，保存我们相关项目的信息</p>
-</li>
-<li><p>引用中包含我们调用的各种库</p>
-</li>
-<li><p>App.xaml/App.xaml.cs 表示应用程序的最先加载的程序</p>
-</li>
-<li><p>MainPage.xaml UWP 默认加载的主页面</p>
-</li>
-</ul>
-<p>每一个界面中都会有一个 InitializeComponent 方法，在这个方法的源代码中，会有对 xaml 中各种控件(control)的加载，这样就能在启动之后显示我们的所设置的布局</p>
-<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/202201031721990.png" alt="InitializeComponent 源代码"></p>
-<h2 id="0x02-生命周期"><a href="#0x02-生命周期" class="headerlink" title="0x02 生命周期"></a>0x02 生命周期</h2><p>应用程序的生命周期是指从应用程序部署到计算机上到应用程序从计算机中删除 的整个阶段</p>
-<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/202201040941156.png" alt="在 app.xaml.cs 中定义的几个状态"></p>
-<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/202201040942779.png" alt="显示应用执行状态之间转换的状态图"></p>
-<p>当启动或激活应用时，这些应用会进入在后台运行状态。 如果应用由于前台应用启动而需要移动到前台，则该应用将获取 <a href="https://docs.microsoft.com/en-us/uwp/api/windows.applicationmodel.core.coreapplication.leavingbackground"><strong>LeavingBackground</strong></a> 事件</p>
-<p>由于预启动，应用的 <strong>OnLaunched ()</strong> 方法可能由系统启动，而不是由用户启动。 由于应用在后台预启动，因此可能需要在 <strong>OnLaunched()</strong> 中采取不同操作</p>
-<p>当用户最小化某个应用时，Windows 会等待数秒，以查看用户是否会切换回该应用。 如果用户在此时间范围内未切换回，并且任何扩展执行、后台任务或活动赞助执行都未处于活动状态，则 Windows 将暂停该应用。 只要应用中不存在任何处于活动状态的扩展执行会话等，该应用也将在出现锁屏界面时暂停</p>
-<h3 id="app-data-session-data"><a href="#app-data-session-data" class="headerlink" title="app data/session data"></a>app data/session data</h3><p>app data 是和应用程序相关的内容，在应用程序的整个生命周期中都存在的</p>
-<p>当我们需要保存应用程序的某些数据以便下一次访问时依然可以 使用时，我们可以将数据保存成应用程序数据（即 app data），也可以将数据写到 文件中</p>
-<pre class="line-numbers language-c#" data-language="c#"><code class="language-c#">Windows.Storage.ApplicationDataContainer localSettings = 
-    Windows.Storage.ApplicationData.Current.LocalSettings;
-localSettings.Values["Name"] = TextBox1.Text;
-//将我们的数据暂存到 localSetting 中，可以理解为一个缓存<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="0x03-基本控件"><a href="#0x03-基本控件" class="headerlink" title="0x03 基本控件"></a>0x03 基本控件</h2><h3 id="选择控件"><a href="#选择控件" class="headerlink" title="选择控件"></a>选择控件</h3><ul>
-<li><p>RadioButton 单选按钮，在多个选项中可以使用 GroupName 进行分组</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;StackPanel&gt;
-    &lt;RadioButton Content="好" GroupName="comment"/&gt;
-    &lt;RadioButton Content="一般" GroupName="comment"/&gt;
-    &lt;RadioButton Content="差" GroupName="comment"/&gt;
-&lt;/StackPanel&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><p>ComboBox 下拉框，可以在下拉框中添加各种奇怪的控件（x</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml"> &lt;ComboBox Header="show something to me" FontSize="32"
-                      PlaceholderText="take a ability"
-                      PlaceholderForeground="Gray"&gt;
-	&lt;x:String&gt;Blue&lt;/x:String&gt;
-    &lt;x:String&gt;Green&lt;/x:String&gt;
-    &lt;x:String&gt;Red&lt;/x:String&gt;
-    &lt;x:String&gt;Yellow&lt;/x:String&gt;
-    &lt;TextBlock Text="this is just a test"/&gt;
-     &lt;!--这种控件添加到 ComboBox 也是被允许的--&gt;
-&lt;/ComboBox&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><p>CheckBox 复选框，提供多选功能。可以有三种状态，表示未选中、未全选、完全选中</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;CheckBox Content="hello" FontSize="32" IsThreeState="True" IsChecked="{x:Null}"/&gt;
-&lt;!--对应代码为 false, x:null, true--&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-<li><p>Button 最常用的按钮控件（在这里提醒一点，基本所有控件的大小默认都是根据字体大小，即 FontSize 自动调整的，默认的属性为 Auto）。除了在按钮中使用默认的 Content 属性，还可以使用 Image、TextBlock 控件包裹在里面</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;Button Content="Standard XAML button" Click="Button_Click" /&gt;
-
-&lt;Button Content="Button" Click="Button_Click" AutomationProperties.Name="Pie"&gt;
-    &lt;Image Source="/Assets/Slices.png" AutomationProperties.Name="Slice"/&gt;
-&lt;/Button&gt;
-
-&lt;StackPanel&gt;
-    &lt;TextBlock Text="The following buttons' content may get 
-                     clipped if we don't pay careful attention to their layout containers." 
-               Margin="0,0,0,8" TextWrapping="Wrap"/&gt;
-    &lt;TextBlock Text="One option to mitigate clipped content 
-                     is to place Buttons underneath each other, allowing for more space to grow horizontally:" 
-               Margin="0,0,0,8" TextWrapping="Wrap"/&gt;
-    &lt;Button HorizontalAlignment="Stretch" Margin="0,0,0,5"&gt;
-        This is some text that is too long and will get cut off
-    &lt;/Button&gt;
-    &lt;Button HorizontalAlignment="Stretch"&gt;
-        This is another text that would result in being cut off
-    &lt;/Button&gt;
-    &lt;TextBlock Text="Another option is to explicitly wrap the Button's content" Margin="0,8,0,8"/&gt;
-    &lt;StackPanel Orientation="Horizontal" HorizontalAlignment="Center"&gt;
-        &lt;Button MaxWidth="240" Margin="0,0,8,0"&gt;
-            &lt;TextBlock Text="This is some text that is too long and will get cut off" 
-                       TextWrapping="WrapWholeWords"/&gt;
-        &lt;/Button&gt;
-        &lt;Button MaxWidth="240"&gt;
-            &lt;TextBlock Text="This is another text that would result in being cut off" 
-                       TextWrapping="WrapWholeWords"/&gt;
-        &lt;/Button&gt;
-    &lt;/StackPanel&gt;
-&lt;/StackPanel&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><p>HyperlinkButton 表示超链接跳转</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;HyperlinkButton Content="Microsoft home page" NavigateUri="http://www.microsoft.com"/&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
-<li><p>RepeatButton 提供一个可以按住之后，连续触发的按钮</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;RepeatButton Content="Click and hold" Click="RepeatButton_Click"/&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
-<li><p>ToggleButon 看起来像一个Button，但工作起来像一个CheckBox。它通常有两种状态，但是跟 CheckBox 一样，也是存在三种状态的情况（虽然第三种状态并不是很能看得出来）</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;ToggleButton Content="ToggleButton" Click="Button_Click"/&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
-<li><p>ToggleSwitch 这就表示一个开关，拥有两种状态，可以设置它开启或者关闭时显示的不同内容</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;StackPanel Orientation="Horizontal"&gt;
-    &lt;ToggleSwitch OnContent="开启啦" OffContent="关闭咯" FontSize="32" 
-                  x:Name="state" IsOn="True"/&gt;
-    &lt;ProgressRing IsActive="{Binding ElementName=state, Path=IsOn, Mode=OneWay}" 
-                  Width="40"/&gt;
-    &lt;!--使用了一个最基本的绑定，之后会提--&gt;
-&lt;/StackPanel&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-</li>
-</ul>
-<h3 id="进度控件"><a href="#进度控件" class="headerlink" title="进度控件"></a>进度控件</h3><ul>
-<li><p>Slider 进度条控件，是表示<strong>连续区间数值</strong>的控件</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;Slider Width="200" Minimum="500" Maximum="1000" StepFrequency="10"
-        SmallChange="10" LargeChange="100" Value="800" /&gt;
-&lt;!--设置进度条最大值、最小值、每次跳转的步数、当前数值以及最大最小变化量--&gt;
-
-&lt;Slider AutomationProperties.Name="Slider with ticks" 
-        TickFrequency="10" TickPlacement="Outside" /&gt;
-&lt;!--可以设置平均刻度，以及刻度的位置--&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><p>ProcessRing 加载进度条</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;muxc:ProgressRing IsActive="True" /&gt;
-
-&lt;ProgressRing Width="60" Height="60" Value="0" IsIndeterminate="False"/&gt;
-&lt;!--IsIndeterminate 表示进度条是否是不确定的，默认是 true--&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-</li>
-</ul>
-<h3 id="文本控件"><a href="#文本控件" class="headerlink" title="文本控件"></a>文本控件</h3><ul>
-<li><p>TextBlock 只读文本显示控件，可以使用内联的元素进行各种精确的设定</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;TextBlock Text="I am a TextBlock"/&gt;
-
-&lt;Page.Resources&gt;
-    &lt;Style TargetType="TextBlock" x:Key="CustomTextBlockStyle"&gt;
-        &lt;Setter Property="FontFamily" Value="Comic Sans MS"/&gt;
-        &lt;Setter Property="FontStyle" Value="Italic"/&gt;
-    &lt;/Style&gt;
-&lt;Page.Resources&gt;
-&lt;!--设定基本的 TextBlock 样式--&gt;
-&lt;TextBlock Text="I am a styled TextBlock" Style="{StaticResource CustomTextBlockStyle}"/&gt;
-    
-&lt;TextBlock&gt;
-    &lt;Run FontFamily="Times New Roman" Foreground="DarkGray"&gt;
-        Text in a TextBlock doesn't have to be a simple string.&lt;/Run&gt;
-    &lt;LineBreak/&gt;&lt;!--进行换行--&gt;
-    &lt;Span&gt;Text can be &lt;Bold&gt;bold&lt;/Bold&gt;,
-	&lt;Italic&gt;italic&lt;/Italic&gt;, or &lt;Underline&gt;underlined&lt;/Underline&gt;. &lt;/Span&gt;
-&lt;/TextBlock&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><p>TextBox TextBox 相当于可编辑的 TextBlock（当然，我们可以使用 IsReadOnly 让它不可编辑）</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;TextBox AutomationProperties.Name="simple TextBox"/&gt;
-
-&lt;TextBox Text="I am super excited to be here!"
-    AutomationProperties.Name="customized TextBox" IsReadOnly="True"
-    FontFamily="Arial" FontSize="24" FontStyle="Italic"
-    CharacterSpacing="200" Foreground="CornflowerBlue" /&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><p>RichTextBlock 富文本控件，使用 Paragraph 进行分段。如果需要在其中加入控件，需要使用 InlineUIContainer</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;RichTextBlock&gt;
-    &lt;Paragraph&gt;
-        &lt;InlineUIContainer&gt;
-            &lt;Image Source="https://gitee.com/chen-xinyang666/pictures/raw/master/202112211555684.jpg"
-            Stretch="Uniform" Width="500" Height="600"/&gt;
-        &lt;/InlineUIContainer&gt;
-	&lt;/Paragraph&gt;
-    &lt;Paragraph&gt;
-        &lt;x:String&gt;hello World&lt;/x:String&gt;
-        &lt;InlineUIContainer&gt;
-        	&lt;TextBlock Text="这只是一个测试，咕咕咕"/&gt;
-        &lt;/InlineUIContainer&gt;
-    &lt;/Paragraph&gt;
-&lt;/RichTextBlock&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-</li>
-</ul>
-<h3 id="媒体控件"><a href="#媒体控件" class="headerlink" title="媒体控件"></a>媒体控件</h3><ul>
-<li><p>image 显示图片的控件。image 控件的伸缩有四种情况：</p>
-<ul>
-<li>None 按照正常图片大小进行填充</li>
-<li>Fill 忽视原图的横纵比，将图片缩放到规定的大小</li>
-<li>Uniform 保持图片的横纵比，将图片尽可能地缩放到规定地大小，如果超出则留空</li>
-<li>UniformToFill 保持图片地横纵比，将图片通过横纵比进行放大，如果过大，会有超出的部分</li>
-</ul>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;InlineUIContainer&gt;
-	&lt;Image Source="https://gitee.com/chen-xinyang666/pictures/raw/master/202112211555684.jpg"
-		Stretch="Uniform" Width="500" Height="600"/&gt;
-&lt;/InlineUIContainer&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><p>MediaPlayerElement 媒体播放器，播放视频或者展示图片</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;MediaPlayerElement Source="/Assets/SampleMedia/ladybug.wmv"
-                    MaxWidth="400"
-                    AutoPlay="False"
-                    AreTransportControlsEnabled="True" /&gt;
-&lt;!--AreTransportControlsEnabled 是自带的播放控件--&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><p>WebView 显示对应的网络链接内容</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;WebView Source="https://docs.microsoft.com/en-us/windows/uwp/design/controls-and-patterns/web-view" /&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-
-</li>
-</ul>
-<h3 id="物件集合"><a href="#物件集合" class="headerlink" title="物件集合"></a>物件集合</h3><ul>
-<li><p>FlipView 可以将多个图片“打包”成一个整体，拥有自带的前后切换框</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;FlipView MaxWidth="400" Height="270"&gt;
-    &lt;Image Source="ms-appx:///Assets/SampleMedia/cliff.jpg" AutomationProperties.Name="Cliff"/&gt;
-    &lt;Image Source="ms-appx:///Assets/SampleMedia/grapes.jpg" AutomationProperties.Name="Grapes"/&gt;
-    &lt;Image Source="ms-appx:///Assets/SampleMedia/rainier.jpg" AutomationProperties.Name="Rainier"/&gt;
-    &lt;Image Source="ms-appx:///Assets/SampleMedia/sunset.jpg" AutomationProperties.Name="Sunset"/&gt;
-    &lt;Image Source="ms-appx:///Assets/SampleMedia/valley.jpg" AutomationProperties.Name="Valley"/&gt;
-&lt;/FlipView&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><p>GridView 可以自动排列行和列，如果图片显示超出范围，会进行自动排版</p>
-</li>
-<li><p>ListView/ListBox ListBox 算是 ListView 的简化版本，可以使用 SelectIndex 和 SelectItem 获取对应选取的元素</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;ListBox ItemsSource="{x:Bind Fonts}" DisplayMemberPath="Item1" 
-         SelectedValuePath="Item2" Height="164" Loaded="ListBox2_Loaded"/&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-
-</li>
-</ul>
-<h2 id="0x04-布局"><a href="#0x04-布局" class="headerlink" title="0x04 布局"></a>0x04 布局</h2><ul>
-<li><p>Grid 网格布局，可以类比为 Excel 的行和列，在 Grid.RowDefinitions 和 Grid.ColumnDefinitons 中进行定义：</p>
-<ul>
-<li>默认是<code>*</code>，表示布局的占比</li>
-<li>可以设置数据，表示正常的像素</li>
-<li>设置 Auto，宽度/高度会根据控件的大小进行调整</li>
-</ul>
-<p>Grid 可以使用 RowSpan/ColumnSpan 进行“单元格合并”</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;Grid Width="240" Height="120" Background="Gray"&gt;
-    &lt;Grid.ColumnDefinitions&gt;
-        &lt;ColumnDefinition Width="50" /&gt;
-        &lt;ColumnDefinition Width="Auto" /&gt;
-        &lt;ColumnDefinition /&gt;
-    &lt;/Grid.ColumnDefinitions&gt;
-    &lt;Grid.RowDefinitions&gt;
-        &lt;RowDefinition Height="50" /&gt;
-        &lt;RowDefinition Height="Auto" /&gt;
-        &lt;RowDefinition /&gt;
-    &lt;/Grid.RowDefinitions&gt;
-    &lt;Rectangle Fill="Red" Grid.Column="0" Grid.Row="0" /&gt;
-    &lt;Rectangle Fill="Blue" Grid.Row="1" /&gt;
-    &lt;Rectangle Fill="Green" Grid.Column="1" /&gt;
-    &lt;Rectangle Fill="Yellow" Grid.Row="1" Grid.Column="1" /&gt;
-&lt;/Grid&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><p>StackPanel 将各种物件整合成一行的布局，也是最基本的布局</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;StackPanel Orientation="Vertical"&gt;
-    &lt;Rectangle Fill="Red"/&gt;
-    &lt;Rectangle Fill="Blue"/&gt;
-    &lt;Rectangle Fill="Green"/&gt;
-    &lt;Rectangle Fill="Yellow"/&gt;
-&lt;/StackPanel&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><p>ViewBox 限制这个布局中的内容放大或是缩小</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;Viewbox Height="300" Width="300" Stretch="Uniform" StretchDirection="UpOnly"&gt;
-    &lt;Border BorderBrush="Gray" BorderThickness="15"&gt;
-        &lt;StackPanel Background="DarkGray"&gt;
-            &lt;StackPanel Orientation="Horizontal"&gt;
-                &lt;Rectangle Fill="Blue" Height="10" Width="40"/&gt;
-                &lt;Rectangle Fill="Green" Height="10" Width="40"/&gt;
-                &lt;Rectangle Fill="Red" Height="10" Width="40"/&gt;
-                &lt;Rectangle Fill="Yellow" Height="10" Width="40"/&gt;
-            &lt;/StackPanel&gt;
-            &lt;Image Source="ms-appx:///Assets/Slices.png"/&gt;
-            &lt;TextBlock Text="This is text." HorizontalAlignment="Center"/&gt;
-        &lt;/StackPanel&gt;
-    &lt;/Border&gt;
-&lt;/Viewbox&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li><p>Canvas 绝对布局控件，可以使用 Canvas.left 等等进行绝对方位的布局。Canvas 还有一个 Z 轴，表示深度</p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;Canvas Width="120" Height="120" Background="Gray"&gt;
-    &lt;Rectangle Fill="Red" Canvas.Left="0" Canvas.Top="0" Canvas.ZIndex="0" /&gt;
-    &lt;Rectangle Fill="Blue" Canvas.Left="20" Canvas.Top="20" Canvas.ZIndex="1" /&gt;
-    &lt;Rectangle Fill="Green" Canvas.Left="40" Canvas.Top="40" Canvas.ZIndex="2" /&gt;
-    &lt;Rectangle Fill="Yellow" Canvas.Left="60" Canvas.Top="60" Canvas.ZIndex="3" /&gt;
-&lt;/Canvas&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-</li>
-</ul>
-<h2 id="0x05-事件触发"><a href="#0x05-事件触发" class="headerlink" title="0x05 事件触发"></a>0x05 事件触发</h2><h3 id="添加控件"><a href="#添加控件" class="headerlink" title="添加控件"></a>添加控件</h3><ul>
-<li><p>XAML 在设计阶段中添加控件，即就是在 xaml 中写下控件代码</p>
-</li>
-<li><p>C# 在运行中添加各种控件</p>
-<pre class="line-numbers language-C#" data-language="C#"><code class="language-C#">Button button = new Button();
-button.Content = "mission complete";
-grid.Children.Add(button);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/202201032135627.png" alt="源码如下，获得面板的子元素的集合"></p>
-</li>
-</ul>
-<h3 id="事件绑定"><a href="#事件绑定" class="headerlink" title="事件绑定"></a>事件绑定</h3><p>事件绑定的函数基本模板 <code>____(object sender, RoutedEventArgs e)</code></p>
-<ul>
-<li><p>XAML 直接在控件中写，<code>Click="button_name_Click"</code></p>
-</li>
-<li><p>C# 在初始页面加载时进行绑定 <code>button_name.Click += button_name_Click;</code></p>
-<p>这里使用 += 的原因在于，对于这个控件，我们进行事件的绑定是一个委托类型。我们正常来说是应该叠加上去，而不是单纯的用 = 把原有的事件替代掉</p>
-</li>
-</ul>
-<h3 id="页面跳转"><a href="#页面跳转" class="headerlink" title="页面跳转"></a>页面跳转</h3><ul>
-<li><p>Frame.Navigate(typeof(Page1)) Page1 是要跳转的页面，根据要跳转的页面进行修改 </p>
-</li>
-<li><p>Frame.Navigate(typeof(Page1), obj); obj 是要传递的参数，可以变化的 </p>
-</li>
-<li><p>Frame.GoBack()/Frame.GoForward() 向后/向前</p>
-</li>
-<li><p>Frame.CanGoBack/Frame.CanGoForward 是否能够向后/向前</p>
-</li>
-</ul>
-<h3 id="数据绑定"><a href="#数据绑定" class="headerlink" title="数据绑定"></a>数据绑定</h3><p>对一些控件值，我们除了硬编码或者通过事件的触发进行更改，我们还可能让其根据某个值进行更改</p>
-<ul>
-<li>oneWay 在数据源更改之后，对绑定数据进行变更</li>
-<li>oneTime 只有在初始化的时候才会进行变更</li>
-<li>TwoWay 绑定值的更改同样会作用于数据源</li>
-</ul>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;Slider Width="800" HorizontalAlignment="Center" VerticalAlignment="Center"
-        x:Name="slider_value" Maximum="400" Value="50"
-        TickFrequency="10" TickPlacement="Inline"&gt;
-    &lt;Slider.HeaderTemplate&gt;
-        &lt;DataTemplate&gt;
-            &lt;StackPanel Orientation="Vertical"&gt;
-                &lt;TextBlock Text="Height" FontSize="40"/&gt;
-                &lt;TextBlock Text="全体目光向我看齐，嘉然是我爹" FontSize="40"/&gt;
-            &lt;/StackPanel&gt;
-        &lt;/DataTemplate&gt;
-    &lt;/Slider.HeaderTemplate&gt;
-&lt;/Slider&gt;
-&lt;TextBox Width="400" Grid.Row="1" HorizontalAlignment="Center"
-         Height="Auto" FontSize="50"
-         VerticalAlignment="Center" x:Name="textBox_value" 
-         Text="{Binding ElementName=slider_value, Path=Value, Mode=TwoWay, 
-               UpdateSourceTrigger=PropertyChanged}"/&gt;
-&lt;!--因为默认是失去焦点之后才会进行更改，这里改成 PropertyChanged--&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="数据模板-样式"><a href="#数据模板-样式" class="headerlink" title="数据模板/样式"></a>数据模板/样式</h3><p>data template/style</p>
-<ul>
-<li>Inline 内嵌在某一个控件内部</li>
-<li>Page resource 定义在页面的 xaml 代码中，紧跟<page>在元素的里面 </page></li>
-<li>App resource 定义在 app.xaml 代码中，紧跟在<application>元素的里面 </application></li>
-<li>Resource dictionary 定义在单独的文件中，在<resourcedictionary>里面</resourcedictionary></li>
-</ul>
-<p>x:Name=”” 控件的命名 x:Key=”” 资源的名称</p>
-<p>在 Style 中，可以使用 BaseOn 继承之前写的数据样式，可以直接在内部进行重写</p>
-<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/202201040906429.png" alt="style 样例"></p>
-<pre class="line-numbers language-xaml" data-language="xaml"><code class="language-xaml">&lt;Page.Resources&gt;
-    &lt;DataTemplate x:Key="ViewNotesDataTemplate"&gt;
-        &lt;Grid&gt;
-            &lt;TextBlock x:Name="txtNoteTitle" Text="{Binding Title}" FontSize="24" &gt;&lt;/TextBlock&gt;
-        &lt;/Grid&gt;
-    &lt;/DataTemplate&gt;
-&lt;/Page.Resources&gt;
-
-&lt;ListBox x:Name="lstBoxNotes"  ScrollViewer.HorizontalScrollMode="Auto" 
-         ScrollViewer.VerticalScrollMode="Auto" 
-         ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-         ScrollViewer.VerticalScrollBarVisibility="Auto" 
-         Margin="279,97,278,97" Width="809"
-         ItemTemplate="{StaticResource ViewNotesDataTemplate}"/&gt;
-&lt;!--DataTemplate 使用样例。使用 ScrollViewer 显示下拉框--&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="弹出窗体"><a href="#弹出窗体" class="headerlink" title="弹出窗体"></a>弹出窗体</h3><p>注意，MessageDialog、PopupMenu 是在 Windows.UI.Popups 这个包中</p>
-<ul>
-<li><p>ToolTip 表示一个弹出的消息提示框</p>
-<pre class="line-numbers language-c#" data-language="c#"><code class="language-c#">ToolTip tool = new ToolTip();
-tool.Content = "click to start";
-ToolTipService.SetToolTip(tool, button_name);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
-<li><p>PopupMenu 本质是一个菜单栏，可以类比于 Windows 中的右键菜单</p>
-<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/202201040932002.png" alt="添加弹出菜单步骤"></p>
-<pre class="line-numbers language-c#" data-language="c#"><code class="language-c#">Windows.Ui.Popups.PopupMenu pMenu = new Windows.Ui.Popups.PopupMenu();
-UICommand redCommand = new UICommand();
-redCommand.Label = "Red";
-redCommand.Id = 1;
-pMenu.Command.Add(redCommand);
-var chosenCommand = await pMenu.ShowForSelectionAsync(
-new Rect(e.GetPosition(null)), e.GetPosition(null));
-//因为这里的操作是耗时的，所以我们需要使用异步(async)
-//await 就像服务员点餐给你菜单一样，程序在这里会进行等待；等待结束就像是告诉服务员餐点好了，程序就继续进行了<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="https://gitee.com/chen-xinyang666/pictures/raw/master/202201040940380.png" alt="各种显示方法"></p>
-</li>
-</ul>
-<h2 id="0x06-文件存储"><a href="#0x06-文件存储" class="headerlink" title="0x06 文件存储"></a>0x06 文件存储</h2><p>每一个通用应用程序默认只有权限访问三个路径（app 安装目录、app data 目录、下载目录），其他的路径如果要访 问的话有两种办法：</p>
-<p>（1）在 manifest 文件中声明能力，即增加权限</p>
-<p>（2）使用 FilePicker</p>
-<p>其中第一种办法适用于常见的知名文件夹，如文档库、视频库、音乐库等，第二种 方法适用于所有的文件夹</p>
-<h3 id="使用-FilePicker"><a href="#使用-FilePicker" class="headerlink" title="使用 FilePicker"></a>使用 FilePicker</h3><p>通过使用 FilePicker 来增加文件读取写入的范围</p>
-<pre class="line-numbers language-c#" data-language="c#"><code class="language-c#">FileOpenPicker openPicker = new FileOpenPicker()
-{
-    CommitButtonText = "Open this!",
-    ViewMode = PickerViewMode.List,
-    SuggestedStartLocation = PickerLocationId.Downloads
-};
-openPicker.FileTypeFilter.Add(".txt");
-StorageFile file = await openPicker.PickSingleFileAsync();
-if (file != null)
-{
-    try
-    {
-        await new MessageDialog(await FileIO.ReadTextAsync(file)).ShowAsync();
-    }
-    catch (Exception ex)
-    {
-        await new MessageDialog(ex.ToString()).ShowAsync();
-    }
-}
-
-FileSavePicker savePicker = new FileSavePicker()
-{
-    CommitButtonText = "Save Here!",
-    SuggestedFileName = "cxy可爱捏",
-};
-savePicker.FileTypeChoices.Add("the format we can read", 
-                               new[] { ".txt", ".md" });
-StorageFile store = await savePicker.PickSaveFileAsync();
-if (store != null)
-{
-    try
-    {
-        await FileIO.WriteTextAsync(store, "114514");
-    }
-    catch (Exception ex)
-    {
-        await new MessageDialog(ex.ToString()).ShowAsync();
-    }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-]]></content>
-      <categories>
-        <category>UWP</category>
-      </categories>
-      <tags>
-        <tag>C#</tag>
       </tags>
   </entry>
   <entry>
